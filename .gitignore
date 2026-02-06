@@ -23,6 +23,9 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+# message queue (runtime data)
+data/queue/
+
 # legacy content (WordPress export)
 kimi/
 blog/

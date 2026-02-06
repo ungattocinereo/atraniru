@@ -5,14 +5,17 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "build:static": "astro build && gzipper compress ./dist --brotli --gzip",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
     "@tryghost/content-api": "^1.12.3",
-    "astro": "^5.17.1"
+    "astro": "^5.17.1",
+    "astro-compress": "^2.3.9"
   },
   "devDependencies": {
-    "@types/tryghost__content-api": "^1.3.17"
+    "@types/tryghost__content-api": "^1.3.17",
+    "gzipper": "^8.2.1"
   }
 }

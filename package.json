@@ -5,12 +5,12 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "build:static": "astro build && gzipper compress ./dist --brotli --gzip",
+    "compress": "gzipper compress ./dist --brotli --gzip --include html,css,js,svg,json,xml,woff,woff2",
+    "build:prod": "npm run build && npm run compress",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^9.5.2",
     "@tryghost/content-api": "^1.12.3",
     "astro": "^5.17.1",
     "astro-compress": "^2.3.9",

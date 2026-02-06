@@ -1,24 +1,17 @@
-// @ts-check
 import { defineConfig } from 'astro/config';
 import compress from 'astro-compress';
-import node from '@astrojs/node';
 
-// https://astro.build/config
 export default defineConfig({
-  output: 'server',
-  adapter: node({
-    mode: 'standalone'
-  }),
+  output: 'static',
   integrations: [
     compress({
-      brotli: true,
-      gzip: true,
-      html: true,
-      css: true,
-      js: true,
-      svg: true,
-      img: false, 
-      image: false 
+      HTML: true,
+      CSS: true,
+      JS: true,
+      SVG: true,
+      Image: false,
+      brotli: false,
+      gzip: false,
     }),
   ],
 });

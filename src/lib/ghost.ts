@@ -2,11 +2,16 @@ import GhostContentAPI from '@tryghost/content-api';
 
 const GHOST_URL = import.meta.env.GHOST_URL;
 const GHOST_PUBLIC_URL = import.meta.env.GHOST_PUBLIC_URL || GHOST_URL;
+const CONTENT_API_KEY = import.meta.env.CONTENT_API_KEY;
+
+if (!GHOST_URL || !CONTENT_API_KEY) {
+    console.error(`[Ghost] Missing env vars: GHOST_URL=${GHOST_URL ? 'set' : 'MISSING'}, CONTENT_API_KEY=${CONTENT_API_KEY ? 'set' : 'MISSING'}`);
+}
 
 // Initialize Ghost Content API
 export const ghostClient = new GhostContentAPI({
-    url: GHOST_URL,
-    key: import.meta.env.CONTENT_API_KEY,
+    url: GHOST_URL || '',
+    key: CONTENT_API_KEY || '',
     version: 'v5.0',
 });
 

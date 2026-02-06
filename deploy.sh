@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e
 
-# Atrani.ru deploy script
+# Atrani.ru deploy script (static site)
 # Usage: ./deploy.sh
 # Run on VPS from the project directory: /home/greg/atraniru
+# Nginx should serve files from /home/greg/atraniru/dist
 
 APP_DIR="/home/greg/atraniru"
-QUEUE_DIR="$APP_DIR/data/queue"
 
 cd "$APP_DIR"
 
@@ -15,6 +15,7 @@ if [ ! -f .env ] || ! grep -q "GHOST_URL" .env || ! grep -q "CONTENT_API_KEY" .e
   echo "ERROR: .env missing or incomplete (need GHOST_URL and CONTENT_API_KEY)"
   echo "Create .env with:"
   echo "  GHOST_URL=http://localhost:2369"
+  echo "  GHOST_PUBLIC_URL=https://atrani.ru/blog/ghost"
   echo "  CONTENT_API_KEY=<your-ghost-content-api-key>"
   exit 1
 fi
@@ -25,18 +26,9 @@ git pull origin main
 echo "=== Installing dependencies ==="
 npm ci
 
-echo "=== Creating queue directories ==="
-mkdir -p "$QUEUE_DIR/pending" "$QUEUE_DIR/delivered"
-
-echo "=== Building ==="
+echo "=== Building static site ==="
 npm run build
 
-echo "=== Restarting with PM2 ==="
-if pm2 describe atraniru > /dev/null 2>&1; then
-  pm2 restart atraniru
-else
-  pm2 start ecosystem.config.cjs --only atraniru
-fi
-
 echo "=== Done! ==="
-pm2 status atraniru
+echo "Static files in: $APP_DIR/dist"
+echo "Nginx should serve from this directory."

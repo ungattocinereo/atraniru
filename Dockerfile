@@ -9,19 +9,10 @@ COPY . .
 RUN npm run build
 
 # --- Production stage ---
-FROM node:22-alpine AS production
-WORKDIR /app
+FROM nginx:alpine AS production
 
-# Copy built output and node_modules
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package.json ./
+COPY --from=build /app/dist /usr/share/nginx/html
 
-# Create queue directory
-RUN mkdir -p /data/queue/pending /data/queue/delivered
+EXPOSE 80
 
-ENV HOST=0.0.0.0
-ENV PORT=4321
-EXPOSE 4321
-
-CMD ["node", "dist/server/entry.mjs"]
+CMD ["nginx", "-g", "daemon off;"]

@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config';
 import compress from 'astro-compress';
 
 export default defineConfig({
+  site: 'https://atrani.ru',
   output: 'static',
   integrations: [
     compress({

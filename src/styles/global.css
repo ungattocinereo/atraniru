@@ -245,22 +245,33 @@ a {
   animation: fadeInUp 0.8s var(--ease-out) 0.5s forwards;
 }
 
-.hero-image {
+.hero-bg-image {
   position: absolute;
-  right: 0;
-  bottom: 0;
-  width: 50%;
-  height: 80%;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   opacity: 0;
-  animation: fadeIn 0.8s var(--ease-out) 0.6s forwards;
+  animation: fadeIn 1.2s var(--ease-out) 0.6s forwards;
 }
 
-.hero-image img {
+.hero-bg-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+  object-position: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 10, 39, 0.85) 0%,
+    rgba(0, 10, 39, 0.65) 50%,
+    rgba(0, 10, 39, 0.4) 100%
+  );
+  z-index: 0;
 }
 
 .scroll-indicator {
@@ -297,8 +308,13 @@ a {
 }
 
 @media (max-width: 1024px) {
-  .hero-image {
-    display: none;
+  .hero-overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(0, 10, 39, 0.9) 0%,
+      rgba(0, 10, 39, 0.75) 50%,
+      rgba(0, 10, 39, 0.6) 100%
+    );
   }
 }
 
@@ -880,7 +896,7 @@ a {
   .hero-label,
   .hero-subtitle,
   .hero-actions,
-  .hero-image {
+  .hero-bg-image {
     animation: none;
     opacity: 1;
   }

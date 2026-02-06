@@ -1,7 +1,7 @@
 ---
 // VideoEmbed component - Orel i Reshka video
-// TODO: Add actual YouTube video ID
-const videoId = "VIDEO_ID_HERE"; // Replace with actual video ID
+const videoId = "OP83dBP1vy0";
+const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 ---
 
 <section class="video-section">
@@ -17,10 +17,11 @@ const videoId = "VIDEO_ID_HERE"; // Replace with actual video ID
       <div class="video-embed">
         <iframe
           src={`https://www.youtube.com/embed/${videoId}`}
-          title="Орел и Решка в Амальфи"
+          title="Орел и Решка в Амальфи - Морской сезон"
           frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen
+          loading="lazy"
         ></iframe>
       </div>
     </div>
@@ -49,8 +50,9 @@ const videoId = "VIDEO_ID_HERE"; // Replace with actual video ID
     max-width: 1000px;
     margin: 0 auto;
     aspect-ratio: 16 / 9;
-    background: var(--color-navy);
+    background: var(--color-navy) url('https://img.youtube.com/vi/OP83dBP1vy0/maxresdefault.jpg') center/cover no-repeat;
     border: 4px solid var(--color-navy);
+    overflow: hidden;
   }
 
   .video-embed iframe {

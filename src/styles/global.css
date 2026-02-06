@@ -3,7 +3,7 @@
    ========================================================================== */
 
 /* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700;800;900&display=swap');
 
 /* ==========================================================================
    CSS Variables
@@ -26,6 +26,7 @@
   /* Typography */
   --font-display: 'Unbounded', sans-serif;
   --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 
   /* Easing */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -297,33 +298,20 @@ a {
   position: absolute;
   bottom: 40px;
   left: 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
   font-size: 12px;
-  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 2px;
   color: var(--color-gray);
-  display: flex;
-  align-items: center;
 }
 
 .scroll-indicator::after {
   content: '';
-  width: 2px;
-  height: 60px;
-  background: var(--color-orange);
-  margin-left: 16px;
-  animation: scrollLine 2s ease-in-out infinite;
-}
-
-@keyframes scrollLine {
-  0%, 100% {
-    transform: scaleY(0.5);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
+  width: 60px;
+  height: 1px;
+  background: var(--color-gray);
 }
 
 @media (max-width: 1024px) {
@@ -777,6 +765,13 @@ a {
   color: var(--color-gray);
   font-size: 14px;
   max-width: 300px;
+  margin-bottom: 24px;
+}
+
+.footer-tagline {
+  font-size: 14px;
+  color: var(--color-gray);
+  font-style: italic;
 }
 
 .footer-col h4 {
@@ -821,26 +816,102 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 40px;
 }
 
-.footer-bottom p {
-  font-size: 14px;
+.footer-copyright {
+  font-size: 12px;
   color: var(--color-gray);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footer-copyright a {
+  color: var(--color-gray);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-copyright a:hover {
+  color: var(--color-orange);
+}
+
+.footer-copyright span {
+  color: rgba(255,255,255,0.2);
+}
+
+.footer-credit {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.5px;
+}
+
+.footer-credit a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-credit a:hover {
+  color: var(--color-orange);
 }
 
 .social-links {
   display: flex;
-  gap: 24px;
+  gap: 12px;
 }
 
 .social-links a {
-  font-size: 14px;
-  color: var(--color-gray);
-  transition: color 0.3s var(--ease-out);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: white;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  transition: all 0.3s var(--ease-out);
 }
 
 .social-links a:hover {
+  background: var(--color-orange);
+  border-color: var(--color-orange);
+  transform: translate(-2px, -2px);
+  box-shadow: 2px 2px 0 rgba(255,255,255,0.2);
+}
+
+.social-links .icon,
+.footer-col .icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+.social-links .icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0;
+}
+
+.footer-col a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+
+.footer-col a:hover {
   color: var(--color-orange);
+  transform: translateX(4px);
 }
 
 @media (max-width: 1024px) {
@@ -862,8 +933,18 @@ a {
 
   .footer-bottom {
     flex-direction: column;
-    gap: 20px;
-    text-align: center;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .footer-copyright {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .footer-credit {
+    align-self: flex-start;
   }
 }
 

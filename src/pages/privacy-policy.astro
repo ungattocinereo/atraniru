@@ -1,0 +1,234 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Политика конфиденциальности — Atrani.ru"
+  description="Политика обработки персональных данных и конфиденциальности atrani.ru"
+>
+  <section class="privacy-hero">
+    <div class="privacy-hero-content">
+      <h1>Политика конфиденциальности</h1>
+      <p class="privacy-date">Действует с 6 февраля 2026</p>
+    </div>
+  </section>
+
+  <section class="privacy-content">
+    <div class="privacy-container">
+      <div class="privacy-section">
+        <h2>1. Общие положения</h2>
+        <p>
+          Настоящая Политика конфиденциальности персональных данных (далее — Политика) действует в отношении всех персональных данных, которые сайт atrani.ru (далее — Сайт) может получить от Пользователя во время использования Сайта, его программ и продуктов.
+        </p>
+        <p>
+          Использование Сайта означает безоговорочное согласие Пользователя с настоящей Политикой и указанными в ней условиями обработки его персональных данных.
+        </p>
+      </div>
+
+      <div class="privacy-section">
+        <h2>2. Персональные данные</h2>
+        <p>
+          В рамках настоящей Политики под «персональными данными Пользователя» понимаются:
+        </p>
+        <ul>
+          <li>Персональные данные, которые Пользователь предоставляет о себе самостоятельно при регистрации на Сайте или в процессе использования Сайта, включая имя, фамилию, электронную почту, номер телефона.</li>
+          <li>Данные, которые автоматически передаются в процессе их использования с помощью установленного на устройстве Пользователя программного обеспечения, в том числе IP-адрес, информация из cookies, информация о браузере пользователя.</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h2>3. Цели обработки персональных данных</h2>
+        <p>
+          Сайт собирает и хранит только те персональные данные, которые необходимы для предоставления сервисов и оказания услуг (исполнения соглашений и договоров с Пользователем).
+        </p>
+        <p>Персональные данные Пользователя могут использоваться в следующих целях:</p>
+        <ul>
+          <li>Связь с Пользователем в случае необходимости, в том числе направление уведомлений, информации и запросов, связанных с использованием Сайта, оказанием услуг.</li>
+          <li>Улучшение качества Сайта, удобства его использования, разработка новых сервисов и услуг.</li>
+          <li>Проведение статистических и иных исследований на основе обезличенных данных.</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h2>4. Обработка персональных данных</h2>
+        <p>
+          Обработка персональных данных осуществляется на основе принципов:
+        </p>
+        <ul>
+          <li>Законности целей и способов обработки персональных данных.</li>
+          <li>Добросовестности.</li>
+          <li>Соответствия целей обработки персональных данных целям, заранее определенным и заявленным при сборе персональных данных.</li>
+          <li>Соответствия объема и характера обрабатываемых персональных данных заявленным целям обработки.</li>
+        </ul>
+      </div>
+
+      <div class="privacy-section">
+        <h2>5. Защита персональных данных</h2>
+        <p>
+          Сайт принимает необходимые и достаточные организационные и технические меры для защиты персональных данных Пользователя от неправомерного или случайного доступа, уничтожения, изменения, блокирования, копирования, распространения, а также от иных неправомерных действий с ней третьих лиц.
+        </p>
+      </div>
+
+      <div class="privacy-section">
+        <h2>6. Изменение Политики конфиденциальности</h2>
+        <p>
+          Сайт имеет право вносить изменения в настоящую Политику конфиденциальности. Новая редакция Политики вступает в силу с момента ее размещения на Сайте, если иное не предусмотрено новой редакцией Политики.
+        </p>
+      </div>
+
+      <div class="privacy-section">
+        <h2>7. Контактная информация</h2>
+        <p>
+          По всем вопросам, связанным с обработкой персональных данных, вы можете обратиться к нам:
+        </p>
+        <ul>
+          <li>Email: <a href="mailto:hello@atrani.ru">hello@atrani.ru</a></li>
+          <li>Telegram: <a href="https://t.me/atraniru">@atraniru</a></li>
+          <li>WhatsApp: <a href="https://wa.me/393270972329">+39 327 097 2329</a></li>
+        </ul>
+      </div>
+
+      <div class="privacy-back">
+        <a href="/contacts" class="btn btn-primary">Вернуться к контактам</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ==========================================================================
+     Privacy Policy Page Styles
+     ========================================================================== */
+
+  .privacy-hero {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-navy-deep);
+    color: white;
+    padding: 120px 40px 80px;
+    text-align: center;
+  }
+
+  .privacy-hero-content h1 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 6vw, 64px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+
+  .privacy-date {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-orange);
+  }
+
+  /* Content */
+  .privacy-content {
+    padding: 80px 40px;
+    background: white;
+  }
+
+  .privacy-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .privacy-section {
+    margin-bottom: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--color-gray-light);
+  }
+
+  .privacy-section:last-of-type {
+    border-bottom: none;
+  }
+
+  .privacy-section h2 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    color: var(--color-navy-deep);
+    margin-bottom: 24px;
+  }
+
+  .privacy-section p {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--color-gray-dark);
+    margin-bottom: 16px;
+  }
+
+  .privacy-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  .privacy-section ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 16px;
+  }
+
+  .privacy-section li {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--color-gray-dark);
+    margin-bottom: 12px;
+    padding-left: 28px;
+    position: relative;
+  }
+
+  .privacy-section li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 8px;
+    height: 8px;
+    background: var(--color-orange);
+  }
+
+  .privacy-section a {
+    color: var(--color-navy-deep);
+    font-weight: 600;
+    text-decoration: underline;
+    transition: color 0.3s var(--ease-out);
+  }
+
+  .privacy-section a:hover {
+    color: var(--color-orange);
+  }
+
+  /* Back Button */
+  .privacy-back {
+    margin-top: 60px;
+    text-align: center;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .privacy-hero {
+      padding: 100px 20px 60px;
+    }
+
+    .privacy-content {
+      padding: 60px 20px;
+    }
+
+    .privacy-section {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+    }
+
+    .privacy-section h2 {
+      font-size: 24px;
+    }
+  }
+</style>

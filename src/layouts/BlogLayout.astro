@@ -1,0 +1,116 @@
+---
+import Layout from './Layout.astro';
+import type { GhostPost } from '../lib/types/ghost';
+
+interface Props {
+  post: GhostPost;
+}
+
+const { post } = Astro.props;
+
+// Determine meta title and description
+const metaTitle = post.meta_title || `${post.title} — АМАЛЬФИГЕТЬ`;
+const metaDescription = post.meta_description || post.custom_excerpt || post.excerpt;
+
+// Get OG image
+const ogImage = post.og_image || post.feature_image || '/images/og-default.jpg';
+---
+
+<Layout title={metaTitle} description={metaDescription}>
+  <!-- Reading progress bar -->
+  <div class="reading-progress" id="progress"></div>
+
+  <slot />
+
+  <!-- Open Graph meta tags for blog posts -->
+  <meta slot="head" property="og:type" content="article" />
+  <meta slot="head" property="og:image" content={ogImage} />
+  <meta slot="head" property="og:url" content={post.url} />
+  {post.published_at && (
+    <meta slot="head" property="article:published_time" content={post.published_at} />
+  )}
+  {post.updated_at && (
+    <meta slot="head" property="article:modified_time" content={post.updated_at} />
+  )}
+  {post.primary_author && (
+    <meta slot="head" property="article:author" content={post.primary_author.name} />
+  )}
+  {post.tags && post.tags.map((tag) => (
+    <meta slot="head" property="article:tag" content={tag.name} />
+  ))}
+
+  <!-- Twitter Card -->
+  <meta slot="head" name="twitter:card" content="summary_large_image" />
+  <meta slot="head" name="twitter:title" content={post.twitter_title || metaTitle} />
+  <meta slot="head" name="twitter:description" content={post.twitter_description || metaDescription} />
+  <meta slot="head" name="twitter:image" content={post.twitter_image || ogImage} />
+
+  <!-- JSON-LD Structured Data -->
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": post.title,
+    "description": metaDescription,
+    "image": post.feature_image,
+    "datePublished": post.published_at,
+    "dateModified": post.updated_at,
+    "author": post.primary_author ? {
+      "@type": "Person",
+      "name": post.primary_author.name,
+      "image": post.primary_author.profile_image,
+      "description": post.primary_author.bio
+    } : undefined,
+    "publisher": {
+      "@type": "Organization",
+      "name": "АМАЛЬФИГЕТЬ",
+      "url": "https://atrani.ru",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://atrani.ru/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": post.url
+    }
+  })}></script>
+</Layout>
+
+<style is:global>
+  @import '../styles/blog.css';
+</style>
+
+<script>
+  // Reading progress bar
+  const progressBar = document.getElementById('progress');
+  if (progressBar) {
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      progressBar.style.width = progress + '%';
+    });
+  }
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href') as string);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>

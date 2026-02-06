@@ -1,0 +1,16 @@
+services:
+  ghost:
+    image: ghost:5-alpine
+    restart: always
+    ports:
+      - "127.0.0.1:2369:2368"
+    environment:
+      url: http://localhost:2369
+      database__client: sqlite3
+      database__connection__filename: /var/lib/ghost/content/data/ghost-local.db
+      mail__transport: Direct
+    volumes:
+      - ghost_content:/var/lib/ghost/content
+
+volumes:
+  ghost_content:

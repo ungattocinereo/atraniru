@@ -1,0 +1,164 @@
+---
+// Ghost API Test Page
+// Visit http://localhost:4321/api-test to verify Ghost integration
+
+import { ghostClient } from '../lib/ghost';
+
+let posts = null;
+let error = null;
+
+try {
+  posts = await ghostClient.posts.browse({
+    limit: 5,
+    include: 'tags,authors'
+  });
+} catch (e) {
+  error = e instanceof Error ? e.message : 'Unknown error';
+}
+---
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ghost API Test</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #0A1628;
+      border-bottom: 3px solid #FF5722;
+      padding-bottom: 10px;
+    }
+    .status {
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    .success {
+      background: #E8F5E9;
+      border-left: 4px solid #4CAF50;
+      color: #2E7D32;
+    }
+    .error {
+      background: #FFEBEE;
+      border-left: 4px solid #F44336;
+      color: #C62828;
+    }
+    .post {
+      padding: 20px;
+      border: 1px solid #E2E8F0;
+      margin-bottom: 16px;
+      border-radius: 8px;
+    }
+    .post h3 {
+      margin: 0 0 8px 0;
+      color: #0A1628;
+    }
+    .post p {
+      margin: 0 0 8px 0;
+      color: #4A5568;
+    }
+    .post small {
+      color: #8B9BB4;
+    }
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-right: 4px;
+      color: #0A1628;
+    }
+    code {
+      background: #F7FAFC;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Menlo', monospace;
+      font-size: 14px;
+    }
+    .instructions {
+      background: #FFF3E0;
+      border-left: 4px solid #FF5722;
+      padding: 16px;
+      margin-bottom: 24px;
+    }
+    .instructions ol {
+      margin: 8px 0;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ghost API Test</h1>
+
+  {error && (
+    <div class="status error">
+      <strong>❌ Error connecting to Ghost API:</strong>
+      <p>{error}</p>
+    </div>
+
+    <div class="instructions">
+      <strong>To fix this:</strong>
+      <ol>
+        <li>Make sure Ghost is running: <code>cd ~/Documents/Code/Atraniru-Ghost && ghost status</code></li>
+        <li>If Ghost is not running: <code>ghost start</code></li>
+        <li>Open Ghost admin: <code>http://localhost:2368/ghost</code></li>
+        <li>Go to Settings → Integrations → Add custom integration</li>
+        <li>Create integration named "Atraniru Frontend"</li>
+        <li>Copy the <strong>Content API Key</strong></li>
+        <li>Update <code>.env</code> file with the key</li>
+        <li>Restart Astro dev server</li>
+      </ol>
+    </div>
+  )}
+
+  {posts && (
+    <div class="status success">
+      <strong>✅ Ghost API connected successfully!</strong>
+      <p>Found {posts.length} post(s)</p>
+    </div>
+  )}
+
+  {posts && (
+    <div>
+      <h2>Posts from Ghost:</h2>
+      {posts.map((post) => (
+        <div class="post">
+          <h3>{post.title}</h3>
+          <p><strong>Slug:</strong> <code>{post.slug}</code></p>
+          <p><strong>Published:</strong> {new Date(post.published_at).toLocaleDateString('ru-RU')}</p>
+          {post.excerpt && <p><strong>Excerpt:</strong> {post.excerpt}</p>}
+          {post.tags && post.tags.length > 0 && (
+            <p>
+              <strong>Tags:</strong> {post.tags.map((tag) => (
+                <span class="tag">{tag.name}</span>
+              ))}
+            </p>
+          )}
+          {post.primary_author && (
+            <p><strong>Author:</strong> {post.primary_author.name}</p>
+          )}
+          <small>Reading time: {post.reading_time || 5} min</small>
+        </div>
+      ))}
+    </div>
+  )}
+
+  <hr style="margin: 40px 0; border: none; border-top: 1px solid #E2E8F0;" />
+
+  <p style="color: #8B9BB4; font-size: 14px;">
+    <strong>Next steps:</strong><br />
+    1. Create test posts in Ghost admin<br />
+    2. Visit <a href="/blog">/blog</a> to see blog index<br />
+    3. Visit <a href="/blog/[slug]">/blog/[slug]</a> to see individual post<br />
+  </p>
+</body>
+</html>

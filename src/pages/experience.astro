@@ -1,0 +1,710 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Впечатления на Амальфитанском побережье | Atrani.ru"
+  description="Экскурсии на машине, катере, мотоцикле. Фотосессии. Кулинарные мастер-классы. Создаем незабываемые впечатления на Амальфи."
+>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg-text" aria-hidden="true">ВПЕЧАТЛЕНИЯ</div>
+    <div class="hero-content">
+      <p class="hero-label">Впечатления на побережье</p>
+      <h1>
+        <span class="highlight">ЧУВСТВУЙ</span>
+        АМАЛЬФИ
+      </h1>
+      <p class="hero-subtitle">От моря до гор, от рассвета до заката — каждое мгновение здесь превращается в воспоминание на всю жизнь</p>
+      <div class="hero-actions">
+        <a href="#experiences" class="btn btn-white">Выбрать впечатление</a>
+        <a href="/contacts" class="btn btn-outline" style="border-color: white; color: white;">Задать вопрос</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">Scroll</div>
+  </section>
+
+  <!-- Experiences Grid -->
+  <section class="experiences" id="experiences">
+    <div class="section-header reveal">
+      <p class="section-label">01 — Наши предложения</p>
+      <h2 class="section-title">Выбирайте впечатление</h2>
+    </div>
+
+    <div class="experiences-grid">
+      <!-- Card 1: Экскурсии на машине -->
+      <article class="experience-card reveal">
+        <div class="card-header">
+          <span class="card-number">01</span>
+        </div>
+        <div class="card-image">
+          <img src="/images/index/excursion-by-car.webp" alt="Автомобильная экскурсия по Амальфитанскому побережью с видом на море" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">На машине по побережью</h3>
+          <p class="card-tagline">Каждый поворот — новая панорама</p>
+          <p class="card-description">Классические маршруты вдоль SS163, гастрономические путешествия в горы, или ваш персональный тур — показываем побережье так, как его знают только местные.</p>
+        </div>
+        <div class="card-footer">
+          <div class="price-info">
+            <span class="price-label">Стоимость</span>
+            <span class="price-amount">от €400</span>
+          </div>
+          <a href="/tours-car" class="btn btn-primary">Узнать больше</a>
+        </div>
+      </article>
+
+      <!-- Card 2: Экскурсии на катере -->
+      <article class="experience-card reveal">
+        <div class="card-header">
+          <span class="card-number">02</span>
+        </div>
+        <div class="card-image">
+          <img src="/images/index/excursion-boat.webp.jpeg" alt="Лодочная экскурсия вдоль скал Амальфи" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">На катере</h3>
+          <p class="card-tagline">Скрытые бухты и гроты</p>
+          <p class="card-description">Увидеть Позитано с моря, заплыть в Изумрудный грот, искупаться в уединенных бухтах, куда не добраться по суше. Побережье открывается с воды совсем иначе.</p>
+        </div>
+        <div class="card-footer">
+          <div class="price-info">
+            <span class="price-label">Стоимость</span>
+            <span class="price-amount">договорная</span>
+          </div>
+          <a href="/contacts#contact-form" class="btn btn-primary">Забронировать</a>
+        </div>
+      </article>
+
+      <!-- Card 3: Экскурсии на мотоцикле -->
+      <article class="experience-card reveal">
+        <div class="card-header">
+          <span class="card-number">03</span>
+        </div>
+        <div class="card-image">
+          <img src="/images/atrani-with-3-bikes-no-plates.webp" alt="Мотоциклы на улицах Атрани" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">На мотоцикле</h3>
+          <p class="card-tagline">Свобода горных серпантинов</p>
+          <p class="card-description">Для тех, кто хочет почувствовать ветер в волосах и адреналин на извилистых дорогах. Аренда Vespa или туры на мотоциклах с гидом по самым живописным маршрутам.</p>
+        </div>
+        <div class="card-footer">
+          <div class="price-info">
+            <span class="price-label">Стоимость</span>
+            <span class="price-amount">от €350</span>
+          </div>
+          <a href="/contacts#contact-form" class="btn btn-primary">Забронировать</a>
+        </div>
+      </article>
+
+      <!-- Card 4: Фотосессии индивидуальные -->
+      <article class="experience-card reveal">
+        <div class="card-header">
+          <span class="card-number">04</span>
+        </div>
+        <div class="card-image">
+          <img src="/images/index/photoshootings.jpg" alt="Индивидуальная фотосессия на Амальфитанском побережье" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Фотосессия индивидуальная</h3>
+          <p class="card-tagline">Вы и Амальфи — идеальный кадр</p>
+          <p class="card-description">Профессиональный фотограф покажет вас на фоне самых красивых мест побережья. От золотого часа в Позитано до романтики улочек Атрани.</p>
+        </div>
+        <div class="card-footer">
+          <div class="price-info">
+            <span class="price-label">Стоимость</span>
+            <span class="price-amount">от €250</span>
+          </div>
+          <a href="/contacts#contact-form" class="btn btn-primary">Забронировать</a>
+        </div>
+      </article>
+
+      <!-- Card 5: Фотосессии для пары -->
+      <article class="experience-card reveal">
+        <div class="card-header">
+          <span class="card-number">05</span>
+        </div>
+        <div class="card-image">
+          <img src="/images/index/photoshootings.jpg" alt="Фотосессия для пары на фоне моря" loading="lazy" style="object-position: center top;">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Фотосессия для пары</h3>
+          <p class="card-tagline">История вашей любви на побережье</p>
+          <p class="card-description">Влюбленные пары, свадебные фотосессии, годовщины — запечатлеем вашу историю в самых романтичных декорациях Италии. Включая рассветы и закаты.</p>
+        </div>
+        <div class="card-footer">
+          <div class="price-info">
+            <span class="price-label">Стоимость</span>
+            <span class="price-amount">от €400</span>
+          </div>
+          <a href="/contacts#contact-form" class="btn btn-primary">Забронировать</a>
+        </div>
+      </article>
+
+      <!-- Card 6: Кулинарные мастер-классы (Coming Soon) -->
+      <article class="experience-card reveal coming-soon">
+        <div class="card-header">
+          <span class="card-number">06</span>
+          <span class="coming-soon-badge">Открытие в 2026</span>
+        </div>
+        <div class="card-image">
+          <img src="/images/cooking-class.jpg" alt="Кулинарный мастер-класс - скоро открытие" loading="lazy">
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Кулинарные мастер-классы</h3>
+          <p class="card-tagline">Вкусы Италии своими руками</p>
+          <p class="card-description">Готовим настоящую неаполитанскую пиццу, лепим пасту с нонной, учимся выбирать сыры и вина. Скоро откроется — следите за обновлениями!</p>
+        </div>
+        <div class="card-footer">
+          <div class="price-info">
+            <span class="price-label">Статус</span>
+            <span class="price-amount">Скоро</span>
+          </div>
+          <button class="btn btn-primary" disabled>В 2026м</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="story reveal">
+    <div class="section-header">
+      <p class="section-label">02 — Наша философия</p>
+      <h2 class="section-title">Почему впечатления важнее достопримечательностей</h2>
+    </div>
+    <div class="story-content">
+      <p>Побывать на побережье Амальфи — это не просто сделать фото у церкви. Это почувствовать запах лимонов, услышать шум волн о камни, попробовать граните с видом на закат.</p>
+
+      <p>Мы не продаем экскурсии — мы создаем впечатления, которые остаются с вами навсегда. Каждый наш тур, каждая фотосессия, каждый мастер-класс — это кусочек нашей жизни здесь, которым мы делимся с вами.</p>
+
+      <blockquote>
+        <p>Потому что Амальфи — это не место на карте. Это чувство, которое нельзя сфотографировать, но можно прожить.</p>
+      </blockquote>
+
+      <div class="info-box">
+        <p><strong>Как это работает:</strong> Все наши впечатления полностью персонализируются под вас: выбирайте время старта, продолжительность, точки интереса. Мы встречаем вас там, где удобно — в отеле, порту, или прямо на площади Атрани. Бронируйте заранее через форму или напишите нам в Telegram.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta reveal">
+    <div class="cta-content">
+      <h2 class="section-title">Готовы создать воспоминания?</h2>
+      <p>Выберите впечатление, которое зовет вас больше всего, или свяжитесь с нами — мы поможем составить идеальный маршрут вашего отдыха на Амальфитанском побережье.</p>
+      <a href="/contacts#contact-form" class="btn btn-white">Написать нам</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    background: var(--color-navy-deep);
+    color: white;
+    overflow: hidden;
+    padding: 120px 40px 80px;
+  }
+
+  .hero-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: clamp(120px, 20vw, 350px);
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .hero-label {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-gray);
+    margin-bottom: 24px;
+    position: relative;
+    padding-left: 60px;
+    opacity: 0;
+    animation: fadeInUp 1s var(--ease-out) 0.2s forwards;
+  }
+
+  .hero-label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 2px;
+    background: var(--color-orange);
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(60px, 12vw, 180px);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -4px;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeInUp 1s var(--ease-out) 0.3s forwards;
+  }
+
+  .hero h1 .highlight {
+    color: var(--color-orange);
+    display: block;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(18px, 2vw, 24px);
+    color: var(--color-gray);
+    max-width: 700px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeInUp 1s var(--ease-out) 0.4s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeInUp 1s var(--ease-out) 0.5s forwards;
+  }
+
+  .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-gray);
+  }
+
+  .scroll-indicator::after {
+    content: '';
+    width: 60px;
+    height: 1px;
+    background: var(--color-gray);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Sections */
+  section {
+    padding: 120px 40px;
+  }
+
+  @media (max-width: 768px) {
+    .hero {
+      padding: 100px 20px 60px;
+    }
+    .scroll-indicator {
+      left: 20px;
+    }
+    section {
+      padding: 80px 20px;
+    }
+  }
+
+  .section-header {
+    max-width: 1200px;
+    margin: 0 auto 80px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-orange);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    color: var(--color-navy);
+  }
+
+  /* Experiences Section */
+  .experiences {
+    background: var(--color-bg-light);
+  }
+
+  .experiences-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+  }
+
+  @media (max-width: 768px) {
+    .experiences-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Experience Card */
+  .experience-card {
+    background: white;
+    border: 2px solid var(--color-navy);
+    position: relative;
+    transition: all 0.3s var(--ease-out);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .experience-card:not(.coming-soon):hover {
+    transform: translate(-8px, -8px);
+    box-shadow: 8px 8px 0 var(--color-navy);
+  }
+
+  .card-header {
+    position: relative;
+    padding: 24px;
+    background: var(--color-navy-deep);
+    border-bottom: 4px solid var(--color-orange);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .card-number {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-orange);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .coming-soon-badge {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    color: white;
+    background: var(--color-orange);
+    padding: 6px 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .card-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+
+  .card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .experience-card:not(.coming-soon):hover .card-image img {
+    transform: scale(1.05);
+  }
+
+  /* Coming Soon Overlay */
+  .coming-soon .card-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 22, 40, 0.7);
+    pointer-events: none;
+  }
+
+  .coming-soon .card-image img {
+    filter: grayscale(50%);
+  }
+
+  .coming-soon:hover .card-image::after {
+    background: rgba(10, 22, 40, 0.5);
+  }
+
+  .card-body {
+    padding: 32px;
+    flex: 1;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    color: var(--color-navy);
+    margin-bottom: 8px;
+  }
+
+  .card-tagline {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-orange);
+    margin-bottom: 16px;
+  }
+
+  .card-description {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+  }
+
+  .card-footer {
+    padding: 24px 32px;
+    background: var(--color-bg-light);
+    border-top: 2px solid var(--color-gray-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  @media (max-width: 600px) {
+    .card-footer {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+
+  .price-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .price-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-gray);
+  }
+
+  .price-amount {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 900;
+    color: var(--color-navy);
+    line-height: 1;
+  }
+
+  .coming-soon .price-amount {
+    color: var(--color-gray);
+  }
+
+  .card-footer .btn {
+    white-space: nowrap;
+  }
+
+  @media (max-width: 600px) {
+    .card-footer .btn {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Story Section */
+  .story {
+    background: white;
+  }
+
+  .story-content {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .story-content p {
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--color-gray-dark);
+    margin-bottom: 24px;
+  }
+
+  .story-content p:first-of-type {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-navy);
+    line-height: 1.5;
+  }
+
+  blockquote {
+    padding: 32px 40px;
+    background: transparent;
+    border: 2px solid var(--color-navy);
+    border-left: 4px solid var(--color-orange);
+    position: relative;
+    margin: 40px 0;
+  }
+
+  blockquote::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 24px;
+    font-family: var(--font-display);
+    font-size: 80px;
+    font-weight: 900;
+    color: var(--color-orange);
+    opacity: 0.4;
+  }
+
+  blockquote p {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-navy);
+    margin: 0;
+  }
+
+  /* Info Box */
+  .info-box {
+    background: var(--color-bg-light);
+    border-left: 4px solid var(--color-orange);
+    padding: 24px 32px;
+    margin: 40px 0;
+  }
+
+  .info-box p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-navy);
+    margin: 0;
+  }
+
+  .info-box strong {
+    color: var(--color-orange);
+  }
+
+  /* CTA Section */
+  .cta {
+    background: var(--color-orange);
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta::before {
+    content: 'AMALFI';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: clamp(100px, 20vw, 300px);
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .cta-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta .section-title {
+    color: white;
+    margin-bottom: 24px;
+  }
+
+  .cta p {
+    font-size: 20px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    opacity: 0.95;
+  }
+
+  /* Reveal Animation */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 1s var(--ease-out);
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    html {
+      scroll-behavior: auto;
+    }
+  }
+</style>
+
+<script>
+  // Scroll reveal animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>

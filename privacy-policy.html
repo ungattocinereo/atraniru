@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Политика конфиденциальности - АМАЛЬФИГЕТЬ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-navy-deep: #000A27;
+            --color-navy: #0A1628;
+            --color-navy-medium: #152238;
+            --color-white: #FFFFFF;
+            --color-orange: #FF5722;
+            --color-orange-light: #FF8A65;
+            --color-gray: #8B9BB4;
+            --color-gray-dark: #4A5568;
+
+            --font-display: 'Unbounded', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+            color-scheme: light;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--color-navy-deep);
+            background: var(--color-white);
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: var(--color-orange);
+            color: white;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 20px;
+            background: var(--color-navy);
+            color: white;
+            padding: 12px 24px;
+            font-weight: 600;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 20px;
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--color-orange);
+            outline-offset: 3px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav a {
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: opacity 0.3s;
+        }
+
+        .nav a:hover {
+            opacity: 0.6;
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: var(--color-navy-deep);
+            color: white;
+            overflow: hidden;
+            padding: 120px 40px 80px;
+        }
+
+        .hero-bg-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-display);
+            font-size: clamp(100px, 20vw, 300px);
+            font-weight: 900;
+            color: rgba(255,255,255,0.03);
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--color-gray);
+            margin-bottom: 32px;
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 40px;
+            height: 2px;
+            background: var(--color-orange);
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -2px;
+            margin-bottom: 24px;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(16px, 2vw, 20px);
+            color: var(--color-gray);
+            max-width: 600px;
+        }
+
+        /* Content */
+        .content {
+            padding: 80px 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .content h2 {
+            font-family: var(--font-display);
+            font-size: clamp(28px, 4vw, 36px);
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -1px;
+            margin-top: 48px;
+            margin-bottom: 24px;
+            color: var(--color-navy);
+        }
+
+        .content h3 {
+            font-family: var(--font-display);
+            font-size: clamp(20px, 3vw, 24px);
+            font-weight: 700;
+            line-height: 1.3;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            color: var(--color-navy);
+        }
+
+        .content p {
+            font-size: 16px;
+            color: var(--color-gray-dark);
+            margin-bottom: 16px;
+            line-height: 1.8;
+        }
+
+        .content ul, .content ol {
+            margin-left: 24px;
+            margin-bottom: 24px;
+            color: var(--color-gray-dark);
+        }
+
+        .content li {
+            margin-bottom: 8px;
+            line-height: 1.8;
+        }
+
+        .content a {
+            color: var(--color-orange);
+            text-decoration: none;
+            border-bottom: 1px solid var(--color-orange);
+            transition: opacity 0.3s;
+        }
+
+        .content a:hover {
+            opacity: 0.7;
+        }
+
+        .content strong {
+            color: var(--color-navy);
+            font-weight: 600;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--color-orange);
+            margin-bottom: 8px;
+        }
+
+        .last-updated {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(255, 87, 34, 0.1);
+            color: var(--color-orange);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 32px;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-navy-deep);
+            color: white;
+            padding: 80px 40px 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto 60px;
+        }
+
+        .footer-brand .logo {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-brand p {
+            color: var(--color-gray);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .footer-tagline {
+            font-size: 14px;
+            color: var(--color-gray);
+            font-style: italic;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-display);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            color: var(--color-gray);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--color-orange);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .footer-copyright {
+            font-size: 12px;
+            color: var(--color-gray);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-copyright a {
+            color: var(--color-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-copyright a:hover {
+            color: var(--color-orange);
+        }
+
+        .footer-copyright span {
+            color: rgba(255,255,255,0.2);
+        }
+
+        .footer-credit {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .footer-credit a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-credit a:hover {
+            color: var(--color-orange);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            font-family: var(--font-display);
+            font-size: 11px;
+            font-weight: 700;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .social-links a:hover {
+            background: var(--color-orange);
+            border-color: var(--color-orange);
+            transform: translate(-2px, -2px);
+            box-shadow: 2px 2px 0 rgba(255,255,255,0.2);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav { display: none; }
+
+            .hero { padding: 100px 20px 60px; }
+
+            .content { padding: 60px 20px; }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .footer-copyright {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .footer-credit {
+                align-self: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Перейти к содержимому</a>
+
+    <header class="header" role="banner">
+        <a href="/" class="logo">АМАЛЬФИГЕТЬ</a>
+        <nav class="nav" role="navigation">
+            <a href="/#experiences">Впечатления</a>
+            <a href="/#about">О нас</a>
+            <a href="/#apartments">Жильё</a>
+            <a href="/#contact">Контакт</a>
+        </nav>
+    </header>
+
+    <main id="main">
+        <section class="hero">
+            <div class="hero-bg-text" aria-hidden="true">PRIVACY</div>
+
+            <div class="hero-content">
+                <p class="hero-label">Политика конфиденциальности</p>
+                <h1>Защита ваших данных</h1>
+                <p class="hero-subtitle">Мы серьёзно относимся к вашей конфиденциальности и прозрачности в обработке персональных данных.</p>
+            </div>
+        </section>
+
+        <section class="content">
+            <p class="last-updated">Последнее обновление: 6 февраля 2026</p>
+
+            <p>Настоящая Политика конфиденциальности описывает, как CristallPont S.R.L. (далее — «мы», «нас», «наш») собирает, использует и защищает персональные данные пользователей сайта atrani.ru (далее — «Сайт»).</p>
+
+            <h2>1. Какие данные мы собираем</h2>
+
+            <h3>1.1. Данные, которые вы предоставляете</h3>
+            <ul>
+                <li><strong>Контактная информация:</strong> имя, адрес электронной почты, номер телефона, когда вы связываетесь с нами или бронируете услуги</li>
+                <li><strong>Данные бронирования:</strong> даты пребывания, количество гостей, особые запросы</li>
+                <li><strong>Платёжная информация:</strong> обрабатывается через защищённые платёжные системы, мы не храним полные данные банковских карт</li>
+            </ul>
+
+            <h3>1.2. Автоматически собираемые данные</h3>
+            <ul>
+                <li><strong>Технические данные:</strong> IP-адрес, тип браузера, операционная система, время посещения</li>
+                <li><strong>Данные о поведении:</strong> просмотренные страницы, время на сайте, источник перехода</li>
+                <li><strong>Файлы cookie:</strong> небольшие текстовые файлы для улучшения работы Сайта</li>
+            </ul>
+
+            <h2>2. Как мы используем ваши данные</h2>
+
+            <p>Мы используем собранные данные для:</p>
+            <ul>
+                <li>Обработки бронирований и предоставления заказанных услуг</li>
+                <li>Связи с вами по поводу вашего бронирования или запросов</li>
+                <li>Улучшения работы Сайта и пользовательского опыта</li>
+                <li>Отправки маркетинговых материалов (только с вашего согласия)</li>
+                <li>Соблюдения юридических обязательств</li>
+                <li>Анализа статистики посещаемости и эффективности маркетинга</li>
+            </ul>
+
+            <h2>3. Правовые основания обработки данных</h2>
+
+            <p>Мы обрабатываем ваши персональные данные на основании:</p>
+            <ul>
+                <li><strong>Исполнение договора:</strong> для предоставления заказанных услуг</li>
+                <li><strong>Согласие:</strong> для маркетинговых коммуникаций и использования cookie</li>
+                <li><strong>Законные интересы:</strong> для улучшения сервиса и защиты от мошенничества</li>
+                <li><strong>Юридические обязательства:</strong> для соблюдения итальянского и европейского законодательства</li>
+            </ul>
+
+            <h2>4. Передача данных третьим лицам</h2>
+
+            <p>Мы можем передавать ваши данные:</p>
+            <ul>
+                <li><strong>Платёжным системам:</strong> для обработки платежей (Stripe, PayPal и др.)</li>
+                <li><strong>Сервисам аналитики:</strong> Google Analytics для анализа посещаемости</li>
+                <li><strong>Коммуникационным платформам:</strong> WhatsApp, Telegram, электронная почта для связи с вами</li>
+                <li><strong>Партнёрам по услугам:</strong> водителям, экскурсоводам, фотографам (только необходимая информация)</li>
+            </ul>
+
+            <p>Мы не продаём и не сдаём в аренду ваши персональные данные.</p>
+
+            <h2>5. Международная передача данных</h2>
+
+            <p>Некоторые наши партнёры находятся за пределами Европейской экономической зоны. Мы обеспечиваем надлежащий уровень защиты ваших данных через:</p>
+            <ul>
+                <li>Использование сервисов, соответствующих GDPR</li>
+                <li>Стандартные договорные оговорки, одобренные Европейской комиссией</li>
+                <li>Сертификации Privacy Shield (где применимо)</li>
+            </ul>
+
+            <h2>6. Хранение данных</h2>
+
+            <p>Мы храним ваши персональные данные:</p>
+            <ul>
+                <li><strong>Данные бронирования:</strong> 10 лет (требование итальянского налогового законодательства)</li>
+                <li><strong>Маркетинговые данные:</strong> до отзыва согласия или 3 года с момента последнего контакта</li>
+                <li><strong>Технические данные:</strong> до 24 месяцев</li>
+            </ul>
+
+            <h2>7. Ваши права</h2>
+
+            <p>Вы имеете право:</p>
+            <ul>
+                <li><strong>Доступ:</strong> получить копию ваших персональных данных</li>
+                <li><strong>Исправление:</strong> исправить неточные или неполные данные</li>
+                <li><strong>Удаление:</strong> запросить удаление ваших данных («право на забвение»)</li>
+                <li><strong>Ограничение обработки:</strong> ограничить использование ваших данных в определённых случаях</li>
+                <li><strong>Портируемость данных:</strong> получить данные в структурированном машиночитаемом формате</li>
+                <li><strong>Возражение:</strong> возразить против обработки данных в маркетинговых целях</li>
+                <li><strong>Отзыв согласия:</strong> в любой момент отозвать ранее данное согласие</li>
+            </ul>
+
+            <p>Для реализации ваших прав свяжитесь с нами по адресу <a href="mailto:privacy@atrani.ru">privacy@atrani.ru</a></p>
+
+            <h2>8. Файлы cookie</h2>
+
+            <p>Мы используем следующие типы cookie:</p>
+            <ul>
+                <li><strong>Необходимые:</strong> для работы Сайта (не требуют согласия)</li>
+                <li><strong>Функциональные:</strong> для запоминания ваших предпочтений</li>
+                <li><strong>Аналитические:</strong> для анализа посещаемости (Google Analytics)</li>
+                <li><strong>Маркетинговые:</strong> для показа релевантной рекламы</li>
+            </ul>
+
+            <p>Вы можете управлять cookie через настройки вашего браузера или нашу панель управления cookie на сайте.</p>
+
+            <h2>9. Безопасность данных</h2>
+
+            <p>Мы применяем организационные и технические меры для защиты ваших данных:</p>
+            <ul>
+                <li>SSL/TLS шифрование для передачи данных</li>
+                <li>Ограниченный доступ к персональным данным только для уполномоченных сотрудников</li>
+                <li>Регулярное обновление систем безопасности</li>
+                <li>Резервное копирование данных</li>
+            </ul>
+
+            <h2>10. Дети</h2>
+
+            <p>Наши услуги не предназначены для лиц младше 16 лет. Мы сознательно не собираем персональные данные детей. Если вы являетесь родителем или опекуном и считаете, что ваш ребёнок предоставил нам персональные данные, свяжитесь с нами.</p>
+
+            <h2>11. Изменения в Политике конфиденциальности</h2>
+
+            <p>Мы можем обновлять эту Политику конфиденциальности. О существенных изменениях мы уведомим вас по электронной почте или через уведомление на Сайте. Дата последнего обновления указана в начале документа.</p>
+
+            <h2>12. Контактная информация</h2>
+
+            <p><strong>Контролёр данных:</strong><br>
+            CristallPont S.R.L.<br>
+            Адрес: Via G. Capone, 54, 84010 Atrani (SA), Italia<br>
+            Email: <a href="mailto:privacy@atrani.ru">privacy@atrani.ru</a><br>
+            Телефон: <a href="tel:+393270972329">+39 327 097 2329</a></p>
+
+            <h2>13. Жалобы</h2>
+
+            <p>Если вы считаете, что ваши права на защиту данных были нарушены, вы имеете право подать жалобу в надзорный орган:</p>
+
+            <p><strong>Garante per la protezione dei dati personali</strong><br>
+            Piazza Venezia, 11<br>
+            00187 Roma, Italia<br>
+            Website: <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">www.garanteprivacy.it</a></p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="/" class="logo">АМАЛЬФИГЕТЬ</a>
+                <p class="footer-tagline">Ваш проводник по Амальфитанскому побережью</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/atrani.ru" aria-label="Facebook">FB</a>
+                    <a href="https://instagram.com/atrani.ru" aria-label="Instagram">IG</a>
+                    <a href="https://t.me/atraníru" aria-label="Telegram">TG</a>
+                    <a href="https://wa.me/393270972329" aria-label="WhatsApp">WA</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Навигация</h4>
+                <ul>
+                    <li><a href="/#experiences">Впечатления</a></li>
+                    <li><a href="/#about">О нас</a></li>
+                    <li><a href="/#apartments">Апартаменты</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Полезное</h4>
+                <ul>
+                    <li><a href="#">Блог</a></li>
+                    <li><a href="#">Магазин</a></li>
+                    <li><a href="#">Расписание</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <ul>
+                    <li><a href="tel:+393270972329">+39 327 097 2329</a></li>
+                    <li><a href="mailto:mail@atrani.ru">mail@atrani.ru</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copyright">
+                <span>&copy; 2014–2026 CristallPont S.R.L. Все права защищены.</span>
+                <span>•</span>
+                <a href="/privacy-policy.html">Privacy Policy</a>
+            </div>
+            <div class="footer-credit">
+                • Design & Development Gregory '<a href="https://cinereo.it" target="_blank" rel="noopener">Cinereo</a>' Day
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

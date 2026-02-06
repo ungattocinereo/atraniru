@@ -679,6 +679,13 @@
             color: var(--color-gray);
             font-size: 14px;
             line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .footer-tagline {
+            font-size: 14px;
+            color: var(--color-gray);
+            font-style: italic;
         }
 
         .footer-col h4 {
@@ -718,33 +725,75 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 40px;
         }
 
-        .footer-bottom p {
+        .footer-copyright {
             font-size: 12px;
             color: var(--color-gray);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .footer-copyright a {
+            color: var(--color-gray);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-copyright a:hover {
+            color: var(--color-orange);
+        }
+
+        .footer-copyright span {
+            color: rgba(255,255,255,0.2);
+        }
+
+        .footer-credit {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            letter-spacing: 0.5px;
+        }
+
+        .footer-credit a {
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-credit a:hover {
+            color: var(--color-orange);
         }
 
         .social-links {
             display: flex;
-            gap: 16px;
+            gap: 12px;
         }
 
         .social-links a {
-            width: 44px;
-            height: 44px;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: transparent;
             border: 1px solid rgba(255,255,255,0.2);
             color: white;
             text-decoration: none;
+            font-family: var(--font-display);
+            font-size: 11px;
+            font-weight: 700;
             transition: all 0.3s var(--ease-out);
         }
 
         .social-links a:hover {
             background: var(--color-orange);
             border-color: var(--color-orange);
+            transform: translate(-2px, -2px);
+            box-shadow: 2px 2px 0 rgba(255,255,255,0.2);
         }
 
         /* Reveal */
@@ -813,7 +862,18 @@
 
             .footer-bottom {
                 flex-direction: column;
-                gap: 24px;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .footer-copyright {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .footer-credit {
+                align-self: flex-start;
             }
         }
     </style>
@@ -1001,7 +1061,13 @@
         <div class="footer-grid">
             <div class="footer-brand">
                 <a href="/" class="logo">АМАЛЬФИГЕТЬ</a>
-                <p>В самом сердце Амальфитанского побережья. Уникальные экскурсии и апартаменты.</p>
+                <p class="footer-tagline">Ваш проводник по Амальфитанскому побережью</p>
+                <div class="social-links">
+                    <a href="https://facebook.com/atrani.ru" aria-label="Facebook">FB</a>
+                    <a href="https://instagram.com/atrani.ru" aria-label="Instagram">IG</a>
+                    <a href="https://t.me/atraníru" aria-label="Telegram">TG</a>
+                    <a href="https://wa.me/393270972329" aria-label="WhatsApp">WA</a>
+                </div>
             </div>
             <div class="footer-col">
                 <h4>Навигация</h4>
@@ -1028,10 +1094,13 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2014–2026 CristallPont S.R.L.</p>
-            <div class="social-links">
-                <a href="https://facebook.com/atrani.ru" aria-label="Facebook">FB</a>
-                <a href="https://instagram.com/atrani.ru" aria-label="Instagram">IG</a>
+            <div class="footer-copyright">
+                <span>&copy; 2014–2026 CristallPont S.R.L. Все права защищены.</span>
+                <span>•</span>
+                <a href="/privacy-policy.html">Privacy Policy</a>
+            </div>
+            <div class="footer-credit">
+                • Design & Development Gregory '<a href="https://cinereo.it" target="_blank" rel="noopener">Cinereo</a>' Day
             </div>
         </div>
     </footer>

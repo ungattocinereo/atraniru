@@ -1,19 +1,33 @@
 #!/bin/bash
+set -e
 
-exec > /tmp/deploy.log 2>&1
-echo "Deploy started at $(date)"
+# Atrani.ru deploy script
+# Usage: ./deploy.sh
+# Run on VPS from the project directory: /home/greg/atraniru
 
-cd /home/greg/atraniru || exit
+APP_DIR="/home/greg/atraniru"
+QUEUE_DIR="$APP_DIR/data/queue"
 
-echo "Pulling changes..."
-git config --global --add safe.directory /home/greg/atraniru
-git fetch origin main
-git reset --hard origin/main
+cd "$APP_DIR"
 
-echo "Installing dependencies..."
-/usr/bin/npm install
+echo "=== Pulling latest code ==="
+git pull origin main
 
-echo "Building project..."
-/usr/bin/npm run build:prod
+echo "=== Installing dependencies ==="
+npm ci
 
-echo "Deploy finished at $(date)"
+echo "=== Creating queue directories ==="
+mkdir -p "$QUEUE_DIR/pending" "$QUEUE_DIR/delivered"
+
+echo "=== Building ==="
+npm run build
+
+echo "=== Restarting with PM2 ==="
+if pm2 describe atraniru > /dev/null 2>&1; then
+  pm2 restart atraniru
+else
+  pm2 start ecosystem.config.cjs --only atraniru
+fi
+
+echo "=== Done! ==="
+pm2 status atraniru

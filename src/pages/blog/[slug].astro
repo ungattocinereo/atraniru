@@ -1,6 +1,7 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
 import { getAllPosts, getSinglePost, getRelatedPosts, formatDate, calculateReadingTime } from '../../lib/ghostApi';
+import { rewriteGhostUrl, rewriteGhostHtml } from '../../lib/ghost';
 import type { GhostPost } from '../../lib/types/ghost';
 
 export async function getStaticPaths() {
@@ -29,7 +30,7 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
     <header class="article-hero">
       {post.feature_image && (
         <div class="article-hero-bg">
-          <img src={post.feature_image} alt={post.title} />
+          <img src={rewriteGhostUrl(post.feature_image)} alt={post.title} />
         </div>
       )}
       <div class="article-hero-content">
@@ -51,7 +52,7 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
           <div class="author-block">
             {post.primary_author.profile_image && (
               <img
-                src={post.primary_author.profile_image}
+                src={rewriteGhostUrl(post.primary_author.profile_image)}
                 alt={post.primary_author.name}
                 class="author-avatar"
               />
@@ -70,12 +71,12 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
     <!-- Featured Image (separate from hero bg) -->
     {post.feature_image && (
       <figure class="featured-image reveal">
-        <img src={post.feature_image} alt={post.title} />
+        <img src={rewriteGhostUrl(post.feature_image)} alt={post.title} />
       </figure>
     )}
 
     <!-- Article Content -->
-    <div class="article-content" set:html={post.html} />
+    <div class="article-content" set:html={rewriteGhostHtml(post.html)} />
 
     <!-- Tags -->
     {post.tags && post.tags.length > 0 && (
@@ -125,7 +126,7 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
         <div class="author-bio reveal">
           {post.primary_author.profile_image && (
             <img
-              src={post.primary_author.profile_image}
+              src={rewriteGhostUrl(post.primary_author.profile_image)}
               alt={post.primary_author.name}
               class="author-bio-avatar"
             />
@@ -164,7 +165,7 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
             <a href={`/blog/${related.slug}`}>
               <div class="related-card-image">
                 <img
-                  src={related.feature_image || '/images/placeholder-blog.jpg'}
+                  src={rewriteGhostUrl(related.feature_image) || '/images/placeholder-blog.jpg'}
                   alt={related.title}
                   loading="lazy"
                 />

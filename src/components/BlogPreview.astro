@@ -1,6 +1,6 @@
 ---
 // BlogPreview component - 4 latest posts from Ghost
-import { ghostClient } from '../lib/ghost';
+import { ghostClient, rewriteGhostUrl } from '../lib/ghost';
 
 let posts = [];
 let error = null;
@@ -59,7 +59,7 @@ try {
           <a href={`/blog/${post.slug}`}>
             <div class="blog-image">
               <img
-                src={post.feature_image || '/images/placeholder-blog.jpg'}
+                src={rewriteGhostUrl(post.feature_image) || '/images/placeholder-blog.jpg'}
                 alt={post.title}
                 loading="lazy"
               />

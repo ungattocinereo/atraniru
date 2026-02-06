@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import { getAllPosts, formatDate } from '../../lib/ghostApi';
+import { rewriteGhostUrl } from '../../lib/ghost';
 
 const posts = await getAllPosts({ limit: 'all' });
 ---
@@ -21,7 +22,7 @@ const posts = await getAllPosts({ limit: 'all' });
           <a href={`/blog/${post.slug}`}>
             <div class="blog-listing-card-image">
               <img
-                src={post.feature_image || '/images/placeholder-blog.jpg'}
+                src={rewriteGhostUrl(post.feature_image) || '/images/placeholder-blog.jpg'}
                 alt={post.title}
                 loading={i < 3 ? 'eager' : 'lazy'}
               />
@@ -36,7 +37,7 @@ const posts = await getAllPosts({ limit: 'all' });
                 {post.primary_author && (
                   <span class="blog-listing-card-author">
                     {post.primary_author.profile_image && (
-                      <img src={post.primary_author.profile_image} alt={post.primary_author.name} class="blog-listing-card-author-img" />
+                      <img src={rewriteGhostUrl(post.primary_author.profile_image)} alt={post.primary_author.name} class="blog-listing-card-author-img" />
                     )}
                     {post.primary_author.name}
                   </span>

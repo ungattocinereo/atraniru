@@ -1,5 +1,6 @@
 ---
 import Layout from './Layout.astro';
+import { rewriteGhostUrl } from '../lib/ghost';
 import type { GhostPost } from '../lib/types/ghost';
 
 interface Props {
@@ -13,7 +14,7 @@ const metaTitle = post.meta_title || `${post.title} — Atrani.ru`;
 const metaDescription = post.meta_description || post.custom_excerpt || post.excerpt;
 
 // Get OG image
-const ogImage = post.og_image || post.feature_image || '/meta.png';
+const ogImage = rewriteGhostUrl(post.og_image || post.feature_image) || '/meta.png';
 ---
 
 <Layout title={metaTitle} description={metaDescription} ogImage={ogImage} ogType="article">
@@ -42,13 +43,13 @@ const ogImage = post.og_image || post.feature_image || '/meta.png';
     "@type": "BlogPosting",
     "headline": post.title,
     "description": metaDescription,
-    "image": post.feature_image,
+    "image": rewriteGhostUrl(post.feature_image),
     "datePublished": post.published_at,
     "dateModified": post.updated_at,
     "author": post.primary_author ? {
       "@type": "Person",
       "name": post.primary_author.name,
-      "image": post.primary_author.profile_image,
+      "image": rewriteGhostUrl(post.primary_author.profile_image),
       "description": post.primary_author.bio
     } : undefined,
     "publisher": {

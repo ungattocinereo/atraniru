@@ -10,6 +10,15 @@ QUEUE_DIR="$APP_DIR/data/queue"
 
 cd "$APP_DIR"
 
+# Check .env exists with Ghost credentials
+if [ ! -f .env ] || ! grep -q "GHOST_URL" .env || ! grep -q "CONTENT_API_KEY" .env; then
+  echo "ERROR: .env missing or incomplete (need GHOST_URL and CONTENT_API_KEY)"
+  echo "Create .env with:"
+  echo "  GHOST_URL=http://localhost:2369"
+  echo "  CONTENT_API_KEY=<your-ghost-content-api-key>"
+  exit 1
+fi
+
 echo "=== Pulling latest code ==="
 git pull origin main
 

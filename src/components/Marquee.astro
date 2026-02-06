@@ -1,0 +1,24 @@
+---
+// Marquee component - infinite scrolling text
+const text = "АТРАНИ • АМАЛЬФИ • ПОЗИТАНО • РАВЕЛЛО";
+---
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-content">
+    <div class="marquee-item">
+      {text.split(' • ').map((item, index) => (
+        <>
+          {item} {index < text.split(' • ').length - 1 && <span>•</span>}
+        </>
+      ))}
+    </div>
+    <!-- Duplicate for seamless loop -->
+    <div class="marquee-item">
+      {text.split(' • ').map((item, index) => (
+        <>
+          {item} {index < text.split(' • ').length - 1 && <span>•</span>}
+        </>
+      ))}
+    </div>
+  </div>
+</div>

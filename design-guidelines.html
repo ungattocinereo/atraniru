@@ -1,0 +1,2684 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дизайн-система АМАЛЬФИГЕТЬ — Гайдлайны</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-navy-deep: #000A27;
+            --color-navy: #0A1628;
+            --color-navy-medium: #152238;
+            --color-navy-light: #1E3050;
+            --color-white: #FFFFFF;
+            --color-orange: #FF5722;
+            --color-orange-light: #FF8A65;
+            --color-gray: #8B9BB4;
+            --color-gray-dark: #4A5568;
+            --color-gray-light: #E2E8F0;
+            --color-bg-light: #F0F4F8;
+
+            --font-display: 'Unbounded', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+            --radius-sm: 0;
+            --radius-md: 0;
+            --radius-lg: 0;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--color-navy-deep);
+            background: var(--color-white);
+        }
+
+        ::selection {
+            background: var(--color-orange);
+            color: white;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 20px;
+            background: var(--color-navy);
+            color: white;
+            padding: 12px 24px;
+            font-weight: 600;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 20px;
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--color-orange);
+            outline-offset: 3px;
+        }
+
+        a {
+            color: var(--color-orange);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: var(--color-orange-light);
+        }
+
+        /* Layout */
+        .page-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--color-navy-deep);
+            color: white;
+            padding: 32px 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-logo {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .sidebar-subtitle {
+            font-size: 12px;
+            color: var(--color-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 40px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-nav-title {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-gray);
+            margin-bottom: 12px;
+        }
+
+        .sidebar-nav-list {
+            list-style: none;
+        }
+
+        .sidebar-nav-list li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-nav-list a {
+            display: block;
+            padding: 8px 12px;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            border-left: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .sidebar-nav-list a:hover {
+            color: white;
+            background: rgba(255,255,255,0.05);
+            border-left-color: var(--color-orange);
+        }
+
+        .sidebar-nav-list a.active {
+            color: white;
+            border-left-color: var(--color-orange);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 60px 80px;
+            max-width: 1200px;
+        }
+
+        /* Hero */
+        .guidelines-hero {
+            margin-bottom: 80px;
+            padding-bottom: 60px;
+            border-bottom: 1px solid var(--color-gray-light);
+        }
+
+        .guidelines-hero h1 {
+            font-family: var(--font-display);
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 16px;
+        }
+
+        .guidelines-hero h1 span {
+            color: var(--color-orange);
+        }
+
+        .guidelines-hero p {
+            font-size: 20px;
+            color: var(--color-gray-dark);
+            max-width: 600px;
+        }
+
+        .version-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--color-orange);
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 80px;
+            scroll-margin-top: 40px;
+        }
+
+        .section-header {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+        }
+
+        .section-description {
+            font-size: 16px;
+            color: var(--color-gray-dark);
+            max-width: 600px;
+        }
+
+        /* Component Card */
+        .component {
+            margin-bottom: 60px;
+            padding: 40px;
+            background: var(--color-bg-light);
+            border-left: 4px solid var(--color-navy);
+        }
+
+        .component-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+
+        .component-name {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .component-id {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--color-orange);
+            background: rgba(255,87,34,0.1);
+            padding: 4px 8px;
+        }
+
+        .component-description {
+            font-size: 15px;
+            color: var(--color-gray-dark);
+            margin-bottom: 24px;
+            max-width: 600px;
+        }
+
+        .component-preview {
+            background: white;
+            padding: 40px;
+            margin-bottom: 24px;
+            border: 1px solid var(--color-gray-light);
+            overflow: hidden;
+        }
+
+        .component-preview.dark {
+            background: var(--color-navy-deep);
+        }
+
+        .component-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .spec-item {
+            padding: 16px;
+            background: white;
+        }
+
+        .spec-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-gray);
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--color-navy);
+        }
+
+        /* Color Grid */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+        }
+
+        .color-card {
+            background: white;
+            overflow: hidden;
+        }
+
+        .color-swatch {
+            height: 100px;
+            display: flex;
+            align-items: flex-end;
+            padding: 12px;
+        }
+
+        .color-swatch.light-text {
+            color: white;
+        }
+
+        .color-swatch.dark-text {
+            color: var(--color-navy-deep);
+        }
+
+        .color-info {
+            padding: 16px;
+        }
+
+        .color-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .color-variable {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--color-gray);
+            margin-bottom: 4px;
+        }
+
+        .color-hex {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--color-orange);
+        }
+
+        /* Typography Scale */
+        .type-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .type-item {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 32px;
+            align-items: center;
+            padding: 24px;
+            background: white;
+        }
+
+        .type-meta {
+            font-size: 13px;
+        }
+
+        .type-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .type-specs {
+            font-family: var(--font-mono);
+            color: var(--color-gray);
+            font-size: 12px;
+        }
+
+        .type-sample {
+            font-family: var(--font-display);
+        }
+
+        .type-sample.body {
+            font-family: var(--font-body);
+        }
+
+        /* Button Examples */
+        .button-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+        }
+
+        /* Actual Components Preview */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .btn-primary {
+            background: var(--color-navy);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-orange);
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--color-navy);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--color-navy);
+            border: 2px solid var(--color-navy);
+        }
+
+        .btn-outline:hover {
+            background: var(--color-navy);
+            color: white;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--color-navy);
+        }
+
+        .btn-white:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 rgba(255,255,255,0.3);
+            color: var(--color-navy);
+        }
+
+        .btn-small {
+            padding: 10px 20px;
+            font-size: 12px;
+        }
+
+        /* Section Label Preview */
+        .section-label-preview {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--color-orange);
+            margin-bottom: 16px;
+        }
+
+        .section-title-preview {
+            font-family: var(--font-display);
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+
+        /* Hero Label Preview */
+        .hero-label-preview {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--color-gray);
+            margin-bottom: 24px;
+        }
+
+        .hero-label-preview::before {
+            content: '';
+            width: 40px;
+            height: 2px;
+            background: var(--color-orange);
+        }
+
+        .hero-title-preview {
+            font-family: var(--font-display);
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -4px;
+            color: white;
+        }
+
+        .hero-title-preview .highlight {
+            color: var(--color-orange);
+            display: block;
+        }
+
+        /* Card Preview */
+        .card-preview {
+            max-width: 400px;
+        }
+
+        .card-preview img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            filter: grayscale(50%);
+        }
+
+        .card-content-preview {
+            padding: 24px;
+            background: white;
+        }
+
+        .card-number-preview {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-orange);
+            margin-bottom: 8px;
+        }
+
+        .card-title-preview {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .card-text-preview {
+            font-size: 14px;
+            color: var(--color-gray-dark);
+        }
+
+        /* Stat Preview */
+        .stat-preview {
+            text-align: center;
+            padding: 32px;
+        }
+
+        .stat-number-preview {
+            font-family: var(--font-display);
+            font-size: 64px;
+            font-weight: 900;
+            color: var(--color-orange);
+            line-height: 1;
+        }
+
+        .stat-label-preview {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-gray);
+            margin-top: 8px;
+        }
+
+        /* Quote Preview */
+        .quote-preview {
+            padding: 32px 40px;
+            background: transparent;
+            border: 2px solid var(--color-navy);
+            border-left: 4px solid var(--color-orange);
+            position: relative;
+        }
+
+        .quote-preview::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 24px;
+            font-family: var(--font-display);
+            font-size: 80px;
+            font-weight: 900;
+            color: var(--color-orange);
+            line-height: 1;
+            opacity: 0.4;
+        }
+
+        .quote-text-preview {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 16px;
+            color: var(--color-navy);
+        }
+
+        .quote-cite-preview {
+            font-size: 14px;
+            color: var(--color-gray);
+        }
+
+        /* Info Box Preview */
+        .info-box-preview {
+            padding: 32px;
+            background: var(--color-bg-light);
+            border-left: 4px solid var(--color-orange);
+        }
+
+        .info-box-title-preview {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-orange);
+            margin-bottom: 12px;
+        }
+
+        /* Tag Preview */
+        .tag-preview {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--color-gray-light);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-navy);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .tag-preview:hover {
+            background: var(--color-navy);
+            color: white;
+        }
+
+        /* Form Elements */
+        .form-preview {
+            max-width: 400px;
+        }
+
+        .form-group-preview {
+            margin-bottom: 20px;
+        }
+
+        .form-label-preview {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-navy);
+        }
+
+        .form-input-preview {
+            width: 100%;
+            padding: 14px 16px;
+            font-family: var(--font-body);
+            font-size: 16px;
+            border: 2px solid var(--color-gray-light);
+            background: white;
+            transition: all 0.3s;
+        }
+
+        .form-input-preview:focus {
+            outline: none;
+            border-color: var(--color-navy);
+        }
+
+        /* Spacing Guide */
+        .spacing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 16px;
+        }
+
+        .spacing-item {
+            text-align: center;
+            padding: 16px;
+            background: white;
+        }
+
+        .spacing-visual {
+            height: 60px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            margin-bottom: 12px;
+        }
+
+        .spacing-block {
+            background: var(--color-orange);
+            width: 40px;
+        }
+
+        .spacing-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .spacing-value {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--color-gray);
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--color-navy-deep);
+            color: var(--color-gray-light);
+            padding: 20px 24px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin-top: 16px;
+        }
+
+        .code-block .keyword {
+            color: var(--color-orange);
+        }
+
+        .code-block .string {
+            color: #7EC699;
+        }
+
+        .code-block .comment {
+            color: var(--color-gray);
+        }
+
+        /* Animation Examples */
+        .animation-demo {
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .animation-box {
+            width: 80px;
+            height: 80px;
+            background: var(--color-navy);
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .animation-box:hover {
+            background: var(--color-orange);
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--color-navy);
+        }
+
+        .animation-box.fade {
+            opacity: 0.3;
+        }
+
+        .animation-box.fade:hover {
+            opacity: 1;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Logo Preview */
+        .logo-preview {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .logo-preview.white {
+            color: white;
+        }
+
+        .logo-preview.dark {
+            color: var(--color-navy-deep);
+        }
+
+        /* Footer Note */
+        .guidelines-footer {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid var(--color-gray-light);
+            text-align: center;
+            color: var(--color-gray);
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 24px;
+            }
+
+            .guidelines-hero h1 {
+                font-size: 32px;
+            }
+
+            .component {
+                padding: 24px;
+            }
+
+            .type-item {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Перейти к содержимому</a>
+
+    <div class="page-wrapper">
+        <aside class="sidebar">
+            <a href="concept-8-navy-brutalist.html" class="sidebar-logo">АМАЛЬФИГЕТЬ</a>
+            <div class="sidebar-subtitle">Design System v1.0</div>
+
+            <nav>
+                <ul class="sidebar-nav">
+                    <li class="sidebar-nav-section">
+                        <div class="sidebar-nav-title">Основы</div>
+                        <ul class="sidebar-nav-list">
+                            <li><a href="#colors">Цвета</a></li>
+                            <li><a href="#typography">Типографика</a></li>
+                            <li><a href="#spacing">Отступы</a></li>
+                            <li><a href="#animations">Анимации</a></li>
+                        </ul>
+                    </li>
+                    <li class="sidebar-nav-section">
+                        <div class="sidebar-nav-title">Компоненты</div>
+                        <ul class="sidebar-nav-list">
+                            <li><a href="#logo">Логотип</a></li>
+                            <li><a href="#buttons">Кнопки</a></li>
+                            <li><a href="#section-headers">Заголовки секций</a></li>
+                            <li><a href="#hero">Hero-блок</a></li>
+                            <li><a href="#cards">Карточки</a></li>
+                            <li><a href="#stats">Статистика</a></li>
+                            <li><a href="#quotes">Цитаты</a></li>
+                            <li><a href="#info-box">Info-box</a></li>
+                            <li><a href="#tags">Теги</a></li>
+                            <li><a href="#forms">Формы</a></li>
+                        </ul>
+                    </li>
+                    <li class="sidebar-nav-section">
+                        <div class="sidebar-nav-title">Паттерны</div>
+                        <ul class="sidebar-nav-list">
+                            <li><a href="#marquee">Бегущая строка</a></li>
+                            <li><a href="#grids">Сетки</a></li>
+                            <li><a href="#accessibility">Доступность</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main id="main" class="main-content">
+            <header class="guidelines-hero">
+                <span class="version-badge">Version 1.0 — Navy Brutalist</span>
+                <h1>Дизайн-система <span>АМАЛЬФИГЕТЬ</span></h1>
+                <p>Полное руководство по визуальному стилю, компонентам и паттернам для разработки сайта atrani.ru</p>
+            </header>
+
+            <!-- COLORS -->
+            <section id="colors" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Цвета</h2>
+                    <p class="section-description">Палитра построена на контрасте глубокого тёмно-синего и яркого оранжевого акцента.</p>
+                </div>
+
+                <div class="color-grid">
+                    <div class="color-card">
+                        <div class="color-swatch light-text" style="background: #000A27;">Navy Deep</div>
+                        <div class="color-info">
+                            <div class="color-name">Navy Deep</div>
+                            <div class="color-variable">--color-navy-deep</div>
+                            <div class="color-hex">#000A27</div>
+                        </div>
+                    </div>
+
+                    <div class="color-card">
+                        <div class="color-swatch light-text" style="background: #0A1628;">Navy</div>
+                        <div class="color-info">
+                            <div class="color-name">Navy</div>
+                            <div class="color-variable">--color-navy</div>
+                            <div class="color-hex">#0A1628</div>
+                        </div>
+                    </div>
+
+                    <div class="color-card">
+                        <div class="color-swatch light-text" style="background: #152238;">Navy Medium</div>
+                        <div class="color-info">
+                            <div class="color-name">Navy Medium</div>
+                            <div class="color-variable">--color-navy-medium</div>
+                            <div class="color-hex">#152238</div>
+                        </div>
+                    </div>
+
+                    <div class="color-card">
+                        <div class="color-swatch light-text" style="background: #1E3050;">Navy Light</div>
+                        <div class="color-info">
+                            <div class="color-name">Navy Light</div>
+                            <div class="color-variable">--color-navy-light</div>
+                            <div class="color-hex">#1E3050</div>
+                        </div>
+                    </div>
+
+                    <div class="color-card">
+                        <div class="color-swatch light-text" style="background: #FF5722;">Orange</div>
+                        <div class="color-info">
+                            <div class="color-name">Orange</div>
+                            <div class="color-variable">--color-orange</div>
+                            <div class="color-hex">#FF5722</div>
+                        </div>
+                    </div>
+
+                    <div class="color-card">
+                        <div class="color-swatch light-text" style="background: #FF8A65;">Orange Light</div>
+                        <div class="color-info">
+                            <div class="color-name">Orange Light</div>
+                            <div class="color-variable">--color-orange-light</div>
+                            <div class="color-hex">#FF8A65</div>
+                        </div>
+                    </div>
+
+                    <div class="color-card">
+                        <div class="color-swatch dark-text" style="background: #8B9BB4;">Gray</div>
+                        <div class="color-info">
+                            <div class="color-name">Gray</div>
+                            <div class="color-variable">--color-gray</div>
+                            <div class="color-hex">#8B9BB4</div>
+                        </div>
+                    </div>
+
+                    <div class="color-card">
+                        <div class="color-swatch dark-text" style="background: #4A5568;">Gray Dark</div>
+                        <div class="color-info">
+                            <div class="color-name">Gray Dark</div>
+                            <div class="color-variable">--color-gray-dark</div>
+                            <div class="color-hex">#4A5568</div>
+                        </div>
+                    </div>
+
+                    <div class="color-card">
+                        <div class="color-swatch dark-text" style="background: #E2E8F0;">Gray Light</div>
+                        <div class="color-info">
+                            <div class="color-name">Gray Light</div>
+                            <div class="color-variable">--color-gray-light</div>
+                            <div class="color-hex">#E2E8F0</div>
+                        </div>
+                    </div>
+
+                    <div class="color-card">
+                        <div class="color-swatch dark-text" style="background: #F0F4F8;">Background Light</div>
+                        <div class="color-info">
+                            <div class="color-name">Background Light</div>
+                            <div class="color-variable">--color-bg-light</div>
+                            <div class="color-hex">#F0F4F8</div>
+                        </div>
+                    </div>
+
+                    <div class="color-card">
+                        <div class="color-swatch dark-text" style="background: #FFFFFF; border: 1px solid #E2E8F0;">White</div>
+                        <div class="color-info">
+                            <div class="color-name">White</div>
+                            <div class="color-variable">--color-white</div>
+                            <div class="color-hex">#FFFFFF</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component" style="margin-top: 40px;">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Применение цветов</div>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Hero/Footer фон</div>
+                            <div class="spec-value">--color-navy-deep</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Кнопки</div>
+                            <div class="spec-value">--color-navy</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Акценты/CTA</div>
+                            <div class="spec-value">--color-orange</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Основной текст</div>
+                            <div class="spec-value">--color-gray-dark</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Вторичный текст</div>
+                            <div class="spec-value">--color-gray</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Секции (чередование)</div>
+                            <div class="spec-value">--color-bg-light</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TYPOGRAPHY -->
+            <section id="typography" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Типографика</h2>
+                    <p class="section-description">Два шрифта: Unbounded для заголовков и акцентов, Space Grotesk для основного текста.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Шрифты</div>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Display Font</div>
+                            <div class="spec-value">'Unbounded', sans-serif</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Body Font</div>
+                            <div class="spec-value">'Space Grotesk', sans-serif</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Mono Font (код)</div>
+                            <div class="spec-value">'JetBrains Mono', monospace</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Шкала размеров</div>
+                            <span class="component-id">.type-*</span>
+                        </div>
+                    </div>
+                    <div class="type-scale">
+                        <div class="type-item">
+                            <div class="type-meta">
+                                <div class="type-name">Hero H1</div>
+                                <div class="type-specs">clamp(60px, 12vw, 180px) / 0.9 / -4px</div>
+                            </div>
+                            <div class="type-sample" style="font-size: 48px; font-weight: 900; line-height: 0.9; letter-spacing: -2px;">АМАЛЬ-ФИГЕТЬ!</div>
+                        </div>
+                        <div class="type-item">
+                            <div class="type-meta">
+                                <div class="type-name">Section Title</div>
+                                <div class="type-specs">clamp(36px, 6vw, 72px) / 1 / -2px</div>
+                            </div>
+                            <div class="type-sample" style="font-size: 36px; font-weight: 800; line-height: 1; letter-spacing: -1px;">Что мы предлагаем</div>
+                        </div>
+                        <div class="type-item">
+                            <div class="type-meta">
+                                <div class="type-name">Card Title</div>
+                                <div class="type-specs">24-32px / 1.2 / -1px</div>
+                            </div>
+                            <div class="type-sample" style="font-size: 24px; font-weight: 700; letter-spacing: -0.5px;">Просторные апартаменты</div>
+                        </div>
+                        <div class="type-item">
+                            <div class="type-meta">
+                                <div class="type-name">Body Large</div>
+                                <div class="type-specs">18-24px / 1.6-1.8</div>
+                            </div>
+                            <div class="type-sample body" style="font-size: 18px; line-height: 1.7;">Самый маленький город Италии. Без туристических клише — только настоящая итальянская жизнь.</div>
+                        </div>
+                        <div class="type-item">
+                            <div class="type-meta">
+                                <div class="type-name">Body</div>
+                                <div class="type-specs">16px / 1.6</div>
+                            </div>
+                            <div class="type-sample body" style="font-size: 16px; line-height: 1.6;">Мы покажем вам Италию без туристической шелухи — настоящие вкусы, настоящих людей, настоящую жизнь.</div>
+                        </div>
+                        <div class="type-item">
+                            <div class="type-meta">
+                                <div class="type-name">Label</div>
+                                <div class="type-specs">12-14px / uppercase / 1-3px tracking</div>
+                            </div>
+                            <div class="type-sample" style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 3px;">01 — Впечатления</div>
+                        </div>
+                        <div class="type-item">
+                            <div class="type-meta">
+                                <div class="type-name">Stat Number</div>
+                                <div class="type-specs">clamp(48px, 6vw, 80px) / 1</div>
+                            </div>
+                            <div class="type-sample" style="font-size: 48px; font-weight: 900; color: var(--color-orange);">500+</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SPACING -->
+            <section id="spacing" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Отступы</h2>
+                    <p class="section-description">Система отступов основана на кратных 8px для консистентности.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Шкала отступов</div>
+                        </div>
+                    </div>
+                    <div class="spacing-grid">
+                        <div class="spacing-item">
+                            <div class="spacing-visual"><div class="spacing-block" style="height: 8px;"></div></div>
+                            <div class="spacing-name">XS</div>
+                            <div class="spacing-value">8px</div>
+                        </div>
+                        <div class="spacing-item">
+                            <div class="spacing-visual"><div class="spacing-block" style="height: 16px;"></div></div>
+                            <div class="spacing-name">SM</div>
+                            <div class="spacing-value">16px</div>
+                        </div>
+                        <div class="spacing-item">
+                            <div class="spacing-visual"><div class="spacing-block" style="height: 24px;"></div></div>
+                            <div class="spacing-name">MD</div>
+                            <div class="spacing-value">24px</div>
+                        </div>
+                        <div class="spacing-item">
+                            <div class="spacing-visual"><div class="spacing-block" style="height: 32px;"></div></div>
+                            <div class="spacing-name">LG</div>
+                            <div class="spacing-value">32px</div>
+                        </div>
+                        <div class="spacing-item">
+                            <div class="spacing-visual"><div class="spacing-block" style="height: 48px;"></div></div>
+                            <div class="spacing-name">XL</div>
+                            <div class="spacing-value">48px</div>
+                        </div>
+                        <div class="spacing-item">
+                            <div class="spacing-visual"><div class="spacing-block" style="height: 60px;"></div></div>
+                            <div class="spacing-name">2XL</div>
+                            <div class="spacing-value">60-80px</div>
+                        </div>
+                    </div>
+                    <div class="component-specs" style="margin-top: 24px;">
+                        <div class="spec-item">
+                            <div class="spec-label">Padding секций</div>
+                            <div class="spec-value">120px 40px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Gap в сетках</div>
+                            <div class="spec-value">24px / 2px (плотные)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Padding карточек</div>
+                            <div class="spec-value">24-48px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Padding кнопок</div>
+                            <div class="spec-value">16px 32px</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ANIMATIONS -->
+            <section id="animations" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Анимации</h2>
+                    <p class="section-description">Плавные, осмысленные переходы с единым easing.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Easing и длительность</div>
+                            <span class="component-id">--ease-out</span>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Easing</div>
+                            <div class="spec-value">cubic-bezier(0.16, 1, 0.3, 1)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hover/Focus</div>
+                            <div class="spec-value">0.3s</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Reveal (scroll)</div>
+                            <div class="spec-value">0.6-0.8s</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Page load</div>
+                            <div class="spec-value">0.8s с задержкой</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hover-эффект «Brutalist Shift»</div>
+                            <span class="component-id">.brutalist-hover</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Фирменный hover: смещение влево-вверх с тенью вправо-вниз.</div>
+                    <div class="component-preview">
+                        <div class="animation-demo">
+                            <div class="animation-box"></div>
+                            <div style="font-size: 14px; color: var(--color-gray);">Наведите курсор →</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">transform</span>: translate(-4px, -4px);
+<span class="keyword">box-shadow</span>: 4px 4px 0 var(--color-navy);
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Scroll Reveal</div>
+                            <span class="component-id">.reveal</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Элементы появляются снизу при скролле. Добавьте класс .reveal к элементу.</div>
+                    <div class="code-block">
+<span class="comment">/* CSS */</span>
+<span class="keyword">.reveal</span> {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s var(--ease-out);
+}
+<span class="keyword">.reveal.visible</span> {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+<span class="comment">/* JS */</span>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add(<span class="string">'visible'</span>);
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll(<span class="string">'.reveal'</span>).forEach(el => observer.observe(el));
+                    </div>
+                </div>
+            </section>
+
+            <!-- LOGO -->
+            <section id="logo" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Логотип</h2>
+                    <p class="section-description">Текстовый логотип на основе шрифта Unbounded.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Logo</div>
+                            <span class="component-id">.logo</span>
+                        </div>
+                    </div>
+                    <div class="component-preview dark" style="display: flex; gap: 60px; align-items: center;">
+                        <div class="logo-preview white">АМАЛЬФИГЕТЬ</div>
+                    </div>
+                    <div class="component-preview" style="display: flex; gap: 60px; align-items: center;">
+                        <div class="logo-preview dark">АМАЛЬФИГЕТЬ</div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Font</div>
+                            <div class="spec-value">Unbounded, 800</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Size (header)</div>
+                            <div class="spec-value">20px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Size (footer)</div>
+                            <div class="spec-value">24px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Letter-spacing</div>
+                            <div class="spec-value">-1px</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- BUTTONS -->
+            <section id="buttons" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Кнопки</h2>
+                    <p class="section-description">Три варианта кнопок для разных контекстов.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Button Primary</div>
+                            <span class="component-id">.btn .btn-primary</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Основная кнопка для главных действий. Тёмный фон, белый текст. Hover: оранжевый + brutalist shift.</div>
+                    <div class="component-preview">
+                        <div class="button-grid">
+                            <a class="btn btn-primary">Забронировать</a>
+                            <a class="btn btn-primary btn-small">Подробнее</a>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Background</div>
+                            <div class="spec-value">--color-navy</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Color</div>
+                            <div class="spec-value">white</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Padding</div>
+                            <div class="spec-value">16px 32px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hover BG</div>
+                            <div class="spec-value">--color-orange</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Button Outline</div>
+                            <span class="component-id">.btn .btn-outline</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Вторичная кнопка. Прозрачный фон с обводкой. Для менее важных действий.</div>
+                    <div class="component-preview">
+                        <div class="button-grid">
+                            <a class="btn btn-outline">Апартаменты</a>
+                            <a class="btn btn-outline btn-small">Смотреть все</a>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Background</div>
+                            <div class="spec-value">transparent</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Border</div>
+                            <div class="spec-value">2px solid --color-navy</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hover</div>
+                            <div class="spec-value">fill --color-navy</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Button White</div>
+                            <span class="component-id">.btn .btn-white</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Для тёмных фонов (hero, CTA). Белый фон, тёмный текст.</div>
+                    <div class="component-preview dark">
+                        <div class="button-grid">
+                            <a class="btn btn-white">Исследовать</a>
+                            <a class="btn btn-white btn-small">WhatsApp</a>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Background</div>
+                            <div class="spec-value">white</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Color</div>
+                            <div class="spec-value">--color-navy</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hover</div>
+                            <div class="spec-value">brutalist shift</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION HEADERS -->
+            <section id="section-headers" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Заголовки секций</h2>
+                    <p class="section-description">Единый формат: номер/лейбл сверху, крупный заголовок снизу.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Section Header</div>
+                            <span class="component-id">.section-header</span>
+                        </div>
+                    </div>
+                    <div class="component-preview">
+                        <p class="section-label-preview">01 — Впечатления</p>
+                        <h2 class="section-title-preview">Что мы предлагаем</h2>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Label Font</div>
+                            <div class="spec-value">12px / 600 / uppercase</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Label Color</div>
+                            <div class="spec-value">--color-orange</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Label Spacing</div>
+                            <div class="spec-value">letter-spacing: 3px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Title Font</div>
+                            <div class="spec-value">clamp(36px, 6vw, 72px) / 800</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- HERO -->
+            <section id="hero" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Hero-блок</h2>
+                    <p class="section-description">Полноэкранный блок — главный визуальный элемент страницы. Включает фоновый декоративный текст, заголовок, подзаголовок, кнопки и изображение.</p>
+                </div>
+
+                <!-- Hero Container -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hero Container</div>
+                            <span class="component-id">.hero</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Основной контейнер hero-блока. Занимает 100vh, тёмный фон, относительное позиционирование для вложенных абсолютных элементов.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Min Height</div>
+                            <div class="spec-value">100vh</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Background</div>
+                            <div class="spec-value">--color-navy-deep</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Padding</div>
+                            <div class="spec-value">120px 40px 80px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Display</div>
+                            <div class="spec-value">flex / column / center</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Position</div>
+                            <div class="spec-value">relative</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Overflow</div>
+                            <div class="spec-value">hidden</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">.hero</span> {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  background: var(--color-navy-deep);
+  color: white;
+  overflow: hidden;
+  padding: 120px 40px 80px;
+}
+                    </div>
+                </div>
+
+                <!-- Full HTML Structure -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Полная HTML-структура Hero</div>
+                            <span class="component-id">section.hero</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Копируйте эту структуру как основу. Все вложенные элементы описаны ниже.</div>
+                    <div class="code-block">
+&lt;section class="hero"&gt;
+  <span class="comment">&lt;!-- Декоративный фоновый текст --&gt;</span>
+  &lt;div class="hero-bg-text" aria-hidden="true"&gt;AMALFI&lt;/div&gt;
+
+  <span class="comment">&lt;!-- Контент (z-index: 1) --&gt;</span>
+  &lt;div class="hero-content"&gt;
+    &lt;p class="hero-label"&gt;Амальфитанское побережье&lt;/p&gt;
+
+    &lt;h1&gt;
+      &lt;span class="highlight"&gt;АМАЛЬ-&lt;/span&gt;
+      ФИГЕТЬ!
+    &lt;/h1&gt;
+
+    &lt;p class="hero-subtitle"&gt;
+      Самый маленький город Италии. Без туристических
+      клише — только настоящая итальянская жизнь.
+    &lt;/p&gt;
+
+    &lt;div class="hero-actions"&gt;
+      &lt;a href="#" class="btn btn-white"&gt;Исследовать&lt;/a&gt;
+      &lt;a href="#" class="btn btn-outline"
+         style="border-color: white; color: white;"&gt;
+        Апартаменты
+      &lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+  <span class="comment">&lt;!-- Изображение справа (опционально) --&gt;</span>
+  &lt;div class="hero-image"&gt;
+    &lt;img src="photo.jpg" alt="Описание"&gt;
+  &lt;/div&gt;
+
+  <span class="comment">&lt;!-- Индикатор скролла --&gt;</span>
+  &lt;div class="scroll-indicator"&gt;Scroll&lt;/div&gt;
+&lt;/section&gt;
+                    </div>
+                </div>
+
+                <!-- Hero Content -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hero Content</div>
+                            <span class="component-id">.hero-content</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Контейнер для текстового контента. Имеет z-index выше фонового текста.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Position</div>
+                            <div class="spec-value">relative</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Z-index</div>
+                            <div class="spec-value">1</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Max Width</div>
+                            <div class="spec-value">1400px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Margin</div>
+                            <div class="spec-value">0 auto</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Width</div>
+                            <div class="spec-value">100%</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">.hero-content</span> {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+                    </div>
+                </div>
+
+                <!-- Hero Label -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hero Label</div>
+                            <span class="component-id">.hero-label</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Маленькая надпись над заголовком с оранжевой линией слева. Появляется с анимацией fadeUp.</div>
+                    <div class="component-preview dark">
+                        <p class="hero-label-preview">Амальфитанское побережье</p>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Font</div>
+                            <div class="spec-value">14px / 500</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Transform</div>
+                            <div class="spec-value">uppercase</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Letter Spacing</div>
+                            <div class="spec-value">3px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Color</div>
+                            <div class="spec-value">--color-gray</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Margin Bottom</div>
+                            <div class="spec-value">32px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Декор ::before</div>
+                            <div class="spec-value">40px × 2px orange</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">.hero-label</span> {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--color-gray);
+  margin-bottom: 32px;
+  <span class="comment">/* Анимация появления */</span>
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s var(--ease-out) 0.2s forwards;
+}
+
+<span class="keyword">.hero-label::before</span> {
+  content: '';
+  width: 40px;
+  height: 2px;
+  background: var(--color-orange);
+}
+                    </div>
+                </div>
+
+                <!-- Hero Title -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hero Title</div>
+                            <span class="component-id">.hero h1</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Главный заголовок. ОБЯЗАТЕЛЬНО разбивается на две строки: первая (АМАЛЬ-) — оранжевая, вторая (ФИГЕТЬ!) — белая. Используйте span.highlight для первой части.</div>
+                    <div class="component-preview dark">
+                        <h1 class="hero-title-preview">
+                            <span class="highlight">АМАЛЬ-</span>
+                            ФИГЕТЬ!
+                        </h1>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Font Family</div>
+                            <div class="spec-value">Unbounded</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Font Size</div>
+                            <div class="spec-value">clamp(60px, 12vw, 180px)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Font Weight</div>
+                            <div class="spec-value">900</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Line Height</div>
+                            <div class="spec-value">0.9</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Letter Spacing</div>
+                            <div class="spec-value">-4px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Margin Bottom</div>
+                            <div class="spec-value">40px</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">.hero h1</span> {
+  font-family: var(--font-display);
+  font-size: clamp(60px, 12vw, 180px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -4px;
+  margin-bottom: 40px;
+  <span class="comment">/* Анимация появления */</span>
+  opacity: 0;
+  transform: translateY(40px);
+  animation: fadeUp 0.8s var(--ease-out) 0.3s forwards;
+}
+
+<span class="keyword">.hero h1 .highlight</span> {
+  color: var(--color-orange);
+  display: block; <span class="comment">/* Переносит на новую строку */</span>
+}
+                    </div>
+                </div>
+
+                <!-- Hero Subtitle -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hero Subtitle</div>
+                            <span class="component-id">.hero-subtitle</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Подзаголовок под основным заголовком. Серый текст, ограниченная ширина.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Font Size</div>
+                            <div class="spec-value">clamp(18px, 2vw, 24px)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Color</div>
+                            <div class="spec-value">--color-gray</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Max Width</div>
+                            <div class="spec-value">600px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Margin Bottom</div>
+                            <div class="spec-value">48px</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">.hero-subtitle</span> {
+  font-size: clamp(18px, 2vw, 24px);
+  color: var(--color-gray);
+  max-width: 600px;
+  margin-bottom: 48px;
+  <span class="comment">/* Анимация появления */</span>
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s var(--ease-out) 0.4s forwards;
+}
+                    </div>
+                </div>
+
+                <!-- Hero Actions -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hero Actions</div>
+                            <span class="component-id">.hero-actions</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Контейнер для кнопок CTA. Используйте btn-white для основной кнопки и btn-outline с белым цветом для вторичной.</div>
+                    <div class="component-preview dark">
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                            <a class="btn btn-white">Исследовать</a>
+                            <a class="btn btn-outline" style="border-color: white; color: white;">Апартаменты</a>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Display</div>
+                            <div class="spec-value">flex</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Gap</div>
+                            <div class="spec-value">16px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Flex Wrap</div>
+                            <div class="spec-value">wrap</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">.hero-actions</span> {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  <span class="comment">/* Анимация появления */</span>
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s var(--ease-out) 0.5s forwards;
+}
+
+<span class="comment">/* Для вторичной кнопки на тёмном фоне */</span>
+<span class="keyword">.hero-actions .btn-outline</span> {
+  border-color: white;
+  color: white;
+}
+                    </div>
+                </div>
+
+                <!-- Hero Background Text -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hero Background Text</div>
+                            <span class="component-id">.hero-bg-text</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Огромный декоративный текст на заднем плане. ОБЯЗАТЕЛЬНО добавьте aria-hidden="true" для доступности. Текст не должен мешать чтению основного контента.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Position</div>
+                            <div class="spec-value">absolute</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Placement</div>
+                            <div class="spec-value">top: 50%, left: 50%</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Transform</div>
+                            <div class="spec-value">translate(-50%, -50%)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Font Size</div>
+                            <div class="spec-value">clamp(150px, 25vw, 400px)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Font Weight</div>
+                            <div class="spec-value">900</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Color</div>
+                            <div class="spec-value">rgba(255,255,255,0.03)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">White Space</div>
+                            <div class="spec-value">nowrap</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Pointer Events</div>
+                            <div class="spec-value">none</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">.hero-bg-text</span> {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-display);
+  font-size: clamp(150px, 25vw, 400px);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.03);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+                    </div>
+                </div>
+
+                <!-- Hero Image -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hero Image</div>
+                            <span class="component-id">.hero-image</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Изображение справа. Позиционируется абсолютно, обрезается clip-path для диагонального края. Появляется с fade-in анимацией. Скрывается на tablet и ниже.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Position</div>
+                            <div class="spec-value">absolute</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Placement</div>
+                            <div class="spec-value">right: 0, bottom: 0</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Width</div>
+                            <div class="spec-value">50%</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Height</div>
+                            <div class="spec-value">80%</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Clip Path</div>
+                            <div class="spec-value">polygon(20% 0, 100% 0, 100% 100%, 0% 100%)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hide on</div>
+                            <div class="spec-value">≤1024px</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">.hero-image</span> {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  height: 80%;
+  <span class="comment">/* Анимация появления */</span>
+  opacity: 0;
+  animation: fadeIn 1s var(--ease-out) 0.6s forwards;
+}
+
+<span class="keyword">.hero-image img</span> {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+<span class="comment">/* Скрываем на планшетах */</span>
+<span class="keyword">@media</span> (max-width: 1024px) {
+  .hero-image { display: none; }
+}
+                    </div>
+                </div>
+
+                <!-- Scroll Indicator -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Scroll Indicator</div>
+                            <span class="component-id">.scroll-indicator</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Индикатор прокрутки в левом нижнем углу. Текст "Scroll" с линией справа.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Position</div>
+                            <div class="spec-value">absolute</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Placement</div>
+                            <div class="spec-value">bottom: 40px, left: 40px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Font Size</div>
+                            <div class="spec-value">12px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Transform</div>
+                            <div class="spec-value">uppercase</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Letter Spacing</div>
+                            <div class="spec-value">2px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Color</div>
+                            <div class="spec-value">--color-gray</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">.scroll-indicator</span> {
+  position: absolute;
+  bottom: 40px;
+  left: 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--color-gray);
+}
+
+<span class="keyword">.scroll-indicator::after</span> {
+  content: '';
+  width: 60px;
+  height: 1px;
+  background: var(--color-gray);
+}
+                    </div>
+                </div>
+
+                <!-- Animations -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hero Animations</div>
+                            <span class="component-id">@keyframes</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Все элементы hero появляются последовательно с задержкой 0.1s между элементами. Используйте анимации fadeUp и fadeIn.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">hero-label</div>
+                            <div class="spec-value">delay: 0.2s</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">h1</div>
+                            <div class="spec-value">delay: 0.3s</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">hero-subtitle</div>
+                            <div class="spec-value">delay: 0.4s</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">hero-actions</div>
+                            <div class="spec-value">delay: 0.5s</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">hero-image</div>
+                            <div class="spec-value">delay: 0.6s</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">@keyframes</span> fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+<span class="keyword">@keyframes</span> fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+                    </div>
+                </div>
+
+                <!-- Responsive -->
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Hero Responsive</div>
+                            <span class="component-id">@media</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Адаптивное поведение hero-блока на разных экранах.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">≤1024px</div>
+                            <div class="spec-value">hero-image скрыт</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">≤768px padding</div>
+                            <div class="spec-value">100px 20px 60px</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">@media</span> (max-width: 1024px) {
+  .hero-image {
+    display: none;
+  }
+}
+
+<span class="keyword">@media</span> (max-width: 768px) {
+  .hero {
+    padding: 100px 20px 60px;
+  }
+}
+                    </div>
+                </div>
+            </section>
+
+            <!-- CARDS -->
+            <section id="cards" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Карточки</h2>
+                    <p class="section-description">Карточки для услуг, апартаментов и статей блога.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Experience Card</div>
+                            <span class="component-id">.experience-card</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Квадратная карточка с изображением, overlay и номером. Hover: цветное фото + оранжевый overlay.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Aspect Ratio</div>
+                            <div class="spec-value">1:1</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Image Filter</div>
+                            <div class="spec-value">grayscale(100%)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Overlay</div>
+                            <div class="spec-value">rgba(10,22,40,0.7)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hover Overlay</div>
+                            <div class="spec-value">rgba(255,87,34,0.9)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Apartment Card</div>
+                            <span class="component-id">.apartment-item</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Горизонтальная карточка с чередованием (нечётные — картинка слева, чётные — справа). Hover: сдвиг + оранжевая полоса.</div>
+                    <div class="component-preview">
+                        <div class="card-preview">
+                            <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80" alt="Apartment">
+                            <div class="card-content-preview">
+                                <span class="card-number-preview">APT—01</span>
+                                <h3 class="card-title-preview">Просторные апартаменты</h3>
+                                <p class="card-text-preview">Светлые апартаменты в самом центре с панорамным видом на море</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Layout</div>
+                            <div class="spec-value">grid 1fr 1fr</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Image Aspect</div>
+                            <div class="spec-value">16:10</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hover Transform</div>
+                            <div class="spec-value">translateX(8px)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hover Shadow</div>
+                            <div class="spec-value">-8px 0 0 --color-orange</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Related Article Card</div>
+                            <span class="component-id">.related-card</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Карточка похожей статьи в блоге. Вертикальная с категорией поверх изображения.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Image Aspect</div>
+                            <div class="spec-value">16:10</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Image Filter</div>
+                            <div class="spec-value">grayscale(30%)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hover</div>
+                            <div class="spec-value">translateY(-8px) + shadow</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Category Badge</div>
+                            <div class="spec-value">--color-orange bg</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STATS -->
+            <section id="stats" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Статистика</h2>
+                    <p class="section-description">Блок с крупными числами на тёмном фоне.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Stat Item</div>
+                            <span class="component-id">.stat-item</span>
+                        </div>
+                    </div>
+                    <div class="component-preview dark">
+                        <div class="stat-preview">
+                            <div class="stat-number-preview">500+</div>
+                            <div class="stat-label-preview">Гостей</div>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Number Font</div>
+                            <div class="spec-value">clamp(48px, 6vw, 80px) / 900</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Number Color</div>
+                            <div class="spec-value">--color-orange</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Label Font</div>
+                            <div class="spec-value">14px / uppercase</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Label Color</div>
+                            <div class="spec-value">--color-gray</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- QUOTES -->
+            <section id="quotes" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Цитаты</h2>
+                    <p class="section-description">Цитаты и отзывы с рамкой (не тёмным фоном).</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Blockquote</div>
+                            <span class="component-id">blockquote</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Используйте рамку с оранжевым левым акцентом, НЕ тёмный фон.</div>
+                    <div class="component-preview">
+                        <div class="quote-preview">
+                            <p class="quote-text-preview">Атрани слишком мал, чтобы врать. Здесь всё настоящее.</p>
+                            <cite class="quote-cite-preview">— Местная мудрость</cite>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Background</div>
+                            <div class="spec-value">transparent</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Border</div>
+                            <div class="spec-value">2px solid --color-navy</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Border Left</div>
+                            <div class="spec-value">4px solid --color-orange</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Quote Mark</div>
+                            <div class="spec-value">80px / opacity 0.4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">About Quote</div>
+                            <span class="component-id">.about-quote</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Цитата в секции «О нас» — упрощённая версия с левой линией.</div>
+                    <div class="component-preview">
+                        <blockquote style="font-family: var(--font-display); font-size: 24px; font-weight: 700; line-height: 1.3; padding-left: 24px; border-left: 4px solid var(--color-orange);">
+                            Атрани слишком мал, чтобы врать. Здесь всё настоящее.
+                        </blockquote>
+                    </div>
+                </div>
+            </section>
+
+            <!-- INFO BOX -->
+            <section id="info-box" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Info-box</h2>
+                    <p class="section-description">Выделенный блок с важной информацией.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Info Box</div>
+                            <span class="component-id">.info-box</span>
+                        </div>
+                    </div>
+                    <div class="component-preview">
+                        <div class="info-box-preview">
+                            <div class="info-box-title-preview">Важно знать</div>
+                            <ul style="padding-left: 20px; color: var(--color-gray-dark);">
+                                <li>Сложность: средняя</li>
+                                <li>Длина: 7,8 км</li>
+                                <li>Время: 4-6 часов</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Background</div>
+                            <div class="spec-value">--color-bg-light</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Border Left</div>
+                            <div class="spec-value">4px solid --color-orange</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Padding</div>
+                            <div class="spec-value">32px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Title</div>
+                            <div class="spec-value">14px / 700 / uppercase</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAGS -->
+            <section id="tags" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Теги</h2>
+                    <p class="section-description">Метки для категорий и тем в блоге.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Tag</div>
+                            <span class="component-id">.tag</span>
+                        </div>
+                    </div>
+                    <div class="component-preview">
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <span class="tag-preview">Маршруты</span>
+                            <span class="tag-preview">Треккинг</span>
+                            <span class="tag-preview">Позитано</span>
+                            <span class="tag-preview">Амальфи</span>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Background</div>
+                            <div class="spec-value">--color-gray-light</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Padding</div>
+                            <div class="spec-value">8px 16px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hover BG</div>
+                            <div class="spec-value">--color-navy</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Hover Color</div>
+                            <div class="spec-value">white</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Category Badge</div>
+                            <span class="component-id">.article-category</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Бейдж категории в hero статьи и на карточках.</div>
+                    <div class="component-preview">
+                        <span style="display: inline-block; padding: 8px 16px; background: var(--color-orange); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: white;">Маршруты</span>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Background</div>
+                            <div class="spec-value">--color-orange</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Font</div>
+                            <div class="spec-value">12px / 700 / uppercase</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FORMS -->
+            <section id="forms" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Формы</h2>
+                    <p class="section-description">Поля ввода, текстовые области и лейблы.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Form Input</div>
+                            <span class="component-id">.form-input</span>
+                        </div>
+                    </div>
+                    <div class="component-preview">
+                        <div class="form-preview">
+                            <div class="form-group-preview">
+                                <label class="form-label-preview" for="demo-input">Имя</label>
+                                <input type="text" id="demo-input" class="form-input-preview" placeholder="Введите имя">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Border</div>
+                            <div class="spec-value">2px solid --color-gray-light</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Focus Border</div>
+                            <div class="spec-value">--color-navy</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Padding</div>
+                            <div class="spec-value">14px 16px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Font</div>
+                            <div class="spec-value">16px Space Grotesk</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- MARQUEE -->
+            <section id="marquee" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Бегущая строка</h2>
+                    <p class="section-description">Анимированная полоса с ключевыми словами.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Marquee</div>
+                            <span class="component-id">.marquee</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Горизонтальная бегущая строка на оранжевом фоне. aria-hidden="true" для доступности.</div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Background</div>
+                            <div class="spec-value">--color-orange</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Font</div>
+                            <div class="spec-value">Unbounded / 18px / 700</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Animation</div>
+                            <div class="spec-value">20s linear infinite</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Separator</div>
+                            <div class="spec-value">8px круг --color-navy-deep</div>
+                        </div>
+                    </div>
+                    <div class="code-block">
+<span class="keyword">@keyframes</span> marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+<span class="comment">/* Дублируйте контент для бесшовного цикла */</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- GRIDS -->
+            <section id="grids" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Сетки</h2>
+                    <p class="section-description">Системы размещения контента.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Experiences Grid</div>
+                            <span class="component-id">.experiences-grid</span>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Columns</div>
+                            <div class="spec-value">repeat(3, 1fr)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Gap</div>
+                            <div class="spec-value">2px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Background</div>
+                            <div class="spec-value">--color-navy (для линий)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Tablet</div>
+                            <div class="spec-value">2 колонки</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Mobile</div>
+                            <div class="spec-value">1 колонка</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Stats Grid</div>
+                            <span class="component-id">.stats-grid</span>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Columns</div>
+                            <div class="spec-value">repeat(4, 1fr)</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Gap</div>
+                            <div class="spec-value">40px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Max Width</div>
+                            <div class="spec-value">1200px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Tablet/Mobile</div>
+                            <div class="spec-value">2 колонки</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Footer Grid</div>
+                            <span class="component-id">.footer-grid</span>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Columns</div>
+                            <div class="spec-value">2fr 1fr 1fr 1fr</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Gap</div>
+                            <div class="spec-value">60px</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Tablet</div>
+                            <div class="spec-value">2 колонки</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Mobile</div>
+                            <div class="spec-value">1 колонка</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ACCESSIBILITY -->
+            <section id="accessibility" class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Доступность</h2>
+                    <p class="section-description">Обязательные требования для inclusive design.</p>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Skip Link</div>
+                            <span class="component-id">.skip-link</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Ссылка «Перейти к содержимому» — первый элемент после body, видна при фокусе.</div>
+                    <div class="code-block">
+&lt;a href="#main" class="skip-link"&gt;Перейти к содержимому&lt;/a&gt;
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Focus Visible</div>
+                            <span class="component-id">:focus-visible</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Оранжевый outline для клавиатурной навигации.</div>
+                    <div class="code-block">
+<span class="keyword">:focus-visible</span> {
+  outline: 3px solid var(--color-orange);
+  outline-offset: 3px;
+}
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">Reduced Motion</div>
+                            <span class="component-id">@media (prefers-reduced-motion)</span>
+                        </div>
+                    </div>
+                    <div class="component-description">Отключение анимаций для пользователей с vestibular disorders.</div>
+                    <div class="code-block">
+<span class="keyword">@media</span> (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+                    </div>
+                </div>
+
+                <div class="component">
+                    <div class="component-header">
+                        <div>
+                            <div class="component-name">ARIA & Semantic HTML</div>
+                        </div>
+                    </div>
+                    <div class="component-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Header</div>
+                            <div class="spec-value">role="banner"</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Nav</div>
+                            <div class="spec-value">role="navigation"</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Декор элементы</div>
+                            <div class="spec-value">aria-hidden="true"</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Images</div>
+                            <div class="spec-value">loading="lazy" + alt</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Dates</div>
+                            <div class="spec-value">&lt;time datetime="..."&gt;</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="guidelines-footer">
+                <p>Дизайн-система АМАЛЬФИГЕТЬ v1.0 — Navy Brutalist</p>
+                <p style="margin-top: 8px;">Создано для <a href="concept-8-navy-brutalist.html">atrani.ru</a></p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // Smooth scroll for sidebar links
+        document.querySelectorAll('.sidebar-nav-list a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Highlight active section in sidebar
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.sidebar-nav-list a');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === '#' + entry.target.id) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        sections.forEach(section => observer.observe(section));
+    </script>
+</body>
+</html>

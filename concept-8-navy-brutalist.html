@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>АМАЛЬФИГЕТЬ - Концепт 8: Navy Brutalist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-navy-deep: #000A27;
+            --color-navy: #0A1628;
+            --color-navy-medium: #152238;
+            --color-white: #FFFFFF;
+            --color-orange: #FF5722;
+            --color-orange-light: #FF8A65;
+            --color-blue: #2196F3;
+            --color-yellow: #FFEB3B;
+            --color-gray: #8B9BB4;
+            --color-gray-dark: #4A5568;
+
+            --font-display: 'Unbounded', sans-serif;
+            --font-body: 'Space Grotesk', sans-serif;
+
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+            color-scheme: light;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--color-navy-deep);
+            background: var(--color-white);
+            overflow-x: hidden;
+        }
+
+        ::selection {
+            background: var(--color-orange);
+            color: white;
+        }
+
+        .skip-link {
+            position: absolute;
+            top: -100%;
+            left: 20px;
+            background: var(--color-navy);
+            color: white;
+            padding: 12px 24px;
+            font-weight: 600;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 20px;
+        }
+
+        :focus-visible {
+            outline: 3px solid var(--color-orange);
+            outline-offset: 3px;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        .nav {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav a {
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: opacity 0.3s;
+        }
+
+        .nav a:hover {
+            opacity: 0.6;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .btn-primary {
+            background: var(--color-navy);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-orange);
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--color-navy);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--color-navy);
+            border: 2px solid var(--color-navy);
+        }
+
+        .btn-outline:hover {
+            background: var(--color-navy);
+            color: white;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--color-navy);
+        }
+
+        .btn-white:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 rgba(255,255,255,0.3);
+        }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            background: var(--color-navy-deep);
+            color: white;
+            overflow: hidden;
+            padding: 120px 40px 80px;
+        }
+
+        .hero-bg-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-display);
+            font-size: clamp(150px, 25vw, 400px);
+            font-weight: 900;
+            color: rgba(255,255,255,0.03);
+            white-space: nowrap;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--color-gray);
+            margin-bottom: 32px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s var(--ease-out) 0.2s forwards;
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 40px;
+            height: 2px;
+            background: var(--color-orange);
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(60px, 12vw, 180px);
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -4px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeUp 0.8s var(--ease-out) 0.3s forwards;
+        }
+
+        .hero h1 .highlight {
+            color: var(--color-orange);
+            display: block;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(18px, 2vw, 24px);
+            color: var(--color-gray);
+            max-width: 600px;
+            margin-bottom: 48px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s var(--ease-out) 0.4s forwards;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUp 0.8s var(--ease-out) 0.5s forwards;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 50%;
+            height: 80%;
+            opacity: 0;
+            animation: fadeIn 1s var(--ease-out) 0.6s forwards;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            left: 40px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-gray);
+        }
+
+        .scroll-indicator::after {
+            content: '';
+            width: 60px;
+            height: 1px;
+            background: var(--color-gray);
+        }
+
+        /* Marquee */
+        .marquee {
+            background: var(--color-orange);
+            padding: 20px 0;
+            overflow: hidden;
+        }
+
+        .marquee-content {
+            display: flex;
+            animation: marquee 20s linear infinite;
+        }
+
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            padding: 0 40px;
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .marquee-item span {
+            width: 8px;
+            height: 8px;
+            background: var(--color-navy-deep);
+            border-radius: 50%;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Section */
+        section {
+            padding: 120px 40px;
+        }
+
+        .section-header {
+            margin-bottom: 80px;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--color-orange);
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(36px, 6vw, 72px);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+
+        /* Experiences */
+        .experiences {
+            background: var(--color-white);
+        }
+
+        .experiences-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--color-navy);
+        }
+
+        .experience-card {
+            background: white;
+            aspect-ratio: 1;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .experience-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: all 0.5s var(--ease-out);
+        }
+
+        .experience-card:hover img {
+            filter: grayscale(0%);
+            transform: scale(1.1);
+        }
+
+        .experience-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 22, 40, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 32px;
+            opacity: 1;
+            transition: all 0.4s var(--ease-out);
+        }
+
+        .experience-card:hover .experience-overlay {
+            background: rgba(255, 87, 34, 0.9);
+        }
+
+        .experience-number {
+            font-family: var(--font-display);
+            font-size: 72px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.2);
+            position: absolute;
+            top: 20px;
+            left: 24px;
+            line-height: 1;
+        }
+
+        .experience-content h3 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .experience-content p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s var(--ease-out);
+        }
+
+        .experience-card:hover .experience-content p {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Stats */
+        .stats {
+            background: var(--color-navy-deep);
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: clamp(48px, 6vw, 80px);
+            font-weight: 900;
+            color: var(--color-orange);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-gray);
+            margin-top: 12px;
+        }
+
+        /* About */
+        .about {
+            background: var(--color-white);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .about-image {
+            position: relative;
+        }
+
+        .about-image img {
+            width: 100%;
+            display: block;
+        }
+
+        .about-image::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: -20px;
+            bottom: -20px;
+            border: 3px solid var(--color-orange);
+            z-index: -1;
+        }
+
+        .about-content p {
+            font-size: 18px;
+            color: var(--color-gray-dark);
+            margin-bottom: 24px;
+            line-height: 1.8;
+        }
+
+        .about-quote {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin: 40px 0;
+            padding-left: 24px;
+            border-left: 4px solid var(--color-orange);
+        }
+
+        /* Apartments */
+        .apartments {
+            background: #F0F4F8;
+        }
+
+        .apartments-list {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .apartment-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            margin-bottom: 2px;
+            background: white;
+            overflow: hidden;
+            transition: all 0.4s var(--ease-out);
+        }
+
+        .apartment-item:nth-child(even) {
+            direction: rtl;
+        }
+
+        .apartment-item:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .apartment-item:hover {
+            transform: translateX(8px);
+            box-shadow: -8px 0 0 var(--color-orange);
+        }
+
+        .apartment-image {
+            aspect-ratio: 16/10;
+            overflow: hidden;
+        }
+
+        .apartment-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(50%);
+            transition: all 0.5s var(--ease-out);
+        }
+
+        .apartment-item:hover .apartment-image img {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
+
+        .apartment-content {
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .apartment-number {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-orange);
+            margin-bottom: 16px;
+        }
+
+        .apartment-content h3 {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .apartment-content p {
+            font-size: 16px;
+            color: var(--color-gray-dark);
+            margin-bottom: 24px;
+        }
+
+        /* CTA */
+        .cta {
+            background: var(--color-orange);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: 'АМАЛЬФИГЕТЬ';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-display);
+            font-size: clamp(100px, 15vw, 250px);
+            font-weight: 900;
+            color: rgba(0,0,0,0.05);
+            white-space: nowrap;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta .section-title {
+            color: white;
+            margin-bottom: 24px;
+        }
+
+        .cta p {
+            font-size: 18px;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--color-navy-deep);
+            color: white;
+            padding: 80px 40px 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto 60px;
+        }
+
+        .footer-brand .logo {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .footer-brand p {
+            color: var(--color-gray);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-display);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 24px;
+            color: var(--color-gray);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: var(--color-orange);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            font-size: 12px;
+            color: var(--color-gray);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-links a {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s var(--ease-out);
+        }
+
+        .social-links a:hover {
+            background: var(--color-orange);
+            border-color: var(--color-orange);
+        }
+
+        /* Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s var(--ease-out);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .hero-image {
+                display: none;
+            }
+
+            .experiences-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .apartment-item {
+                grid-template-columns: 1fr;
+            }
+
+            .apartment-item:nth-child(even) {
+                direction: ltr;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav { display: none; }
+
+            section { padding: 80px 20px; }
+
+            .hero { padding: 100px 20px 60px; }
+
+            .experiences-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Перейти к содержимому</a>
+
+    <header class="header" role="banner">
+        <a href="/" class="logo">АМАЛЬФИГЕТЬ</a>
+        <nav class="nav" role="navigation">
+            <a href="#experiences">Впечатления</a>
+            <a href="#about">О нас</a>
+            <a href="#apartments">Жильё</a>
+            <a href="#contact">Контакт</a>
+        </nav>
+    </header>
+
+    <main id="main">
+        <section class="hero">
+            <div class="hero-bg-text" aria-hidden="true">AMALFI</div>
+
+            <div class="hero-content">
+                <p class="hero-label">Амальфитанское побережье</p>
+                <h1>
+                    <span class="highlight">АМАЛЬ-</span>
+                    ФИГЕТЬ!
+                </h1>
+                <p class="hero-subtitle">Самый маленький город Италии. Без туристических клише — только настоящая итальянская жизнь, вкусы и эмоции.</p>
+                <div class="hero-actions">
+                    <a href="#experiences" class="btn btn-white">Исследовать</a>
+                    <a href="#apartments" class="btn btn-outline" style="border-color: white; color: white;">Апартаменты</a>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=1000&q=80" alt="Побережье Амальфи">
+            </div>
+
+            <div class="scroll-indicator">Scroll</div>
+        </section>
+
+        <div class="marquee" aria-hidden="true">
+            <div class="marquee-content">
+                <div class="marquee-item">Апартаменты <span></span> Экскурсии <span></span> Фотосессии <span></span> Катера <span></span> Амальфи <span></span> Атрани <span></span></div>
+                <div class="marquee-item">Апартаменты <span></span> Экскурсии <span></span> Фотосессии <span></span> Катера <span></span> Амальфи <span></span> Атрани <span></span></div>
+            </div>
+        </div>
+
+        <section id="experiences" class="experiences">
+            <div class="section-header reveal">
+                <p class="section-label">01 — Впечатления</p>
+                <h2 class="section-title">Что мы предлагаем</h2>
+            </div>
+
+            <div class="experiences-grid">
+                <article class="experience-card reveal">
+                    <img src="https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=600&q=80" alt="По побережью на машине" loading="lazy">
+                    <span class="experience-number">01</span>
+                    <div class="experience-overlay">
+                        <div class="experience-content">
+                            <h3>По побережью на машине</h3>
+                            <p>Легендарный серпантин с секретными остановками</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="experience-card reveal">
+                    <img src="https://images.unsplash.com/photo-1516483638261-f4dbaf036963?w=600&q=80" alt="На катере" loading="lazy">
+                    <span class="experience-number">02</span>
+                    <div class="experience-overlay">
+                        <div class="experience-content">
+                            <h3>Побережье на катере</h3>
+                            <p>Скрытые гроты и уединённые пляжи</p>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="experience-card reveal">
+                    <img src="https://images.unsplash.com/photo-1515859005217-8a1f08870f59?w=600&q=80" alt="Фотосессия" loading="lazy">
+                    <span class="experience-number">03</span>
+                    <div class="experience-overlay">
+                        <div class="experience-content">
+                            <h3>Фотосессия</h3>
+                            <p>Профессиональные кадры в лучших локациях</p>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stats-grid reveal">
+                <div class="stat-item">
+                    <div class="stat-number">15+</div>
+                    <div class="stat-label">Лет в Италии</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">Гостей</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Маршрутов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">300</div>
+                    <div class="stat-label">Солнечных дней</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="about">
+            <div class="about-grid">
+                <div class="about-image reveal">
+                    <img src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?w=800&q=80" alt="Наша команда" loading="lazy">
+                </div>
+                <div class="about-content reveal">
+                    <p class="section-label">02 — О нас</p>
+                    <h2 class="section-title">Uè guagliò!</h2>
+                    <p>15 лет назад мы переехали из России в Италию. Получили образование по эногастрономии и влюбились в это место.</p>
+                    <blockquote class="about-quote">
+                        Атрани слишком мал, чтобы врать. Здесь всё настоящее.
+                    </blockquote>
+                    <p>Мы покажем вам Италию без туристической шелухи — настоящие вкусы, настоящих людей, настоящую жизнь.</p>
+                    <a href="#contact" class="btn btn-primary">Познакомиться</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="apartments" class="apartments">
+            <div class="section-header reveal">
+                <p class="section-label">03 — Размещение</p>
+                <h2 class="section-title">Наши апартаменты</h2>
+            </div>
+
+            <div class="apartments-list">
+                <article class="apartment-item reveal">
+                    <div class="apartment-image">
+                        <img src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&q=80" alt="Просторные апартаменты" loading="lazy">
+                    </div>
+                    <div class="apartment-content">
+                        <span class="apartment-number">APT—01</span>
+                        <h3>Просторные апартаменты</h3>
+                        <p>Светлые апартаменты в самом центре с панорамным видом на море</p>
+                        <a href="#contact" class="btn btn-outline">Подробнее</a>
+                    </div>
+                </article>
+
+                <article class="apartment-item reveal">
+                    <div class="apartment-image">
+                        <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&q=80" alt="Комфортные комнаты" loading="lazy">
+                    </div>
+                    <div class="apartment-content">
+                        <span class="apartment-number">APT—02</span>
+                        <h3>Комфортные комнаты</h3>
+                        <p>В историческом таунхаусе рядом с мишленовским рестораном</p>
+                        <a href="#contact" class="btn btn-outline">Подробнее</a>
+                    </div>
+                </article>
+
+                <article class="apartment-item reveal">
+                    <div class="apartment-image">
+                        <img src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=800&q=80" alt="Уютные комнатки" loading="lazy">
+                    </div>
+                    <div class="apartment-content">
+                        <span class="apartment-number">APT—03</span>
+                        <h3>Уютные комнатки</h3>
+                        <p>Идеально для соло-путешественников — продуманный минимализм</p>
+                        <a href="#contact" class="btn btn-outline">Подробнее</a>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section id="contact" class="cta">
+            <div class="cta-content reveal">
+                <h2 class="section-title">Готовы?</h2>
+                <p>Напишите — спланируем идеальное путешествие на побережье Амальфи</p>
+                <a href="https://wa.me/393270972329" class="btn btn-white">Написать в WhatsApp</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <a href="/" class="logo">АМАЛЬФИГЕТЬ</a>
+                <p>В самом сердце Амальфитанского побережья. Уникальные экскурсии и апартаменты.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Навигация</h4>
+                <ul>
+                    <li><a href="#experiences">Впечатления</a></li>
+                    <li><a href="#about">О нас</a></li>
+                    <li><a href="#apartments">Апартаменты</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Полезное</h4>
+                <ul>
+                    <li><a href="#">Блог</a></li>
+                    <li><a href="#">Магазин</a></li>
+                    <li><a href="#">Расписание</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Контакты</h4>
+                <ul>
+                    <li><a href="tel:+393270972329">+39 327 097 2329</a></li>
+                    <li><a href="mailto:mail@atrani.ru">mail@atrani.ru</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2014–2026 CristallPont S.R.L.</p>
+            <div class="social-links">
+                <a href="https://facebook.com/atrani.ru" aria-label="Facebook">FB</a>
+                <a href="https://instagram.com/atrani.ru" aria-label="Instagram">IG</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('visible');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

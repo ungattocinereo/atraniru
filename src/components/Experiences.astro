@@ -1,0 +1,45 @@
+---
+// Experiences component - grid of 3 experiences
+const experiences = [
+  {
+    id: 1,
+    title: "Фото прогулки",
+    description: "Запечатлейте красоту Атрани",
+    image: "/images/placeholder-photo-walks.jpg"
+  },
+  {
+    id: 2,
+    title: "Лодочные туры",
+    description: "Откройте скрытые бухты и гроты",
+    image: "/images/placeholder-boat-tours.jpg"
+  },
+  {
+    id: 3,
+    title: "Эно-гастро туры",
+    description: "Вкусы Амальфитанского побережья",
+    image: "/images/placeholder-enogastro.jpg"
+  }
+];
+---
+
+<section class="experiences" id="experiences">
+  <div class="section-header reveal">
+    <p class="section-label">01 — Впечатления</p>
+    <h2 class="section-title">Чем заняться</h2>
+  </div>
+  <div class="experiences-grid">
+    {experiences.map((exp) => (
+      <article class="experience-card reveal">
+        <div class="experience-image">
+          <img src={exp.image} alt={exp.title} loading="lazy" />
+        </div>
+        <div class="experience-overlay"></div>
+        <div class="experience-content">
+          <span class="experience-number">{String(exp.id).padStart(2, '0')}</span>
+          <h3 class="experience-title">{exp.title}</h3>
+          <p class="experience-text">{exp.description}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>

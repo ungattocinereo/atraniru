@@ -1,0 +1,186 @@
+---
+// BlogPreview component - 4 latest posts from Ghost
+import { ghostClient } from '../lib/ghost';
+
+let posts = [];
+let error = null;
+
+try {
+  posts = await ghostClient.posts.browse({
+    limit: 4,
+    include: 'tags,authors'
+  });
+} catch (e) {
+  error = e;
+  console.warn('Ghost API error:', e.message);
+  // Fallback: show placeholder posts
+  posts = [
+    {
+      slug: 'placeholder-1',
+      title: 'Скоро здесь появятся статьи',
+      excerpt: 'Следите за обновлениями блога',
+      feature_image: '/images/placeholder-blog-1.jpg',
+      published_at: new Date().toISOString()
+    },
+    {
+      slug: 'placeholder-2',
+      title: 'Истории из Атрани',
+      excerpt: 'Секреты и советы от местных жителей',
+      feature_image: '/images/placeholder-blog-2.jpg',
+      published_at: new Date().toISOString()
+    },
+    {
+      slug: 'placeholder-3',
+      title: 'Гастрономические открытия',
+      excerpt: 'Лучшие рестораны Амальфитанского побережья',
+      feature_image: '/images/placeholder-blog-3.jpg',
+      published_at: new Date().toISOString()
+    },
+    {
+      slug: 'placeholder-4',
+      title: 'Путеводитель по побережью',
+      excerpt: 'Всё, что нужно знать перед поездкой',
+      feature_image: '/images/placeholder-blog-4.jpg',
+      published_at: new Date().toISOString()
+    }
+  ];
+}
+---
+
+<section class="blog">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-label">05 — Блог</p>
+      <h2 class="section-title">Истории и советы</h2>
+    </div>
+    <div class="blog-grid">
+      {posts.map((post) => (
+        <article class="blog-card reveal">
+          <a href={`/blog/${post.slug}`}>
+            <div class="blog-image">
+              <img
+                src={post.feature_image || '/images/placeholder-blog.jpg'}
+                alt={post.title}
+                loading="lazy"
+              />
+            </div>
+            <div class="blog-content">
+              <h3>{post.title}</h3>
+              <p>{post.excerpt}</p>
+              <span class="blog-date">
+                {new Date(post.published_at).toLocaleDateString('ru-RU', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </span>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+    <div class="blog-cta reveal">
+      <a href="/blog" class="btn btn-primary">Все статьи</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .blog {
+    padding: 120px 0;
+    background: var(--color-bg-light);
+  }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+    margin-bottom: 60px;
+  }
+
+  .blog-card {
+    background: white;
+    overflow: hidden;
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  .blog-card:hover {
+    transform: translateY(-8px);
+  }
+
+  .blog-card a {
+    display: block;
+    text-decoration: none;
+  }
+
+  .blog-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--color-navy);
+  }
+
+  .blog-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .blog-card:hover .blog-image img {
+    transform: scale(1.05);
+  }
+
+  .blog-content {
+    padding: 32px;
+  }
+
+  .blog-content h3 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-navy);
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+  }
+
+  .blog-content p {
+    font-size: 16px;
+    color: var(--color-gray-dark);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .blog-date {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-gray);
+  }
+
+  .blog-cta {
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .blog {
+      padding: 80px 0;
+    }
+
+    .blog-grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    .blog-content {
+      padding: 24px;
+    }
+
+    .blog-content h3 {
+      font-size: 20px;
+    }
+  }
+</style>

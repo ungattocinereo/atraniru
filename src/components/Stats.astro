@@ -1,0 +1,19 @@
+---
+// Stats component - key numbers
+const stats = [
+  { number: "15+", label: "лет опыта" },
+  { number: "500+", label: "довольных гостей" },
+  { number: "12+", label: "апартаментов" }
+];
+---
+
+<section class="stats">
+  <div class="stats-grid reveal">
+    {stats.map((stat) => (
+      <div class="stat-item">
+        <div class="stat-number">{stat.number}</div>
+        <div class="stat-label">{stat.label}</div>
+      </div>
+    ))}
+  </div>
+</section>

@@ -1,0 +1,100 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Атрани — аутентичный отдых на Амальфитанском побережье. Эно-гастро-туры, фото прогулки, апартаменты.' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <title>{title}</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Перейти к содержимому</a>
+
+    <header class="header" role="banner">
+      <a href="/" class="logo">АМАЛЬФИГЕТЬ</a>
+      <nav class="nav" role="navigation">
+        <a href="/about">О нас</a>
+        <a href="/experiences">Экскурсии</a>
+        <a href="/apartments">Апартаменты</a>
+        <a href="/blog">Блог</a>
+        <a href="/contacts">Контакты</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="footer">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="/" class="footer-logo">АМАЛЬФИГЕТЬ</a>
+          <p>Ваш проводник по Амальфитанскому побережью</p>
+        </div>
+        <div class="footer-col">
+          <h4>Навигация</h4>
+          <ul>
+            <li><a href="/">Главная</a></li>
+            <li><a href="/about">О нас</a></li>
+            <li><a href="/apartments">Апартаменты</a></li>
+            <li><a href="/blog">Блог</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Услуги</h4>
+          <ul>
+            <li><a href="/experiences">Экскурсии</a></li>
+            <li><a href="/transport">Транспорт</a></li>
+            <li><a href="/contacts">Контакты</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Контакты</h4>
+          <p>Атрани, Италия</p>
+          <a href="mailto:info@atrani.ru">info@atrani.ru</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2014–2026 CristallPont S.R.L. Все права защищены.</p>
+        <div class="social-links">
+          <a href="#" aria-label="Instagram">Instagram</a>
+          <a href="#" aria-label="Facebook">Facebook</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Scroll reveal animation
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @import '../styles/global.css';
+</style>

@@ -1,0 +1,177 @@
+---
+// Apartments component - 6 apartments with alternating layout
+const apartments = [
+  {
+    id: 1,
+    number: "APT—01",
+    title: "Уютные апартаменты с балконом",
+    description: "Просторные апартаменты в оранжевых тонах с видом на море и уютным балконом.",
+    image: "/images/orange-cozy-room-with-a-balcony.jpg"
+  },
+  {
+    id: 2,
+    number: "APT—02",
+    title: "Винтажная квартира с террасой",
+    description: "Стильные апартаменты в винтажном стиле с собственной террасой и панорамным видом.",
+    image: "/images/vintage-interior-room-with-a-balcony.jpg"
+  },
+  {
+    id: 3,
+    number: "APT—03",
+    title: "Современные апартаменты",
+    description: "Светлые апартаменты с современным дизайном и всеми удобствами для комфортного отдыха.",
+    image: "/images/4444_DSC0806_DxO.jpg"
+  },
+  {
+    id: 4,
+    number: "APT—04",
+    title: "Семейные апартаменты",
+    description: "Просторная квартира для семьи с несколькими спальнями и полностью оборудованной кухней.",
+    image: "/images/555_DSC0806_DxO.jpg"
+  },
+  {
+    id: 5,
+    number: "APT—05",
+    title: "Студия у моря",
+    description: "Компактная студия идеально подходит для пар, ищущих романтичный отдых на побережье.",
+    image: "/images/DSC0053.jpg"
+  },
+  {
+    id: 6,
+    number: "APT—06",
+    title: "Люкс с видом на Атрани",
+    description: "Премиальные апартаменты с панорамными окнами и захватывающим видом на город.",
+    image: "/images/placeholder-apartment-6.jpg"
+  }
+];
+---
+
+<section class="apartments" id="apartments">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-label">04 — Проживание</p>
+      <h2 class="section-title">Наши апартаменты</h2>
+    </div>
+    <div class="apartments-list">
+      {apartments.map((apt, index) => (
+        <article class={`apartment-item reveal ${index % 2 === 1 ? 'reverse' : ''}`}>
+          <div class="apartment-image">
+            <img src={apt.image} alt={apt.title} loading="lazy" />
+          </div>
+          <div class="apartment-content">
+            <span class="apartment-number">{apt.number}</span>
+            <h3>{apt.title}</h3>
+            <p>{apt.description}</p>
+            <a href={`/apartments/${apt.id}`} class="btn btn-outline">Подробнее</a>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .apartments {
+    padding: 120px 0;
+    background: white;
+  }
+
+  .apartments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .apartment-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+    padding: 60px 0;
+    border-bottom: 1px solid var(--color-gray-light);
+  }
+
+  .apartment-item:last-child {
+    border-bottom: none;
+  }
+
+  .apartment-item.reverse {
+    direction: rtl;
+  }
+
+  .apartment-item.reverse > * {
+    direction: ltr;
+  }
+
+  .apartment-image {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .apartment-image img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .apartment-item:hover .apartment-image img {
+    transform: scale(1.05);
+  }
+
+  .apartment-number {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-orange);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 16px;
+  }
+
+  .apartment-content h3 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--color-navy);
+    margin-bottom: 16px;
+    letter-spacing: -1px;
+  }
+
+  .apartment-content p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 1024px) {
+    .apartment-item {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .apartment-item.reverse {
+      direction: ltr;
+    }
+
+    .apartment-image img {
+      height: 300px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .apartments {
+      padding: 80px 0;
+    }
+
+    .apartment-item {
+      padding: 40px 0;
+    }
+
+    .apartment-content h3 {
+      font-size: 24px;
+    }
+  }
+</style>

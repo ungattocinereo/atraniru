@@ -1,0 +1,94 @@
+---
+// AboutCoast component - combined info about coast + dolce far niente
+---
+
+<section class="about-coast">
+  <div class="container">
+    <div class="coast-grid">
+      <div class="coast-content reveal">
+        <div class="section-header">
+          <p class="section-label">02 — О побережье</p>
+          <h2 class="section-title">Жемчужина Италии</h2>
+        </div>
+        <p>
+          От <strong>Сорренто до Салерно</strong> вдоль одного из самых красивых ландшафтов в мире
+          (это вам даже в ЮНЕСКО подтвердят) раскинулось драгоценное ожерелье из <strong>18 больших
+          и малых городов</strong> Амальфитанского побережья.
+        </p>
+        <p>
+          50 километров извилистой дороги между скалами и морем входят в число объектов всемирного
+          наследия как идеальный средиземноморский пейзаж, имеющий колоссальное культурное и
+          природное значение. А это значит, что <strong>Амальфитанское побережье – самое итальянское
+          из всего, что есть в Италии.</strong>
+        </p>
+        <p>
+          <strong>Для многих становится открытием, что буквально в 300 метрах, на расстоянии
+          пятиминутной пешей прогулки от раскрученного Амальфи расположился другой, не менее
+          интересный город, пока свободный от толп туристов – Атрани!</strong>
+        </p>
+      </div>
+
+      <div class="dolce-content reveal">
+        <h3>Dolce far niente</h3>
+        <p>
+          <strong>В Атрани время как будто остановилось</strong>, каждый, кто сюда попадает,
+          переносится в прошлое и видит Италию такой, какой она была когда-то, без наигранного блеска
+          и туристических клише.
+        </p>
+        <p>
+          Счастье в Италии сконцентрировано в выражении <strong>dolce far niente</strong> и
+          переводится как «наслаждение отсутствием дел». Спорим, вы именно за этим приехали в Италию?
+        </p>
+        <p>
+          Правильное «ничегонеделание» перевернет ваше представление об отдыхе и заставит влюбиться
+          в эту благословенную страну раз и навсегда. Так, когда-то мы всей семьей влюбились в Атрани
+          и решили остаться здесь, чтобы стать мостиком для русскоговорящих туристов в самое сердце
+          Италии.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-coast {
+    padding: 120px 0;
+    background: white;
+  }
+
+  .coast-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .coast-content p,
+  .dolce-content p {
+    margin-bottom: 20px;
+    line-height: 1.8;
+    font-size: 16px;
+  }
+
+  .dolce-content h3 {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--color-navy);
+    margin-bottom: 24px;
+    letter-spacing: -1px;
+  }
+
+  @media (max-width: 1024px) {
+    .coast-grid {
+      grid-template-columns: 1fr;
+      gap: 60px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .about-coast {
+      padding: 80px 0;
+    }
+  }
+</style>

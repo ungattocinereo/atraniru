@@ -1,0 +1,73 @@
+---
+// VideoEmbed component - Orel i Reshka video
+// TODO: Add actual YouTube video ID
+const videoId = "VIDEO_ID_HERE"; // Replace with actual video ID
+---
+
+<section class="video-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <p class="section-label">03 — Медиа</p>
+      <h2 class="section-title">Орел и Решка в Амальфи</h2>
+    </div>
+    <div class="video-container reveal">
+      <p class="video-description">
+        Как мы помогали проводить съемки программы «Орел и Решка» Морской Сезон
+      </p>
+      <div class="video-embed">
+        <iframe
+          src={`https://www.youtube.com/embed/${videoId}`}
+          title="Орел и Решка в Амальфи"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .video-section {
+    padding: 120px 0;
+    background: var(--color-bg-light);
+  }
+
+  .video-description {
+    text-align: center;
+    font-size: 18px;
+    color: var(--color-gray-dark);
+    margin-bottom: 40px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .video-embed {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    background: var(--color-navy);
+    border: 4px solid var(--color-navy);
+  }
+
+  .video-embed iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 768px) {
+    .video-section {
+      padding: 80px 0;
+    }
+
+    .video-description {
+      font-size: 16px;
+    }
+  }
+</style>

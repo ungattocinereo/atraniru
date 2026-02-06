@@ -9,7 +9,7 @@ interface Props {
 const { post } = Astro.props;
 
 // Determine meta title and description
-const metaTitle = post.meta_title || `${post.title} — АМАЛЬФИГЕТЬ`;
+const metaTitle = post.meta_title || `${post.title} — Atrani.ru`;
 const metaDescription = post.meta_description || post.custom_excerpt || post.excerpt;
 
 // Get OG image
@@ -62,7 +62,7 @@ const ogImage = post.og_image || post.feature_image || '/images/og-default.jpg';
     } : undefined,
     "publisher": {
       "@type": "Organization",
-      "name": "АМАЛЬФИГЕТЬ",
+      "name": "Atrani.ru",
       "url": "https://atrani.ru",
       "logo": {
         "@type": "ImageObject",

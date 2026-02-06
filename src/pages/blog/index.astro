@@ -1,0 +1,269 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getAllPosts, formatDate } from '../../lib/ghostApi';
+
+const posts = await getAllPosts({ limit: 'all' });
+---
+
+<Layout title="Блог — Atrani.ru" description="Статьи, истории и советы о жизни на Амальфитанском побережье">
+  <section class="blog-hero">
+    <div class="blog-hero-content">
+      <p class="section-label">Блог</p>
+      <h1 class="blog-hero-title">Истории с побережья</h1>
+      <p class="blog-hero-text">Маршруты, секретные места, гастрономия и советы от тех, кто живёт на Амальфитанском побережье</p>
+    </div>
+  </section>
+
+  <section class="blog-listing">
+    <div class="blog-listing-grid">
+      {posts.map((post, i) => (
+        <article class={`blog-listing-card reveal ${i === 0 ? 'blog-listing-card--featured' : ''}`}>
+          <a href={`/blog/${post.slug}`}>
+            <div class="blog-listing-card-image">
+              <img
+                src={post.feature_image || '/images/placeholder-blog.jpg'}
+                alt={post.title}
+                loading={i < 3 ? 'eager' : 'lazy'}
+              />
+              {post.primary_tag && (
+                <span class="blog-listing-card-category">{post.primary_tag.name}</span>
+              )}
+            </div>
+            <div class="blog-listing-card-content">
+              <h2 class="blog-listing-card-title">{post.title}</h2>
+              <p class="blog-listing-card-excerpt">{post.custom_excerpt || post.excerpt}</p>
+              <div class="blog-listing-card-meta">
+                {post.primary_author && (
+                  <span class="blog-listing-card-author">
+                    {post.primary_author.profile_image && (
+                      <img src={post.primary_author.profile_image} alt={post.primary_author.name} class="blog-listing-card-author-img" />
+                    )}
+                    {post.primary_author.name}
+                  </span>
+                )}
+                <time datetime={post.published_at}>{formatDate(post.published_at)}</time>
+                <span>{post.reading_time} мин</span>
+              </div>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+
+    {posts.length === 0 && (
+      <div class="blog-empty">
+        <p>Статьи скоро появятся. Следите за обновлениями!</p>
+      </div>
+    )}
+  </section>
+
+  <section class="newsletter">
+    <div class="newsletter-content">
+      <h2 class="newsletter-title">Италия в вашей почте</h2>
+      <p class="newsletter-text">Раз в неделю — новые маршруты, секретные места и истории из жизни на побережье. Без спама, только полезное.</p>
+      <form class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="Ваш email" required />
+        <button type="submit" class="newsletter-btn">Подписаться</button>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<style is:global>
+  @import '../../styles/blog.css';
+</style>
+
+<style>
+  .blog-hero {
+    padding: 160px 40px 80px;
+    background: var(--color-navy-deep);
+    color: white;
+    text-align: center;
+  }
+
+  .blog-hero-content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .blog-hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .blog-hero-text {
+    font-size: 20px;
+    color: var(--color-gray);
+    line-height: 1.6;
+  }
+
+  .section-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-orange);
+    margin-bottom: 16px;
+  }
+
+  .blog-listing {
+    padding: 80px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .blog-listing-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+
+  .blog-listing-card--featured {
+    grid-column: 1 / -1;
+  }
+
+  .blog-listing-card--featured .blog-listing-card-image {
+    aspect-ratio: 21/9;
+  }
+
+  .blog-listing-card--featured .blog-listing-card-title {
+    font-size: 32px;
+  }
+
+  .blog-listing-card {
+    background: white;
+    overflow: hidden;
+    transition: all 0.4s var(--ease-out);
+    border: 1px solid var(--color-gray-light);
+  }
+
+  .blog-listing-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(5, 10, 20, 0.15);
+  }
+
+  .blog-listing-card a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .blog-listing-card-image {
+    position: relative;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    background: var(--color-navy);
+  }
+
+  .blog-listing-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(30%);
+    transition: all 0.5s var(--ease-out);
+  }
+
+  .blog-listing-card:hover .blog-listing-card-image img {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+  }
+
+  .blog-listing-card-category {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    padding: 6px 12px;
+    background: var(--color-orange);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+  }
+
+  .blog-listing-card-content {
+    padding: 28px;
+  }
+
+  .blog-listing-card-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+    color: var(--color-navy);
+  }
+
+  .blog-listing-card-excerpt {
+    font-size: 16px;
+    color: var(--color-gray-dark);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .blog-listing-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--color-gray);
+  }
+
+  .blog-listing-card-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: var(--color-navy);
+  }
+
+  .blog-listing-card-author-img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--color-orange);
+  }
+
+  .blog-empty {
+    text-align: center;
+    padding: 80px 40px;
+    color: var(--color-gray);
+    font-size: 18px;
+  }
+
+  @media (max-width: 768px) {
+    .blog-hero {
+      padding: 120px 20px 60px;
+    }
+
+    .blog-listing {
+      padding: 60px 20px;
+    }
+
+    .blog-listing-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .blog-listing-card--featured .blog-listing-card-image {
+      aspect-ratio: 16/10;
+    }
+
+    .blog-listing-card--featured .blog-listing-card-title {
+      font-size: 22px;
+    }
+
+    .blog-listing-card-content {
+      padding: 20px;
+    }
+  }
+</style>

@@ -27,5 +27,5 @@ pnpm-debug.log*
 data/queue/
 
 # legacy content (WordPress export)
-kimi/
-blog/
+/kimi/
+/blog/

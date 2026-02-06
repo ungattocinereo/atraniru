@@ -1,0 +1,244 @@
+---
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { getAllPosts, getSinglePost, getRelatedPosts, formatDate, calculateReadingTime } from '../../lib/ghostApi';
+import type { GhostPost } from '../../lib/types/ghost';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts({ limit: 'all' });
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+const post = await getSinglePost(slug);
+
+if (!post) {
+  return Astro.redirect('/blog');
+}
+
+const readingTime = post.reading_time || (post.html ? calculateReadingTime(post.html) : 1);
+const tagSlugs = post.tags?.map(t => t.slug) || [];
+const relatedPosts = await getRelatedPosts(post.id, tagSlugs, 3);
+const postUrl = `https://atrani.ru/blog/${post.slug}`;
+---
+
+<BlogLayout post={post}>
+  <article>
+    <!-- Article Hero -->
+    <header class="article-hero">
+      {post.feature_image && (
+        <div class="article-hero-bg">
+          <img src={post.feature_image} alt={post.title} />
+        </div>
+      )}
+      <div class="article-hero-content">
+        <div class="article-meta">
+          {post.primary_tag && (
+            <a href={`/blog`} class="article-category">{post.primary_tag.name}</a>
+          )}
+          <time class="article-date" datetime={post.published_at}>
+            {formatDate(post.published_at)}
+          </time>
+          <span class="article-read-time">{readingTime} мин чтения</span>
+        </div>
+        <h1 class="article-title">{post.title}</h1>
+        {(post.custom_excerpt || post.excerpt) && (
+          <p class="article-excerpt">{post.custom_excerpt || post.excerpt}</p>
+        )}
+
+        {post.primary_author && (
+          <div class="author-block">
+            {post.primary_author.profile_image && (
+              <img
+                src={post.primary_author.profile_image}
+                alt={post.primary_author.name}
+                class="author-avatar"
+              />
+            )}
+            <div class="author-info">
+              <span class="author-name">{post.primary_author.name}</span>
+              {post.primary_author.bio && (
+                <span class="author-role">{post.primary_author.bio.split('.')[0]}</span>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
+
+    <!-- Featured Image (separate from hero bg) -->
+    {post.feature_image && (
+      <figure class="featured-image reveal">
+        <img src={post.feature_image} alt={post.title} />
+      </figure>
+    )}
+
+    <!-- Article Content -->
+    <div class="article-content" set:html={post.html} />
+
+    <!-- Tags -->
+    {post.tags && post.tags.length > 0 && (
+      <div class="article-tags reveal">
+        {post.tags.map((tag) => (
+          <a href={`/blog`} class="tag">{tag.name}</a>
+        ))}
+      </div>
+    )}
+
+    <!-- Share Block -->
+    <div class="share-block reveal">
+      <span class="share-label">Поделиться</span>
+      <div class="share-buttons">
+        <a
+          href={`https://t.me/share/url?url=${encodeURIComponent(postUrl)}&text=${encodeURIComponent(post.title)}`}
+          class="share-btn"
+          target="_blank"
+          rel="noopener"
+          aria-label="Поделиться в Telegram"
+        >TG</a>
+        <a
+          href={`https://wa.me/?text=${encodeURIComponent(post.title + ' ' + postUrl)}`}
+          class="share-btn"
+          target="_blank"
+          rel="noopener"
+          aria-label="Поделиться в WhatsApp"
+        >WA</a>
+        <a
+          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(postUrl)}`}
+          class="share-btn"
+          target="_blank"
+          rel="noopener"
+          aria-label="Поделиться в Facebook"
+        >FB</a>
+        <button
+          class="share-btn"
+          aria-label="Скопировать ссылку"
+          data-copy-url={postUrl}
+        >&#128279;</button>
+      </div>
+    </div>
+
+    <!-- Author Bio -->
+    {post.primary_author && (
+      <div class="author-bio-wrapper">
+        <div class="author-bio reveal">
+          {post.primary_author.profile_image && (
+            <img
+              src={post.primary_author.profile_image}
+              alt={post.primary_author.name}
+              class="author-bio-avatar"
+            />
+          )}
+          <div class="author-bio-content">
+            <h4>{post.primary_author.name}</h4>
+            {post.primary_author.bio && <p>{post.primary_author.bio}</p>}
+            <div class="author-bio-links">
+              {post.primary_author.website && (
+                <a href={post.primary_author.website} target="_blank" rel="noopener">Сайт</a>
+              )}
+              {post.primary_author.facebook && (
+                <a href={`https://facebook.com/${post.primary_author.facebook}`} target="_blank" rel="noopener">Facebook</a>
+              )}
+              {post.primary_author.twitter && (
+                <a href={`https://twitter.com/${post.primary_author.twitter}`} target="_blank" rel="noopener">Twitter</a>
+              )}
+              <a href="/blog">Все статьи автора</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </article>
+
+  <!-- Related Articles -->
+  {relatedPosts.length > 0 && (
+    <section class="related-section">
+      <div class="related-header">
+        <h2 class="related-title">Читайте также</h2>
+        <a href="/blog" class="related-link">Все статьи &#8594;</a>
+      </div>
+      <div class="related-grid">
+        {relatedPosts.map((related) => (
+          <article class="related-card reveal">
+            <a href={`/blog/${related.slug}`}>
+              <div class="related-card-image">
+                <img
+                  src={related.feature_image || '/images/placeholder-blog.jpg'}
+                  alt={related.title}
+                  loading="lazy"
+                />
+                {related.primary_tag && (
+                  <span class="related-card-category">{related.primary_tag.name}</span>
+                )}
+              </div>
+              <div class="related-card-content">
+                <h3 class="related-card-title">{related.title}</h3>
+                <p class="related-card-meta">
+                  {related.reading_time} мин &middot; {formatDate(related.published_at)}
+                </p>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Newsletter -->
+  <section class="newsletter">
+    <div class="newsletter-content">
+      <h2 class="newsletter-title">Италия в вашей почте</h2>
+      <p class="newsletter-text">Раз в неделю — новые маршруты, секретные места и истории из жизни на побережье. Без спама, только полезное.</p>
+      <form class="newsletter-form">
+        <input type="email" class="newsletter-input" placeholder="Ваш email" required />
+        <button type="submit" class="newsletter-btn">Подписаться</button>
+      </form>
+    </div>
+  </section>
+</BlogLayout>
+
+<style>
+  .author-bio-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .related-card a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  @media (max-width: 768px) {
+    .author-bio-wrapper {
+      padding: 0 20px;
+    }
+  }
+</style>
+
+<script>
+  // Copy URL to clipboard
+  document.querySelectorAll('[data-copy-url]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const url = (btn as HTMLElement).dataset.copyUrl;
+      if (url) {
+        try {
+          await navigator.clipboard.writeText(url);
+          const original = btn.textContent;
+          btn.textContent = '\u2713';
+          setTimeout(() => { btn.textContent = original; }, 2000);
+        } catch {
+          // Fallback
+          const input = document.createElement('input');
+          input.value = url;
+          document.body.appendChild(input);
+          input.select();
+          document.execCommand('copy');
+          document.body.removeChild(input);
+        }
+      }
+    });
+  });
+</script>

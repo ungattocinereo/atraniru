@@ -1,0 +1,32 @@
+services:
+  ghost:
+    image: ghost:6-alpine
+    container_name: atraniru-ghost
+    restart: unless-stopped
+    environment:
+      url: https://atrani.ru/blog
+      NODE_ENV: production
+      server__host: 0.0.0.0
+      server__port: 40002
+      database__client: mysql
+      database__connection__host: shared-mysql
+      database__connection__user: ghost2
+      database__connection__password: EuXORAZQaK-JBQ2VNH5Y1otG
+      database__connection__database: ghost2
+      security__staffDeviceVerification: false
+    ports:
+      - "127.0.0.1:40002:40002"
+    volumes:
+      - ghost_content:/var/lib/ghost/content
+    networks:
+      - web-proxy
+      - shared_mysql
+
+volumes:
+  ghost_content:
+
+networks:
+  web-proxy:
+    external: true
+  shared_mysql:
+    external: true

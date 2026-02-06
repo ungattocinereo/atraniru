@@ -13,19 +13,16 @@ const metaTitle = post.meta_title || `${post.title} — Atrani.ru`;
 const metaDescription = post.meta_description || post.custom_excerpt || post.excerpt;
 
 // Get OG image
-const ogImage = post.og_image || post.feature_image || '/images/og-default.jpg';
+const ogImage = post.og_image || post.feature_image || '/meta.png';
 ---
 
-<Layout title={metaTitle} description={metaDescription}>
+<Layout title={metaTitle} description={metaDescription} ogImage={ogImage} ogType="article">
   <!-- Reading progress bar -->
   <div class="reading-progress" id="progress"></div>
 
   <slot />
 
   <!-- Open Graph meta tags for blog posts -->
-  <meta slot="head" property="og:type" content="article" />
-  <meta slot="head" property="og:image" content={ogImage} />
-  <meta slot="head" property="og:url" content={post.url} />
   {post.published_at && (
     <meta slot="head" property="article:published_time" content={post.published_at} />
   )}
@@ -38,12 +35,6 @@ const ogImage = post.og_image || post.feature_image || '/images/og-default.jpg';
   {post.tags && post.tags.map((tag) => (
     <meta slot="head" property="article:tag" content={tag.name} />
   ))}
-
-  <!-- Twitter Card -->
-  <meta slot="head" name="twitter:card" content="summary_large_image" />
-  <meta slot="head" name="twitter:title" content={post.twitter_title || metaTitle} />
-  <meta slot="head" name="twitter:description" content={post.twitter_description || metaDescription} />
-  <meta slot="head" name="twitter:image" content={post.twitter_image || ogImage} />
 
   <!-- JSON-LD Structured Data -->
   <script slot="head" type="application/ld+json" set:html={JSON.stringify({

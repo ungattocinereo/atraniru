@@ -2,9 +2,15 @@
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  ogType?: string;
 }
 
-const { title, description = 'Атрани — аутентичный отдых на Амальфитанском побережье. Эно-гастро-туры, фото прогулки, апартаменты.' } = Astro.props;
+const { title, description = 'Атрани — аутентичный отдых на Амальфитанском побережье. Эно-гастро-туры, фото прогулки, апартаменты.', ogImage = '/meta.png', ogType = 'website' } = Astro.props;
+
+const siteUrl = 'https://atrani.ru';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const absoluteOgImage = ogImage.startsWith('http') ? ogImage : new URL(ogImage, siteUrl).href;
 ---
 
 <!doctype html>
@@ -15,14 +21,29 @@ const { title, description = 'Атрани — аутентичный отдых
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Canonical -->
+    <link rel="canonical" href={canonicalUrl} />
+
     <!-- Open Graph -->
+    <meta property="og:site_name" content="Atrani.ru" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={absoluteOgImage} />
+    <meta property="og:locale" content="ru_RU" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={absoluteOgImage} />
 
     <title>{title}</title>
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <slot name="head" />
   </head>
   <body>
     <a href="#main" class="skip-link">Перейти к содержимому</a>

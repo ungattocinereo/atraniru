@@ -1,43 +1,106 @@
-# Astro Starter Kit: Minimal
+# Atrani.ru — Официальный сайт
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Туристический сайт для Атрани на Амальфитанском побережье, Италия. Эно-гастро-туры, фото прогулки, апартаменты.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 🎨 Дизайн
 
-## 🚀 Project Structure
+Navy Brutalist (Concept 8) — темно-синий фон (#000A27) с оранжевыми акцентами (#FF5722).
 
-Inside of your Astro project, you'll see the following folders and files:
+**Шрифты:** Unbounded (заголовки) + Space Grotesk (текст)
+
+## 🚀 Технологии
+
+- **Astro** — статический генератор сайтов
+- **Ghost CMS** — блог-платформа
+- **Vanilla CSS** — без фреймворков
+- **TypeScript** — типизация
+
+## 📁 Структура проекта
 
 ```text
 /
 ├── public/
+│   └── images/              # Статические изображения
 ├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+│   ├── components/          # Компоненты страниц
+│   │   ├── Hero.astro
+│   │   ├── Marquee.astro
+│   │   ├── Stats.astro
+│   │   ├── Quote.astro
+│   │   ├── Experiences.astro
+│   │   ├── AboutCoast.astro
+│   │   ├── VideoEmbed.astro
+│   │   ├── Apartments.astro
+│   │   ├── BlogPreview.astro
+│   │   └── CTA.astro
+│   ├── layouts/
+│   │   └── Layout.astro     # Базовый layout
+│   ├── lib/
+│   │   └── ghost.ts         # Ghost API клиент
+│   ├── pages/
+│   │   └── index.astro      # Главная страница
+│   └── styles/
+│       └── global.css       # Глобальные стили
+├── docs/
+│   └── plans/               # Документация дизайна
+└── pages/                   # Контент (не в src)
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 🛠 Команды
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Все команды выполняются из корня проекта:
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
+| Команда                   | Описание                                         |
 | :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+| `npm install`             | Установить зависимости                           |
+| `npm run dev`             | Запустить dev сервер на `localhost:4321`         |
+| `npm run build`           | Собрать production сайт в `./dist/`              |
+| `npm run preview`         | Предпросмотр production сборки                   |
 
-## 👀 Want to learn more?
+## ⚙️ Настройка
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+### 1. Установить зависимости
+
+```bash
+npm install
+```
+
+### 2. Настроить Ghost CMS (опционально)
+
+Создайте `.env` файл в корне проекта:
+
+```env
+GHOST_URL=https://your-ghost-site.com
+CONTENT_API_KEY=your_content_api_key
+```
+
+Если Ghost не настроен, блог будет показывать placeholder посты.
+
+### 3. Запустить dev сервер
+
+```bash
+npm run dev
+```
+
+Сайт будет доступен на `http://localhost:4321`
+
+## 📝 Контент
+
+- **Изображения:** добавляйте в `public/images/`
+- **Блог:** управляется через Ghost CMS
+- **Страницы:** создавайте `.astro` файлы в `src/pages/`
+
+## 🎯 TODO
+
+- [ ] Добавить placeholder изображения для экскурсий
+- [ ] Добавить реальный YouTube ID для "Орел и Решка"
+- [ ] Настроить Ghost CMS
+- [ ] Добавить страницу контактов
+- [ ] Добавить страницу "О нас"
+- [ ] Добавить индивидуальные страницы апартаментов
+- [ ] Настроить SEO мета-теги
+- [ ] Добавить Yandex.Metrica / Google Analytics
+
+## 📄 Лицензия
+
+© 2014–2026 CristallPont S.R.L. Все права защищены.

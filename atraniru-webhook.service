@@ -1,0 +1,17 @@
+[Unit]
+Description=Atrani.ru Webhook Server (Ghost rebuild trigger)
+After=network.target
+
+[Service]
+Type=simple
+User=greg
+WorkingDirectory=/home/greg/atraniru
+ExecStart=/usr/bin/node /home/greg/atraniru/webhook.mjs
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=atraniru-webhook
+
+[Install]
+WantedBy=multi-user.target

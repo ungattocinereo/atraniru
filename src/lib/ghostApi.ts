@@ -10,7 +10,9 @@ interface GetPostsOptions {
 }
 
 /**
- * Get all posts with optional filtering and pagination
+ * Get all posts with optional filtering and pagination.
+ * When limit='all', manually paginates through all pages
+ * (Ghost Content API caps at 100 per page).
  */
 export async function getAllPosts(options: GetPostsOptions = {}): Promise<GhostPost[]> {
   const {
@@ -19,6 +21,36 @@ export async function getAllPosts(options: GetPostsOptions = {}): Promise<GhostP
     filter,
     include = 'tags,authors',
   } = options;
+
+  // When limit='all', paginate through all pages manually
+  if (limit === 'all') {
+    const allPosts: GhostPost[] = [];
+    let currentPage = 1;
+    let hasMore = true;
+
+    while (hasMore) {
+      try {
+        const posts = await ghostClient.posts.browse({
+          limit: 100,
+          page: currentPage,
+          filter,
+          include,
+        });
+
+        allPosts.push(...(posts as GhostPost[]));
+
+        const meta = (posts as any).meta;
+        const totalPages = meta?.pagination?.pages ?? 1;
+        hasMore = currentPage < totalPages;
+        currentPage++;
+      } catch (error) {
+        console.error(`Error fetching posts page ${currentPage} from Ghost:`, error);
+        hasMore = false;
+      }
+    }
+
+    return allPosts;
+  }
 
   try {
     const posts = await ghostClient.posts.browse({

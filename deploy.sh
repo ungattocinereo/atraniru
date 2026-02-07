@@ -8,8 +8,8 @@ set -e
 # Architecture:
 #   Caddy serves Astro static files from dist/
 #   Ghost (Docker, port 40002) is headless CMS only
-#   Webhook server (port 40003) triggers rebuild on Ghost publish
-#   Caddy proxies /blog/ghost/*, /blog/content/*, /webhook/* to their services
+#   Webhook server (port 40003) triggers rebuild on Ghost publish or GitHub push
+#   Caddy proxies /blog/ghost/*, /blog/content/*, /webhook/*, /hooks/* to port 40003
 #
 # Required Caddy config (/etc/caddy/Caddyfile):
 #
@@ -29,8 +29,13 @@ set -e
 #           reverse_proxy localhost:40002
 #       }
 #
-#       # Webhook server (rebuild trigger)
+#       # Webhook server (Ghost + GitHub rebuild triggers)
 #       handle /webhook/* {
+#           reverse_proxy localhost:40003
+#       }
+#
+#       # GitHub webhook (redeploy on push)
+#       handle /hooks/* {
 #           reverse_proxy localhost:40003
 #       }
 #

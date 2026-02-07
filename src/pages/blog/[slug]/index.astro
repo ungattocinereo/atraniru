@@ -1,8 +1,8 @@
 ---
-import BlogLayout from '../../layouts/BlogLayout.astro';
-import { getAllPosts, getSinglePost, getRelatedPosts, formatDate, calculateReadingTime } from '../../lib/ghostApi';
-import { rewriteGhostUrl, rewriteGhostHtml } from '../../lib/ghost';
-import type { GhostPost } from '../../lib/types/ghost';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+import { getAllPosts, getSinglePost, getRelatedPosts, formatDate, calculateReadingTime } from '../../../lib/ghostApi';
+import { rewriteGhostUrl, rewriteGhostHtml } from '../../../lib/ghost';
+import type { GhostPost } from '../../../lib/types/ghost';
 
 export async function getStaticPaths() {
   const posts = await getAllPosts({ limit: 'all' });

@@ -1,0 +1,16 @@
+---
+import { getAllPosts, getSinglePost } from '../../../lib/ghostApi';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts({ limit: 'all' });
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { postId: post.id },
+  }));
+}
+
+const { postId } = Astro.props;
+const ghostEditorUrl = `/blog/ghost/#/editor/post/${postId}`;
+
+return Astro.redirect(ghostEditorUrl);
+---

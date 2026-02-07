@@ -68,13 +68,6 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
       </div>
     </header>
 
-    <!-- Featured Image (separate from hero bg) -->
-    {post.feature_image && (
-      <figure class="featured-image reveal">
-        <img src={rewriteGhostUrl(post.feature_image)} alt={post.title} />
-      </figure>
-    )}
-
     <!-- Article Content -->
     <div class="article-content" set:html={rewriteGhostHtml(post.html)} />
 

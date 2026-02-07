@@ -140,17 +140,222 @@ a {
   color: var(--color-orange);
 }
 
+/* Burger button — hidden on desktop */
+.burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: 40px;
+  height: 40px;
+  padding: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 60;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.burger-line {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: white;
+  transition: transform 0.3s var(--ease-out), opacity 0.3s var(--ease-out);
+  transform-origin: center;
+}
+
+.burger.is-active .burger-line:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.burger.is-active .burger-line:nth-child(2) {
+  opacity: 0;
+}
+
+.burger.is-active .burger-line:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Mobile overlay */
+.mobile-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: var(--color-navy-deep, #000A27);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 100px 40px 60px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s var(--ease-out), visibility 0.3s;
+}
+
+.mobile-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.mobile-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Mobile nav links */
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: auto;
+}
+
+.mobile-nav a {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+  padding: 12px 0;
+  transition: color 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+  transform: translateY(20px);
+  opacity: 0;
+}
+
+.mobile-overlay.is-open .mobile-nav a {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.mobile-overlay.is-open .mobile-nav a:nth-child(1) { transition-delay: 0.05s; }
+.mobile-overlay.is-open .mobile-nav a:nth-child(2) { transition-delay: 0.1s; }
+.mobile-overlay.is-open .mobile-nav a:nth-child(3) { transition-delay: 0.15s; }
+.mobile-overlay.is-open .mobile-nav a:nth-child(4) { transition-delay: 0.2s; }
+
+.mobile-nav a:hover,
+.mobile-nav a:active {
+  color: var(--color-orange);
+  transform: translateX(8px);
+}
+
+.mobile-nav-num {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.35);
+  min-width: 28px;
+  letter-spacing: 0;
+}
+
+.mobile-nav-dash {
+  color: rgba(255,255,255,0.2);
+  margin: 0 12px 0 0;
+  font-size: 14px;
+}
+
+/* Mobile social links */
+.mobile-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 40px;
+}
+
+.mobile-social a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: color 0.3s var(--ease-out);
+}
+
+.mobile-social a:hover {
+  color: var(--color-orange);
+}
+
+.mobile-social a:hover .mobile-social-badge {
+  background: var(--color-orange);
+  border-color: var(--color-orange);
+  transform: translate(-2px, -2px);
+  box-shadow: 2px 2px 0 rgba(255,255,255,0.2);
+}
+
+.mobile-social-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(255,255,255,0.2);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  transition: all 0.3s var(--ease-out);
+}
+
+/* Lock body scroll when menu is open */
+body.menu-open {
+  overflow: hidden;
+}
+
+body.menu-open .header {
+  mix-blend-mode: normal;
+  z-index: 60;
+}
+
 @media (max-width: 768px) {
   .header {
     padding: 20px;
   }
 
   .nav {
-    gap: 16px;
+    display: none;
   }
 
-  .nav a {
+  .burger {
+    display: flex;
+  }
+
+  .mobile-nav a {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 400px) {
+  .mobile-nav a {
+    font-size: 24px;
+  }
+
+  .mobile-overlay {
+    padding: 100px 24px 40px;
+  }
+
+  .mobile-social {
+    gap: 12px;
+  }
+
+  .mobile-social a {
     font-size: 12px;
+  }
+
+  .mobile-social-badge {
+    width: 36px;
+    height: 36px;
+    font-size: 10px;
   }
 }
 

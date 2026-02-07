@@ -62,7 +62,27 @@ const absoluteOgImage = ogImage.startsWith('http') ? ogImage : new URL(ogImage, 
         <a href="/blog">Блог</a>
         <a href="/contacts">Контакты</a>
       </nav>
+      <button class="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+        <span class="burger-line"></span>
+      </button>
     </header>
+
+    <div class="mobile-overlay" id="mobile-menu" aria-hidden="true">
+      <nav class="mobile-nav" role="navigation">
+        <a href="/experience"><span class="mobile-nav-num">01</span><span class="mobile-nav-dash">&mdash;</span>Экскурсии</a>
+        <a href="/apartments"><span class="mobile-nav-num">02</span><span class="mobile-nav-dash">&mdash;</span>Апартаменты</a>
+        <a href="/blog"><span class="mobile-nav-num">03</span><span class="mobile-nav-dash">&mdash;</span>Блог</a>
+        <a href="/contacts"><span class="mobile-nav-num">04</span><span class="mobile-nav-dash">&mdash;</span>Контакты</a>
+      </nav>
+      <div class="mobile-social">
+        <a href="https://facebook.com/atrani.ru" target="_blank" rel="noopener"><span class="mobile-social-badge">FB</span>Фейсбук</a>
+        <a href="https://instagram.com/atrani.ru" target="_blank" rel="noopener"><span class="mobile-social-badge">IG</span>Инстаграм</a>
+        <a href="https://t.me/atraniru" target="_blank" rel="noopener"><span class="mobile-social-badge">TG</span>Телеграм</a>
+        <a href="https://wa.me/393270972329" target="_blank" rel="noopener"><span class="mobile-social-badge">WA</span>Вотсап</a>
+      </div>
+    </div>
 
     <main id="main">
       <slot />
@@ -183,6 +203,43 @@ const absoluteOgImage = ogImage.startsWith('http') ? ogImage : new URL(ogImage, 
       }, { threshold: 0.1 });
 
       document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+      // Mobile menu
+      const burger = document.querySelector('.burger');
+      const overlay = document.getElementById('mobile-menu');
+
+      if (burger && overlay) {
+        burger.addEventListener('click', () => {
+          const isOpen = overlay.classList.toggle('is-open');
+          burger.classList.toggle('is-active', isOpen);
+          burger.setAttribute('aria-expanded', String(isOpen));
+          overlay.setAttribute('aria-hidden', String(!isOpen));
+          document.body.classList.toggle('menu-open', isOpen);
+        });
+
+        // Close on link click
+        overlay.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => {
+            overlay.classList.remove('is-open');
+            burger.classList.remove('is-active');
+            burger.setAttribute('aria-expanded', 'false');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('menu-open');
+          });
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && overlay.classList.contains('is-open')) {
+            overlay.classList.remove('is-open');
+            burger.classList.remove('is-active');
+            burger.setAttribute('aria-expanded', 'false');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('menu-open');
+            burger.focus();
+          }
+        });
+      }
     </script>
   </body>
 </html>

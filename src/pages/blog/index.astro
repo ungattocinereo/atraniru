@@ -8,11 +8,33 @@ const posts = await getAllPosts({ limit: 'all' });
 
 <Layout title="Блог — Atrani.ru" description="Статьи, истории и советы о жизни на Амальфитанском побережье">
   <section class="blog-hero">
-    <div class="blog-hero-content">
-      <p class="section-label">Блог</p>
-      <h1 class="blog-hero-title">Истории с побережья</h1>
-      <p class="blog-hero-text">Маршруты, секретные места, гастрономия и советы от тех, кто живёт на Амальфитанском побережье</p>
+    <!-- Background decorative text -->
+    <div class="blog-hero-bg-text" aria-hidden="true">БЛОЖЕ</div>
+
+    <!-- Hero background image -->
+    <div class="blog-hero-bg-image">
+      <img
+        src="/images/index/atrani-4-index.jpg"
+        alt="Атрани — вид на город у моря"
+        loading="eager"
+      />
     </div>
+
+    <!-- Overlay for text readability -->
+    <div class="blog-hero-overlay"></div>
+
+    <!-- Hero content -->
+    <div class="blog-hero-content">
+      <p class="hero-label">Блог</p>
+      <h1 class="blog-hero-title">
+        <span class="highlight">ЖИЗНЬ</span>
+        <span class="blog-hero-title-line">У МОРЮШКА</span>
+      </h1>
+      <p class="blog-hero-subtitle">Маршруты, секретные места, гастрономия и советы от тех, кто живёт на Амальфитанском побережье</p>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" aria-hidden="true">Scroll</div>
   </section>
 
   <section class="blog-listing">
@@ -76,39 +98,96 @@ const posts = await getAllPosts({ limit: 'all' });
 
 <style>
   .blog-hero {
-    padding: 160px 40px 80px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
     background: var(--color-navy-deep);
     color: white;
-    text-align: center;
+    overflow: hidden;
+    padding: 120px 40px 80px;
+  }
+
+  .blog-hero-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: clamp(128px, 21vw, 340px);
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+    user-select: none;
+    z-index: 2;
+    white-space: nowrap;
+  }
+
+  .blog-hero-bg-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 0;
+    animation: fadeIn 1.2s var(--ease-out) 0.6s forwards;
+  }
+
+  .blog-hero-bg-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .blog-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 10, 39, 0.88) 0%,
+      rgba(0, 10, 39, 0.7) 50%,
+      rgba(0, 10, 39, 0.5) 100%
+    );
+    z-index: 0;
   }
 
   .blog-hero-content {
-    max-width: 700px;
+    position: relative;
+    z-index: 3;
+    max-width: 1400px;
     margin: 0 auto;
+    width: 100%;
   }
 
   .blog-hero-title {
     font-family: var(--font-display);
-    font-size: clamp(36px, 5vw, 56px);
-    font-weight: 800;
-    letter-spacing: -2px;
-    line-height: 1.1;
-    margin-bottom: 20px;
+    font-size: clamp(48px, 10vw, 160px);
+    font-weight: 900;
+    line-height: 0.9;
+    letter-spacing: -4px;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeInUp 0.8s var(--ease-out) 0.3s forwards;
   }
 
-  .blog-hero-text {
-    font-size: 20px;
-    color: var(--color-gray);
-    line-height: 1.6;
-  }
-
-  .section-label {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+  .blog-hero-title .highlight {
+    display: block;
     color: var(--color-orange);
-    margin-bottom: 16px;
+  }
+
+  .blog-hero-title-line {
+    white-space: nowrap;
+  }
+
+  .blog-hero-subtitle {
+    font-size: clamp(18px, 2vw, 24px);
+    color: var(--color-gray);
+    max-width: 600px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeInUp 0.8s var(--ease-out) 0.4s forwards;
   }
 
   .blog-listing {
@@ -244,7 +323,16 @@ const posts = await getAllPosts({ limit: 'all' });
 
   @media (max-width: 768px) {
     .blog-hero {
-      padding: 120px 20px 60px;
+      padding: 100px 20px 60px;
+    }
+
+    .blog-hero-overlay {
+      background: linear-gradient(
+        135deg,
+        rgba(0, 10, 39, 0.92) 0%,
+        rgba(0, 10, 39, 0.8) 50%,
+        rgba(0, 10, 39, 0.65) 100%
+      );
     }
 
     .blog-listing {

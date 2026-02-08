@@ -4,6 +4,7 @@ import { getAllPosts, formatDate } from '../../lib/ghostApi';
 import { rewriteGhostUrl } from '../../lib/ghost';
 
 const posts = await getAllPosts({ limit: 'all' });
+const BATCH_SIZE = 12;
 ---
 
 <Layout title="Блог — Atrani.ru" description="Статьи, истории и советы о жизни на Амальфитанском побережье">
@@ -38,9 +39,12 @@ const posts = await getAllPosts({ limit: 'all' });
   </section>
 
   <section class="blog-listing">
-    <div class="blog-listing-grid">
+    <div class="blog-listing-grid" data-batch-size={BATCH_SIZE}>
       {posts.map((post, i) => (
-        <article class={`blog-listing-card reveal ${i === 0 ? 'blog-listing-card--featured' : ''}`}>
+        <article
+          class={`blog-listing-card reveal ${i === 0 ? 'blog-listing-card--featured' : ''} ${i >= BATCH_SIZE ? 'blog-listing-card--hidden' : ''}`}
+          data-index={i}
+        >
           <a href={`/blog/${post.slug}`}>
             <div class="blog-listing-card-image">
               <img
@@ -72,6 +76,10 @@ const posts = await getAllPosts({ limit: 'all' });
         </article>
       ))}
     </div>
+
+    {posts.length > BATCH_SIZE && (
+      <div id="load-more-sentinel" aria-hidden="true"></div>
+    )}
 
     {posts.length === 0 && (
       <div class="blog-empty">
@@ -321,6 +329,27 @@ const posts = await getAllPosts({ limit: 'all' });
     font-size: 18px;
   }
 
+  /* Infinite scroll: hidden cards */
+  .blog-listing-card--hidden {
+    display: none;
+  }
+
+  /* Infinite scroll: reveal animation */
+  .blog-listing-card--revealing {
+    animation: cardReveal 0.4s ease-out forwards;
+  }
+
+  @keyframes cardReveal {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Sentinel element */
+  #load-more-sentinel {
+    height: 1px;
+    margin-top: -1px;
+  }
+
   @media (max-width: 768px) {
     .blog-hero {
       padding: 100px 20px 60px;
@@ -356,3 +385,50 @@ const posts = await getAllPosts({ limit: 'all' });
     }
   }
 </style>
+
+<!-- Fallback: show all cards when JS is disabled -->
+<noscript>
+  <style>
+    .blog-listing-card--hidden { display: block !important; }
+  </style>
+</noscript>
+
+<script>
+  const grid = document.querySelector('.blog-listing-grid');
+  const sentinel = document.getElementById('load-more-sentinel');
+
+  if (grid && sentinel) {
+    const BATCH = parseInt(grid.dataset.batchSize || '12', 10);
+    const cards = grid.querySelectorAll('.blog-listing-card');
+    const total = cards.length;
+    let visible = Math.min(BATCH, total);
+
+    function revealNextBatch() {
+      const end = Math.min(visible + BATCH, total);
+      for (let i = visible; i < end; i++) {
+        const card = cards[i];
+        card.classList.remove('blog-listing-card--hidden');
+        card.classList.add('blog-listing-card--revealing');
+        // Stagger the animation slightly
+        card.style.animationDelay = `${(i - visible) * 0.05}s`;
+      }
+      visible = end;
+
+      // All cards shown — remove sentinel
+      if (visible >= total) {
+        sentinel.remove();
+        observer.disconnect();
+      }
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        revealNextBatch();
+      }
+    }, {
+      rootMargin: '200px',
+    });
+
+    observer.observe(sentinel);
+  }
+</script>

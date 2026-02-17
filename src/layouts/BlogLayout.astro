@@ -9,15 +9,52 @@ interface Props {
 
 const { post } = Astro.props;
 
-// Determine meta title and description
-const metaTitle = post.meta_title || `${post.title} — Atrani.ru`;
-const metaDescription = post.meta_description || post.custom_excerpt || post.excerpt;
+const siteUrl = 'https://atrani.ru';
+const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
 
-// Get OG image
+// Title: Ghost og_title > meta_title > default
+const metaTitle = post.og_title || post.meta_title || `${post.title} — Atrani.ru`;
+
+// Description: Ghost og_description > meta_description > excerpt
+const metaDescription = post.og_description || post.meta_description || post.custom_excerpt || post.excerpt;
+
+// OG image
 const ogImage = rewriteGhostUrl(post.og_image || post.feature_image) || '/meta.png';
+
+// Twitter-specific overrides (Ghost allows separate twitter fields)
+const twitterTitle = post.twitter_title || metaTitle;
+const twitterDescription = post.twitter_description || metaDescription;
+const twitterImage = rewriteGhostUrl(post.twitter_image || post.og_image || post.feature_image) || '/meta.png';
+
+// Author twitter handle
+const authorTwitter = post.primary_author?.twitter
+  ? (post.primary_author.twitter.startsWith('@') ? post.primary_author.twitter : `@${post.primary_author.twitter}`)
+  : undefined;
+
+// Image alt text
+const imageAlt = post.feature_image_alt || post.title;
+
+// Word count for JSON-LD
+const wordCount = post.html
+  ? post.html.replace(/<[^>]*>/g, '').trim().split(/\s+/).length
+  : undefined;
+
+// Article section from primary tag
+const articleSection = post.primary_tag?.name || undefined;
 ---
 
-<Layout title={metaTitle} description={metaDescription} ogImage={ogImage} ogType="article">
+<Layout
+  title={metaTitle}
+  description={metaDescription}
+  ogImage={ogImage}
+  ogType="article"
+  ogImageAlt={imageAlt}
+  twitterSite="@atraniru"
+  twitterCreator={authorTwitter}
+  twitterTitle={twitterTitle}
+  twitterDescription={twitterDescription}
+  twitterImage={twitterImage}
+>
   <!-- Reading progress bar -->
   <div class="reading-progress" id="progress"></div>
 
@@ -46,11 +83,15 @@ const ogImage = rewriteGhostUrl(post.og_image || post.feature_image) || '/meta.p
     "image": rewriteGhostUrl(post.feature_image),
     "datePublished": post.published_at,
     "dateModified": post.updated_at,
+    "inLanguage": "ru",
+    ...(wordCount ? { "wordCount": wordCount } : {}),
+    ...(articleSection ? { "articleSection": articleSection } : {}),
     "author": post.primary_author ? {
       "@type": "Person",
       "name": post.primary_author.name,
       "image": rewriteGhostUrl(post.primary_author.profile_image),
-      "description": post.primary_author.bio
+      "description": post.primary_author.bio,
+      ...(post.primary_author.website ? { "url": post.primary_author.website } : {})
     } : undefined,
     "publisher": {
       "@type": "Organization",
@@ -63,7 +104,7 @@ const ogImage = rewriteGhostUrl(post.og_image || post.feature_image) || '/meta.p
     },
     "mainEntityOfPage": {
       "@type": "WebPage",
-      "@id": post.url
+      "@id": canonicalUrl
     }
   })}></script>
 </Layout>

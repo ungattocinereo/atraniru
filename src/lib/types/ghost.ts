@@ -48,6 +48,8 @@ export interface GhostPost {
   twitter_image: string | null;
   twitter_title: string | null;
   twitter_description: string | null;
+  feature_image_alt: string | null;
+  feature_image_caption: string | null;
   authors?: GhostAuthor[];
   tags?: GhostTag[];
   primary_tag?: GhostTag;

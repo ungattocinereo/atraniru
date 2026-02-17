@@ -7,7 +7,15 @@ const posts = await getAllPosts({ limit: 'all' });
 const BATCH_SIZE = 12;
 ---
 
-<Layout title="Блог — Atrani.ru" description="Мы покажем вам Италию без туристической шелухи — настоящие вкусы, настоящих людей, настоящую жизнь." ogImage="/meta.webp">
+<Layout
+  title="Блог об Амальфитанском побережье — новости и советы от местных | Atrani.ru"
+  description="Свежие статьи от тех, кто живёт на Амальфитанском побережье прямо сейчас. Маршруты, секретные места, гастрономия, практические советы — настоящая Италия без туристической шелухи."
+  ogImage="/meta.png"
+  ogImageWidth={2752}
+  ogImageHeight={1536}
+  ogImageAlt="Блог Atrani.ru — жизнь на Амальфитанском побережье"
+  twitterSite="@atraniru"
+>
   <section class="blog-hero">
     <!-- Background decorative text -->
     <div class="blog-hero-bg-text" aria-hidden="true">БЛОЖЕ</div>
@@ -31,7 +39,7 @@ const BATCH_SIZE = 12;
         <span class="highlight">ЖИЗНЬ</span>
         <span class="blog-hero-title-line">У МОРЮШКА</span>
       </h1>
-      <p class="blog-hero-subtitle">Маршруты, секретные места, гастрономия и советы от тех, кто живёт на Амальфитанском побережье</p>
+      <p class="blog-hero-subtitle">Свежие статьи от местных жителей побережья Амальфи — маршруты, секреты, гастрономия и советы из первых рук</p>
     </div>
 
     <!-- Scroll indicator -->
@@ -98,6 +106,33 @@ const BATCH_SIZE = 12;
       </form>
     </div>
   </section>
+
+  <!-- JSON-LD Blog schema -->
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Блог Atrani.ru — Амальфитанское побережье",
+    "description": "Свежие статьи от тех, кто живёт на Амальфитанском побережье прямо сейчас.",
+    "url": "https://atrani.ru/blog",
+    "inLanguage": "ru",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Atrani.ru",
+      "url": "https://atrani.ru",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://atrani.ru/logo.png"
+      }
+    },
+    "blogPost": posts.slice(0, 10).map(post => ({
+      "@type": "BlogPosting",
+      "headline": post.title,
+      "url": `https://atrani.ru/blog/${post.slug}`,
+      "datePublished": post.published_at,
+      "image": rewriteGhostUrl(post.feature_image),
+      ...(post.primary_author ? { "author": { "@type": "Person", "name": post.primary_author.name } } : {})
+    }))
+  })}></script>
 </Layout>
 
 <style is:global>

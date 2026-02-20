@@ -11,7 +11,7 @@ const [allPosts, featuredPosts] = await Promise.all([
 const BATCH_SIZE = 12;
 
 // Category counts for toggle badges
-const blogCount = allPosts.filter(p => p.primary_tag?.slug === 'blog').length;
+const blogCount = allPosts.filter(p => p.primary_tag?.slug === 'blogh').length;
 const newsCount = allPosts.filter(p => p.primary_tag?.slug === 'novosti').length;
 
 // Exclude featured from regular grid
@@ -65,7 +65,7 @@ const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
         Все посты
         <span class="blog-filter-count">{allPosts.length}</span>
       </button>
-      <button class="blog-filter-tab" data-filter="blog" type="button">
+      <button class="blog-filter-tab" data-filter="blogh" type="button">
         Блог
         <span class="blog-filter-count">{blogCount}</span>
       </button>
@@ -322,14 +322,15 @@ const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
      CATEGORY FILTER TABS
      ============================================= */
   .blog-filters {
-    background: var(--color-navy-deep);
-    padding: 0 40px 60px;
+    background: white;
+    padding: 40px 40px;
   }
 
   .blog-filters-inner {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
+    justify-content: center;
     gap: 12px;
     flex-wrap: wrap;
   }
@@ -337,6 +338,7 @@ const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
   .blog-filter-tab {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     padding: 14px 28px;
     font-family: var(--font-body);
@@ -344,17 +346,17 @@ const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    color: var(--color-gray);
+    color: var(--color-gray-dark);
     background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.12);
+    border: 2px solid var(--color-gray-light);
     cursor: pointer;
     transition: all 0.3s var(--ease-out);
     position: relative;
   }
 
   .blog-filter-tab:hover {
-    color: white;
-    border-color: rgba(255, 255, 255, 0.35);
+    color: var(--color-navy);
+    border-color: var(--color-navy);
     transform: translateY(-2px);
   }
 
@@ -378,11 +380,13 @@ const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
     font-size: 11px;
     font-weight: 700;
     font-family: var(--font-mono, 'JetBrains Mono', monospace);
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-gray-light);
+    color: var(--color-gray-dark);
   }
 
   .blog-filter-tab.is-active .blog-filter-count {
     background: rgba(0, 0, 0, 0.2);
+    color: white;
   }
 
   /* =============================================
@@ -563,8 +567,8 @@ const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    background: var(--color-navy-deep);
-    color: var(--color-orange);
+    background: var(--color-orange);
+    color: var(--color-navy-deep);
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
@@ -854,7 +858,7 @@ const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
 
     /* Filters */
     .blog-filters {
-      padding: 0 20px 40px;
+      padding: 24px 20px;
     }
 
     .blog-filter-tab {

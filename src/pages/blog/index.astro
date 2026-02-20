@@ -896,16 +896,16 @@ const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
     }
 
     .featured-card--small a {
-      flex-direction: row;
+      flex-direction: column;
     }
 
     .featured-card--small .featured-card-image {
-      width: 35%;
-      aspect-ratio: auto;
+      width: 100%;
+      aspect-ratio: 16/9;
     }
 
     .featured-card--small .featured-card-title {
-      font-size: 14px;
+      font-size: 16px;
     }
 
     .featured-card--small .featured-card-content {

@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Newsletter from '../../components/Newsletter.astro';
 import { getAllPosts, getFeaturedPosts, formatDate } from '../../lib/ghostApi';
 import { rewriteGhostUrl } from '../../lib/ghost';
 
@@ -177,17 +178,7 @@ const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
     )}
   </section>
 
-  <section class="newsletter">
-    <div class="newsletter-bg-text" aria-hidden="true">ПОЧТА</div>
-    <div class="newsletter-content">
-      <h2 class="newsletter-title">Италия в вашей почте</h2>
-      <p class="newsletter-text">Раз в неделю — новые маршруты, секретные места и истории из жизни на побережье. Без спама, только полезное.</p>
-      <form class="newsletter-form">
-        <input type="email" class="newsletter-input" placeholder="Ваш email" required />
-        <button type="submit" class="newsletter-btn">Подписаться</button>
-      </form>
-    </div>
-  </section>
+  <Newsletter showBgText={true} />
 
   <!-- JSON-LD Blog schema -->
   <script slot="head" type="application/ld+json" set:html={JSON.stringify({

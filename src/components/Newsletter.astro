@@ -1,0 +1,115 @@
+---
+interface Props {
+  showBgText?: boolean;
+}
+
+const { showBgText = false } = Astro.props;
+
+const GHOST_URL = import.meta.env.GHOST_URL;
+const GHOST_PUBLIC_URL = import.meta.env.GHOST_PUBLIC_URL || GHOST_URL;
+---
+
+<section class="newsletter">
+  {showBgText && <div class="newsletter-bg-text" aria-hidden="true">ПОЧТА</div>}
+  <div class="newsletter-content">
+    <!-- Form state -->
+    <div class="newsletter-form-wrap">
+      <h2 class="newsletter-title">Италия в вашей почте</h2>
+      <p class="newsletter-text">Раз в неделю — новые маршруты, секретные места и истории из жизни на побережье. Без спама, только полезное.</p>
+      <form class="newsletter-form" data-ghost-url={GHOST_PUBLIC_URL}>
+        <input type="email" class="newsletter-input" placeholder="Ваш email" required />
+        <button type="submit" class="newsletter-btn">
+          <span class="newsletter-btn-label">Подписаться</span>
+          <svg class="newsletter-btn-spinner" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="40 20" />
+          </svg>
+        </button>
+      </form>
+      <p class="newsletter-error" aria-live="polite"></p>
+    </div>
+
+    <!-- Success state -->
+    <div class="newsletter-success">
+      <div class="newsletter-success-check" aria-hidden="true">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <circle class="newsletter-check-circle" cx="28" cy="28" r="25" stroke="white" stroke-width="2.5" />
+          <path class="newsletter-check-mark" d="M17 28L24 35L39 20" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <h2 class="newsletter-title">Проверьте почту!</h2>
+      <p class="newsletter-text">Мы отправили письмо с&nbsp;подтверждением на&nbsp;ваш адрес. Нажмите на&nbsp;ссылку внутри&nbsp;&mdash; и&nbsp;вы&nbsp;в&nbsp;рассылке&nbsp;Atrani.ru. Будем присылать свежие истории с&nbsp;побережья, чтобы было тепло, интересно и&nbsp;чуть-чуть завидно.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.newsletter-form').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formEl = form as HTMLFormElement;
+      const input = formEl.querySelector('.newsletter-input') as HTMLInputElement;
+      const btn = formEl.querySelector('.newsletter-btn') as HTMLButtonElement;
+      const errorEl = formEl.closest('.newsletter-form-wrap')?.querySelector('.newsletter-error') as HTMLElement;
+      const section = formEl.closest('.newsletter') as HTMLElement;
+
+      const email = input.value.trim();
+
+      // Reset error
+      errorEl.textContent = '';
+      errorEl.classList.remove('is-visible');
+
+      // Validate email format
+      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+      if (!emailRegex.test(email)) {
+        errorEl.textContent = 'Введите корректный email-адрес';
+        errorEl.classList.add('is-visible');
+        input.focus();
+        return;
+      }
+
+      // Check for obvious throwaway patterns
+      const domain = email.split('@')[1]?.toLowerCase();
+      if (!domain || domain.split('.').length < 2) {
+        errorEl.textContent = 'Введите корректный email-адрес';
+        errorEl.classList.add('is-visible');
+        input.focus();
+        return;
+      }
+
+      // Loading state
+      formEl.classList.add('is-loading');
+      btn.disabled = true;
+      input.disabled = true;
+
+      try {
+        const ghostUrl = formEl.dataset.ghostUrl?.replace(/\/$/, '');
+        const response = await fetch(`${ghostUrl}/members/api/send-magic-link/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            emailType: 'subscribe',
+            labels: [],
+          }),
+        });
+
+        if (!response.ok) {
+          const data = await response.json().catch(() => null);
+          const ghostMsg = data?.errors?.[0]?.message;
+          throw new Error(ghostMsg || 'Не удалось отправить письмо');
+        }
+
+        // Success — animate to thank-you state
+        section.classList.add('is-success');
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Не удалось подписаться. Попробуйте позже.';
+        errorEl.textContent = message;
+        errorEl.classList.add('is-visible');
+        formEl.classList.remove('is-loading');
+        btn.disabled = false;
+        input.disabled = false;
+      }
+    });
+  });
+</script>

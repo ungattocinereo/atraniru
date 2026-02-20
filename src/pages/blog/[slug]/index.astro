@@ -1,5 +1,6 @@
 ---
 import BlogLayout from '../../../layouts/BlogLayout.astro';
+import Newsletter from '../../../components/Newsletter.astro';
 import { getAllPosts, getSinglePost, getRelatedPosts, formatDate, calculateReadingTime } from '../../../lib/ghostApi';
 import { rewriteGhostUrl, rewriteGhostHtml } from '../../../lib/ghost';
 import type { GhostPost } from '../../../lib/types/ghost';
@@ -180,16 +181,7 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
   )}
 
   <!-- Newsletter -->
-  <section class="newsletter">
-    <div class="newsletter-content">
-      <h2 class="newsletter-title">Италия в вашей почте</h2>
-      <p class="newsletter-text">Раз в неделю — новые маршруты, секретные места и истории из жизни на побережье. Без спама, только полезное.</p>
-      <form class="newsletter-form">
-        <input type="email" class="newsletter-input" placeholder="Ваш email" required />
-        <button type="submit" class="newsletter-btn">Подписаться</button>
-      </form>
-    </div>
-  </section>
+  <Newsletter />
 </BlogLayout>
 
 <style>

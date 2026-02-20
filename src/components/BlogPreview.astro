@@ -7,7 +7,7 @@ let error = null;
 
 try {
   posts = await ghostClient.posts.browse({
-    limit: 4,
+    limit: 8,
     include: 'tags,authors'
   });
 } catch (e) {
@@ -42,6 +42,34 @@ try {
       excerpt: 'Всё, что нужно знать перед поездкой',
       feature_image: '/images/placeholder-blog-4.jpg',
       published_at: new Date().toISOString()
+    },
+    {
+      slug: 'placeholder-5',
+      title: 'Транспорт на побережье',
+      excerpt: 'Как добраться и перемещаться по Амальфи',
+      feature_image: '/images/placeholder-blog-5.jpg',
+      published_at: new Date().toISOString()
+    },
+    {
+      slug: 'placeholder-6',
+      title: 'Пляжи Амальфи',
+      excerpt: 'Лучшие пляжи для отдыха на побережье',
+      feature_image: '/images/placeholder-blog-6.jpg',
+      published_at: new Date().toISOString()
+    },
+    {
+      slug: 'placeholder-7',
+      title: 'Винные туры',
+      excerpt: 'Дегустации и винодельни региона Кампания',
+      feature_image: '/images/placeholder-blog-7.jpg',
+      published_at: new Date().toISOString()
+    },
+    {
+      slug: 'placeholder-8',
+      title: 'Фестивали и праздники',
+      excerpt: 'Традиционные события Амальфитанского побережья',
+      feature_image: '/images/placeholder-blog-8.jpg',
+      published_at: new Date().toISOString()
     }
   ];
 }
@@ -50,7 +78,7 @@ try {
 <section class="blog">
   <div class="container">
     <div class="section-header reveal">
-      <p class="section-label">05 — Блог</p>
+      <p class="section-label">04 — Блог</p>
       <h2 class="section-title">Истории и советы</h2>
     </div>
     <div class="blog-grid">
@@ -93,8 +121,8 @@ try {
 
   .blog-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
     margin-bottom: 60px;
   }
 
@@ -105,7 +133,7 @@ try {
   }
 
   .blog-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
 
   .blog-card a {
@@ -116,7 +144,7 @@ try {
   .blog-image {
     position: relative;
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 3 / 2;
     overflow: hidden;
     background: var(--color-navy);
   }
@@ -133,28 +161,32 @@ try {
   }
 
   .blog-content {
-    padding: 32px;
+    padding: 16px 20px 20px;
   }
 
   .blog-content h3 {
     font-family: var(--font-display);
-    font-size: 24px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--color-navy);
-    margin-bottom: 12px;
-    letter-spacing: -0.5px;
-    line-height: 1.2;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+    line-height: 1.3;
   }
 
   .blog-content p {
-    font-size: 16px;
+    font-size: 13px;
     color: var(--color-gray-dark);
-    line-height: 1.6;
-    margin-bottom: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   .blog-date {
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -165,6 +197,13 @@ try {
     text-align: center;
   }
 
+  @media (max-width: 1024px) {
+    .blog-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+  }
+
   @media (max-width: 768px) {
     .blog {
       padding: 80px 0;
@@ -172,15 +211,19 @@ try {
 
     .blog-grid {
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 16px;
     }
 
     .blog-content {
-      padding: 24px;
+      padding: 16px;
     }
 
     .blog-content h3 {
-      font-size: 20px;
+      font-size: 16px;
+    }
+
+    .blog-content p {
+      font-size: 14px;
     }
   }
 </style>

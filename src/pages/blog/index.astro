@@ -1,10 +1,22 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getAllPosts, formatDate } from '../../lib/ghostApi';
+import { getAllPosts, getFeaturedPosts, formatDate } from '../../lib/ghostApi';
 import { rewriteGhostUrl } from '../../lib/ghost';
 
-const posts = await getAllPosts({ limit: 'all' });
+const [allPosts, featuredPosts] = await Promise.all([
+  getAllPosts({ limit: 'all' }),
+  getFeaturedPosts(4),
+]);
+
 const BATCH_SIZE = 12;
+
+// Category counts for toggle badges
+const blogCount = allPosts.filter(p => p.primary_tag?.slug === 'blog').length;
+const newsCount = allPosts.filter(p => p.primary_tag?.slug === 'novosti').length;
+
+// Exclude featured from regular grid
+const featuredIds = new Set(featuredPosts.map(p => p.id));
+const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
 ---
 
 <Layout
@@ -46,12 +58,81 @@ const BATCH_SIZE = 12;
     <div class="scroll-indicator" aria-hidden="true">Scroll</div>
   </section>
 
+  <!-- Category toggles -->
+  <section class="blog-filters">
+    <div class="blog-filters-inner">
+      <button class="blog-filter-tab is-active" data-filter="all" type="button">
+        Все посты
+        <span class="blog-filter-count">{allPosts.length}</span>
+      </button>
+      <button class="blog-filter-tab" data-filter="blog" type="button">
+        Блог
+        <span class="blog-filter-count">{blogCount}</span>
+      </button>
+      <button class="blog-filter-tab" data-filter="novosti" type="button">
+        Новости
+        <span class="blog-filter-count">{newsCount}</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- Featured posts -->
+  {featuredPosts.length > 0 && (
+    <section class="featured-section">
+      <div class="featured-header">
+        <span class="featured-label">Избранное</span>
+        <div class="featured-line" aria-hidden="true"></div>
+      </div>
+      <div class="featured-grid">
+        {featuredPosts.map((post, i) => (
+          <article
+            class={`featured-card ${i === 0 ? 'featured-card--hero' : 'featured-card--small'} reveal`}
+            data-tag={post.primary_tag?.slug || ''}
+          >
+            <a href={`/blog/${post.slug}`}>
+              <div class="featured-card-image">
+                <img
+                  src={rewriteGhostUrl(post.feature_image) || '/images/placeholder-blog.jpg'}
+                  alt={post.title}
+                  loading="eager"
+                />
+                <div class="featured-card-overlay"></div>
+                <span class="featured-card-badge">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  Избранное
+                </span>
+              </div>
+              <div class="featured-card-content">
+                {post.primary_tag && (
+                  <span class="featured-card-category">{post.primary_tag.name}</span>
+                )}
+                <h2 class="featured-card-title">{post.title}</h2>
+                {i === 0 && (
+                  <p class="featured-card-excerpt">{post.custom_excerpt || post.excerpt}</p>
+                )}
+                <div class="featured-card-meta">
+                  <time datetime={post.published_at}>{formatDate(post.published_at)}</time>
+                  <span>{post.reading_time} мин</span>
+                </div>
+              </div>
+            </a>
+          </article>
+        ))}
+      </div>
+    </section>
+  )}
+
   <section class="blog-listing">
+    <div class="section-divider">
+      <span class="section-divider-label">Последние публикации</span>
+      <div class="section-divider-line" aria-hidden="true"></div>
+    </div>
     <div class="blog-listing-grid" data-batch-size={BATCH_SIZE}>
-      {posts.map((post, i) => (
+      {regularPosts.map((post, i) => (
         <article
-          class={`blog-listing-card reveal ${i === 0 ? 'blog-listing-card--featured' : ''} ${i >= BATCH_SIZE ? 'blog-listing-card--hidden' : ''}`}
+          class={`blog-listing-card reveal ${i >= BATCH_SIZE ? 'blog-listing-card--hidden' : ''}`}
           data-index={i}
+          data-tag={post.primary_tag?.slug || ''}
         >
           <a href={`/blog/${post.slug}`}>
             <div class="blog-listing-card-image">
@@ -85,11 +166,11 @@ const BATCH_SIZE = 12;
       ))}
     </div>
 
-    {posts.length > BATCH_SIZE && (
+    {regularPosts.length > BATCH_SIZE && (
       <div id="load-more-sentinel" aria-hidden="true"></div>
     )}
 
-    {posts.length === 0 && (
+    {regularPosts.length === 0 && (
       <div class="blog-empty">
         <p>Статьи скоро появятся. Следите за обновлениями!</p>
       </div>
@@ -97,6 +178,7 @@ const BATCH_SIZE = 12;
   </section>
 
   <section class="newsletter">
+    <div class="newsletter-bg-text" aria-hidden="true">ПОЧТА</div>
     <div class="newsletter-content">
       <h2 class="newsletter-title">Италия в вашей почте</h2>
       <p class="newsletter-text">Раз в неделю — новые маршруты, секретные места и истории из жизни на побережье. Без спама, только полезное.</p>
@@ -124,7 +206,7 @@ const BATCH_SIZE = 12;
         "url": "https://atrani.ru/logo.png"
       }
     },
-    "blogPost": posts.slice(0, 10).map(post => ({
+    "blogPost": allPosts.slice(0, 10).map(post => ({
       "@type": "BlogPosting",
       "headline": post.title,
       "url": `https://atrani.ru/blog/${post.slug}`,
@@ -140,6 +222,9 @@ const BATCH_SIZE = 12;
 </style>
 
 <style>
+  /* =============================================
+     HERO
+     ============================================= */
   .blog-hero {
     min-height: 100vh;
     display: flex;
@@ -233,8 +318,328 @@ const BATCH_SIZE = 12;
     animation: fadeInUp 0.8s var(--ease-out) 0.4s forwards;
   }
 
+  /* =============================================
+     CATEGORY FILTER TABS
+     ============================================= */
+  .blog-filters {
+    background: var(--color-navy-deep);
+    padding: 0 40px 60px;
+  }
+
+  .blog-filters-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .blog-filter-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--color-gray);
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    cursor: pointer;
+    transition: all 0.3s var(--ease-out);
+    position: relative;
+  }
+
+  .blog-filter-tab:hover {
+    color: white;
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
+  }
+
+  .blog-filter-tab.is-active {
+    background: var(--color-orange);
+    color: white;
+    border-color: var(--color-orange);
+  }
+
+  .blog-filter-tab.is-active:hover {
+    transform: translateY(-2px);
+  }
+
+  .blog-filter-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 7px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-mono, 'JetBrains Mono', monospace);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .blog-filter-tab.is-active .blog-filter-count {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  /* =============================================
+     FEATURED POSTS SECTION
+     ============================================= */
+  .featured-section {
+    padding: 80px 40px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .featured-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .featured-label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-orange);
+    white-space: nowrap;
+  }
+
+  .featured-line {
+    flex: 1;
+    height: 2px;
+    background: var(--color-gray-light);
+  }
+
+  /* 1+3 Grid */
+  .featured-grid {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    grid-template-rows: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  /* Hero card: spans all 3 rows on left */
+  .featured-card--hero {
+    grid-row: 1 / 4;
+    grid-column: 1;
+  }
+
+  .featured-card--small {
+    grid-column: 2;
+  }
+
+  /* Card base */
+  .featured-card {
+    position: relative;
+    overflow: hidden;
+    border: 2px solid var(--color-navy);
+    transition: all 0.4s var(--ease-out);
+    background: white;
+  }
+
+  .featured-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(5, 10, 20, 0.15);
+    border-color: var(--color-orange);
+  }
+
+  .featured-card a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+
+  /* Hero card image fills entire card */
+  .featured-card--hero .featured-card-image {
+    position: absolute;
+    inset: 0;
+  }
+
+  .featured-card--hero a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: 500px;
+  }
+
+  .featured-card--hero .featured-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 10, 39, 0.92) 0%,
+      rgba(0, 10, 39, 0.5) 45%,
+      transparent 100%
+    );
+    z-index: 1;
+  }
+
+  .featured-card--hero .featured-card-content {
+    position: relative;
+    z-index: 2;
+    padding: 40px;
+    color: white;
+  }
+
+  .featured-card--hero .featured-card-title {
+    font-size: 28px;
+    color: white;
+    margin-bottom: 12px;
+  }
+
+  .featured-card--hero .featured-card-category {
+    background: var(--color-orange);
+    color: white;
+    padding: 4px 10px;
+  }
+
+  .featured-card--hero .featured-card-meta {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  /* Small cards: horizontal layout */
+  .featured-card--small a {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .featured-card--small .featured-card-image {
+    width: 40%;
+    min-width: 40%;
+    position: relative;
+  }
+
+  .featured-card--small .featured-card-overlay {
+    display: none;
+  }
+
+  .featured-card--small .featured-card-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .featured-card--small .featured-card-title {
+    font-size: 16px;
+    margin-bottom: 8px;
+  }
+
+  /* Shared card image styles */
+  .featured-card-image {
+    overflow: hidden;
+    background: var(--color-navy);
+  }
+
+  .featured-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(30%);
+    transition: all 0.5s var(--ease-out);
+  }
+
+  .featured-card:hover .featured-card-image img {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+  }
+
+  .featured-card-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--color-navy-deep);
+    color: var(--color-orange);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    z-index: 3;
+  }
+
+  .featured-card-category {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-orange);
+    margin-bottom: 8px;
+  }
+
+  .featured-card-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+    color: var(--color-navy);
+  }
+
+  .featured-card-excerpt {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.6;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .featured-card-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: var(--color-gray);
+  }
+
+  /* =============================================
+     SECTION DIVIDERS
+     ============================================= */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .section-divider-label {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-orange);
+    white-space: nowrap;
+  }
+
+  .section-divider-line {
+    flex: 1;
+    height: 2px;
+    background: var(--color-gray-light);
+  }
+
+  /* =============================================
+     REGULAR POST GRID
+     ============================================= */
   .blog-listing {
-    padding: 80px 40px;
+    padding: 60px 40px 80px;
     max-width: 1200px;
     margin: 0 auto;
   }
@@ -243,18 +648,6 @@ const BATCH_SIZE = 12;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 32px;
-  }
-
-  .blog-listing-card--featured {
-    grid-column: 1 / -1;
-  }
-
-  .blog-listing-card--featured .blog-listing-card-image {
-    aspect-ratio: 21/9;
-  }
-
-  .blog-listing-card--featured .blog-listing-card-title {
-    font-size: 32px;
   }
 
   .blog-listing-card {
@@ -364,12 +757,17 @@ const BATCH_SIZE = 12;
     font-size: 18px;
   }
 
-  /* Infinite scroll: hidden cards */
+  /* =============================================
+     INFINITE SCROLL & FILTERING
+     ============================================= */
   .blog-listing-card--hidden {
     display: none;
   }
 
-  /* Infinite scroll: reveal animation */
+  .blog-listing-card--filter-hidden {
+    display: none !important;
+  }
+
   .blog-listing-card--revealing {
     animation: cardReveal 0.4s ease-out forwards;
   }
@@ -379,10 +777,65 @@ const BATCH_SIZE = 12;
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* Sentinel element */
   #load-more-sentinel {
     height: 1px;
     margin-top: -1px;
+  }
+
+  /* =============================================
+     NEWSLETTER (enhanced)
+     ============================================= */
+  .newsletter {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .newsletter-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: clamp(80px, 15vw, 220px);
+    font-weight: 900;
+    color: rgba(0, 0, 0, 0.06);
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  .newsletter-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* =============================================
+     RESPONSIVE
+     ============================================= */
+  @media (max-width: 1024px) {
+    /* Featured: switch to 2x2 grid */
+    .featured-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+
+    .featured-card--hero {
+      grid-row: auto;
+      grid-column: auto;
+    }
+
+    .featured-card--hero a {
+      min-height: 320px;
+    }
+
+    .featured-card--small a {
+      flex-direction: column;
+    }
+
+    .featured-card--small .featured-card-image {
+      width: 100%;
+      aspect-ratio: 16/10;
+    }
   }
 
   @media (max-width: 768px) {
@@ -399,20 +852,69 @@ const BATCH_SIZE = 12;
       );
     }
 
+    /* Filters */
+    .blog-filters {
+      padding: 0 20px 40px;
+    }
+
+    .blog-filter-tab {
+      padding: 10px 18px;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .blog-filter-count {
+      min-width: 22px;
+      height: 22px;
+      font-size: 10px;
+    }
+
+    /* Featured */
+    .featured-section {
+      padding: 60px 20px 20px;
+    }
+
+    .featured-grid {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+
+    .featured-card--hero a {
+      min-height: 360px;
+    }
+
+    .featured-card--hero .featured-card-content {
+      padding: 24px;
+    }
+
+    .featured-card--hero .featured-card-title {
+      font-size: 22px;
+    }
+
+    .featured-card--small a {
+      flex-direction: row;
+    }
+
+    .featured-card--small .featured-card-image {
+      width: 35%;
+      aspect-ratio: auto;
+    }
+
+    .featured-card--small .featured-card-title {
+      font-size: 14px;
+    }
+
+    .featured-card--small .featured-card-content {
+      padding: 16px;
+    }
+
+    /* Regular grid */
     .blog-listing {
-      padding: 60px 20px;
+      padding: 40px 20px 60px;
     }
 
     .blog-listing-grid {
       grid-template-columns: 1fr;
-    }
-
-    .blog-listing-card--featured .blog-listing-card-image {
-      aspect-ratio: 16/10;
-    }
-
-    .blog-listing-card--featured .blog-listing-card-title {
-      font-size: 22px;
     }
 
     .blog-listing-card-content {
@@ -429,41 +931,129 @@ const BATCH_SIZE = 12;
 </noscript>
 
 <script>
+  // === Category Filtering + Infinite Scroll ===
+  const filterTabs = document.querySelectorAll('.blog-filter-tab');
+  const allCards = Array.from(document.querySelectorAll('.blog-listing-card'));
+  const featuredCards = Array.from(document.querySelectorAll('.featured-card'));
   const grid = document.querySelector('.blog-listing-grid');
   const sentinel = document.getElementById('load-more-sentinel');
+  const BATCH = parseInt(grid?.dataset.batchSize || '12', 10);
 
-  if (grid && sentinel) {
-    const BATCH = parseInt(grid.dataset.batchSize || '12', 10);
-    const cards = grid.querySelectorAll('.blog-listing-card');
-    const total = cards.length;
-    let visible = Math.min(BATCH, total);
+  let currentFilter = 'all';
+  let visible = 0;
 
-    function revealNextBatch() {
-      const end = Math.min(visible + BATCH, total);
-      for (let i = visible; i < end; i++) {
-        const card = cards[i];
-        card.classList.remove('blog-listing-card--hidden');
-        card.classList.add('blog-listing-card--revealing');
-        // Stagger the animation slightly
-        card.style.animationDelay = `${(i - visible) * 0.05}s`;
-      }
-      visible = end;
+  // --- Filtering ---
+  function getFilteredCards() {
+    if (currentFilter === 'all') return allCards;
+    return allCards.filter(c => c.dataset.tag === currentFilter);
+  }
 
-      // All cards shown — remove sentinel
-      if (visible >= total) {
-        sentinel.remove();
-        observer.disconnect();
-      }
-    }
+  function applyFilter(filter) {
+    currentFilter = filter;
 
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        revealNextBatch();
-      }
-    }, {
-      rootMargin: '200px',
+    // Update active tab
+    filterTabs.forEach(tab => {
+      tab.classList.toggle('is-active', tab.dataset.filter === filter);
     });
 
+    // Filter featured cards
+    featuredCards.forEach(card => {
+      const show = filter === 'all' || card.dataset.tag === filter;
+      card.style.display = show ? '' : 'none';
+    });
+
+    // Reset all regular cards
+    allCards.forEach(card => {
+      card.classList.remove('blog-listing-card--hidden', 'blog-listing-card--revealing', 'blog-listing-card--filter-hidden');
+      card.style.animationDelay = '';
+    });
+
+    // Apply filter + batch visibility
+    const filtered = getFilteredCards();
+    let idx = 0;
+    allCards.forEach(card => {
+      const matchesFilter = filter === 'all' || card.dataset.tag === filter;
+      if (!matchesFilter) {
+        card.classList.add('blog-listing-card--filter-hidden');
+        return;
+      }
+      if (idx >= BATCH) {
+        card.classList.add('blog-listing-card--hidden');
+      } else {
+        // Staggered reveal animation
+        card.classList.add('blog-listing-card--revealing');
+        card.style.animationDelay = `${idx * 0.04}s`;
+      }
+      idx++;
+    });
+
+    visible = Math.min(BATCH, filtered.length);
+
+    // Handle empty state
+    handleEmptyState(filtered.length);
+
+    // Reset infinite scroll
+    resetInfiniteScroll(filtered.length);
+  }
+
+  filterTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const filter = tab.dataset.filter;
+      if (filter !== currentFilter) applyFilter(filter);
+    });
+  });
+
+  // --- Empty State ---
+  function handleEmptyState(matchCount) {
+    let emptyEl = document.querySelector('.blog-empty-filtered');
+    if (matchCount === 0) {
+      if (!emptyEl) {
+        emptyEl = document.createElement('div');
+        emptyEl.className = 'blog-empty blog-empty-filtered';
+        emptyEl.innerHTML = '<p>В этой категории пока нет статей</p>';
+        grid?.parentNode?.insertBefore(emptyEl, grid.nextSibling);
+      }
+      emptyEl.style.display = 'block';
+    } else if (emptyEl) {
+      emptyEl.style.display = 'none';
+    }
+  }
+
+  // --- Infinite Scroll ---
+  function revealNextBatch() {
+    const filtered = getFilteredCards();
+    const end = Math.min(visible + BATCH, filtered.length);
+    for (let i = visible; i < end; i++) {
+      const card = filtered[i];
+      card.classList.remove('blog-listing-card--hidden');
+      card.classList.add('blog-listing-card--revealing');
+      card.style.animationDelay = `${(i - visible) * 0.04}s`;
+    }
+    visible = end;
+
+    if (visible >= filtered.length && sentinel) {
+      observer.unobserve(sentinel);
+    }
+  }
+
+  function resetInfiniteScroll(totalFiltered) {
+    if (!sentinel) return;
+    if (totalFiltered > BATCH) {
+      observer.observe(sentinel);
+    } else {
+      observer.unobserve(sentinel);
+    }
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    if (entries[0]?.isIntersecting) {
+      revealNextBatch();
+    }
+  }, { rootMargin: '200px' });
+
+  // Initial setup
+  visible = Math.min(BATCH, allCards.length);
+  if (grid && sentinel && allCards.length > BATCH) {
     observer.observe(sentinel);
   }
 </script>

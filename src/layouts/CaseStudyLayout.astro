@@ -1,0 +1,344 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage: string;
+  eyebrow: string;
+  heroTitle: string;
+  heroAccent?: string;
+  location: string;
+  heroImage: string;
+}
+
+const { title, description, ogImage, eyebrow, heroTitle, heroAccent, location, heroImage } = Astro.props;
+---
+
+<Layout title={title} description={description} ogImage={ogImage}>
+  <article class="cs">
+    <nav class="cs-back">
+      <a href="/photosessions">← Все фотосессии</a>
+    </nav>
+
+    <header class="cs-hero">
+      <div class="cs-hero-image">
+        <img src={heroImage} alt={heroTitle} loading="eager" />
+      </div>
+      <div class="cs-hero-content">
+        <p class="cs-eyebrow">{eyebrow}</p>
+        <h1 class="cs-title">
+          {heroTitle}{heroAccent && (
+            <>
+              {' '}<span class="cs-accent">{heroAccent}</span>
+            </>
+          )}
+        </h1>
+        <p class="cs-location">{location}</p>
+      </div>
+    </header>
+
+    <div class="cs-body">
+      <slot />
+    </div>
+
+    <section class="cs-cta">
+      <div class="cs-cta-content">
+        <p class="cs-cta-eyebrow">Готовы снять свою историю?</p>
+        <h2>Напишите даты, настроение и локации —<br>остальное я возьму на себя.</h2>
+        <div class="cs-cta-actions">
+          <a href="/contacts#contact-form" class="btn btn-white">Написать</a>
+          <a href="https://wa.me/393270972329" target="_blank" rel="noopener" class="btn btn-outline cs-btn-wa">WhatsApp</a>
+        </div>
+        <p class="cs-cta-meta"><a href="/photosessions">Посмотреть все пакеты →</a></p>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .cs {
+    background: white;
+    padding-top: 80px;
+  }
+
+  .cs-back {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 40px 0;
+  }
+
+  .cs-back a {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-gray-dark);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .cs-back a:hover {
+    color: var(--color-orange);
+  }
+
+  .cs-hero {
+    max-width: 1400px;
+    margin: 40px auto 0;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  .cs-hero-image {
+    aspect-ratio: 3/4;
+    overflow: hidden;
+  }
+
+  .cs-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .cs-hero-content {
+    padding: 40px 0;
+  }
+
+  .cs-eyebrow {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-orange);
+    margin-bottom: 20px;
+  }
+
+  .cs-title {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    color: var(--color-navy-deep);
+  }
+
+  .cs-accent {
+    color: var(--color-orange);
+  }
+
+  .cs-location {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-gray);
+  }
+
+  .cs-body {
+    max-width: 760px;
+    margin: 100px auto;
+    padding: 0 40px;
+  }
+
+  .cs-body :global(h2) {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3.5vw, 40px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin: 60px 0 24px;
+    color: var(--color-navy-deep);
+  }
+
+  .cs-body :global(h2 .cs-accent) {
+    color: var(--color-orange);
+  }
+
+  .cs-body :global(p) {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--color-gray-dark);
+    margin-bottom: 20px;
+  }
+
+  .cs-body :global(.cs-lead) {
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--color-navy-deep);
+    font-weight: 500;
+    margin-bottom: 32px;
+  }
+
+  .cs-body :global(blockquote) {
+    margin: 48px 0;
+    padding: 32px 36px;
+    border: 2px solid var(--color-navy);
+    border-left: 4px solid var(--color-orange);
+    position: relative;
+  }
+
+  .cs-body :global(blockquote::before) {
+    content: '"';
+    position: absolute;
+    top: -18px;
+    left: 20px;
+    font-family: var(--font-display);
+    font-size: 80px;
+    font-weight: 900;
+    color: var(--color-orange);
+    opacity: 0.4;
+    line-height: 1;
+  }
+
+  .cs-body :global(blockquote p) {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-navy-deep);
+    margin-bottom: 12px;
+  }
+
+  .cs-body :global(blockquote cite) {
+    font-style: normal;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-gray);
+  }
+
+  .cs-body :global(.cs-gallery) {
+    margin: 60px -40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--color-navy);
+  }
+
+  .cs-body :global(.cs-gallery img) {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+    background: var(--color-navy-deep);
+  }
+
+  .cs-body :global(.cs-gallery-tight) {
+    margin: 40px -40px;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .cs-body :global(.cs-divider) {
+    margin: 60px 0;
+    border: none;
+    height: 1px;
+    background: var(--color-gray-light);
+  }
+
+  .cs-cta {
+    background: var(--color-orange);
+    color: white;
+    padding: 100px 40px;
+    text-align: center;
+  }
+
+  .cs-cta-content {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .cs-cta-eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+    opacity: 0.85;
+  }
+
+  .cs-cta h2 {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    margin-bottom: 28px;
+    color: white;
+  }
+
+  .cs-cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .cs-btn-wa {
+    border-color: white;
+    color: white;
+  }
+
+  .cs-btn-wa:hover {
+    background: white;
+    color: var(--color-orange);
+  }
+
+  .cs-cta-meta {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.9;
+  }
+
+  .cs-cta-meta a {
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    padding-bottom: 2px;
+  }
+
+  @media (max-width: 1024px) {
+    .cs-hero {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .cs-hero-content {
+      padding: 0 0 40px;
+    }
+
+    .cs-body :global(.cs-gallery) {
+      grid-template-columns: repeat(2, 1fr);
+      margin: 48px -20px;
+    }
+
+    .cs-body :global(.cs-gallery-tight) {
+      grid-template-columns: repeat(3, 1fr);
+      margin: 32px -20px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .cs-hero {
+      padding: 0 20px;
+    }
+
+    .cs-body {
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    .cs-body :global(.cs-gallery),
+    .cs-body :global(.cs-gallery-tight) {
+      grid-template-columns: 1fr;
+      margin: 32px -20px;
+    }
+
+    .cs-cta {
+      padding: 60px 20px;
+    }
+  }
+</style>

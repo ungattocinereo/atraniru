@@ -1,18 +1,21 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 ---
 
 <Layout
-  title="Фотосессии на побережье Амальфи — пакеты от €200 | Atrani.ru"
-  description="Киношные фотосессии на Амальфитанском побережье. Для пар, путешественников и блогеров. Съёмка с местным фотографом в Атрани, Амальфи, Равелло, Позитано. Пакеты от €200."
+  title="Фотосессии на Амальфи — пакеты от €200 | Atrani.ru"
+  description="Киношные фотосессии в Атрани, Равелло и Позитано. Для пар, соло и блогеров — с местным фотографом. Пакеты от €200, галерея за 7 дней."
   ogImage="/images/photosessions/regan-tay-main.webp"
+  ogImageAlt="Фотосессия на Амальфитанском побережье — пара в Равелло"
 >
+  <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Фотосессии', url: '/photosessions' }]} hideVisually={true} />
   <!-- Hero -->
   <section class="hero ps-hero">
     <div class="ps-hero-slideshow" aria-hidden="true">
       <img src="/images/photosessions/hero-atrani.webp" alt="" class="ps-slide is-active" data-caption="Атрани">
       <img src="/images/photosessions/hero-ravello.webp" alt="" class="ps-slide" data-caption="Равелло">
-      <img src="/images/photosessions/hero-amalfi.jpg" alt="" class="ps-slide" data-caption="Амальфи">
+      <img src="/images/photosessions/hero-amalfi.webp" alt="" class="ps-slide" data-caption="Амальфи">
       <img src="/images/photosessions/hero-tramonti.webp" alt="" class="ps-slide" data-caption="Трамонти">
     </div>
 
@@ -314,7 +317,7 @@ import Layout from '../layouts/Layout.astro';
   <section class="ps-section ps-seasons">
     <div class="section-header reveal">
       <p class="section-label">05 — Сезоны и скидки</p>
-      <h2 class="section-title">Когда<br>приезжать</h2>
+      <h2 class="section-title">А что<br>по скидкам?</h2>
     </div>
 
     <div class="ps-seasons-grid">
@@ -327,7 +330,7 @@ import Layout from '../layouts/Layout.astro';
         <p class="ps-season-desc">Бронируйте за 2–4 недели. Рассветные сессии — чтобы обойти толпу и поймать тихое побережье.</p>
       </article>
 
-      <article class="ps-season ps-season-featured reveal">
+      <article class="ps-season ps-season-featured ps-season-featured--orange reveal">
         <div class="ps-season-badge">−20%</div>
         <div class="ps-season-head">
           <h3>Средний сезон</h3>
@@ -1154,6 +1157,28 @@ import Layout from '../layouts/Layout.astro';
 
   .ps-season-featured .ps-season-desc {
     color: rgba(255, 255, 255, 0.75);
+  }
+
+  .ps-season-featured--orange {
+    background: var(--color-orange);
+    color: white;
+  }
+
+  .ps-season-featured--orange .ps-season-months {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .ps-season-featured--orange .ps-season-price {
+    color: white;
+  }
+
+  .ps-season-featured--orange .ps-season-desc {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .ps-season-featured--orange .ps-season-badge {
+    background: white;
+    color: var(--color-orange);
   }
 
   .ps-seasons-loyalty {

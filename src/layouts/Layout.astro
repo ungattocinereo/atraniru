@@ -12,6 +12,7 @@ interface Props {
   twitterTitle?: string;
   twitterDescription?: string;
   twitterImage?: string;
+  noindex?: boolean;
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   twitterTitle,
   twitterDescription,
   twitterImage,
+  noindex = false,
 } = Astro.props;
 
 const siteUrl = 'https://atrani.ru';
@@ -53,6 +55,7 @@ const absoluteTwitterImage = twitterImage
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
 
     <!-- Canonical -->
     <link rel="canonical" href={canonicalUrl} />
@@ -163,7 +166,7 @@ const absoluteTwitterImage = twitterImage
               </a>
             </li>
             <li>
-              <a href="https://guide.amalfi.day" target="_blank" rel="noopener">
+              <a href="https://guide.amalfi.day/ru" target="_blank" rel="noopener">
                 <svg class="icon" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
                 Гришин гид
               </a>

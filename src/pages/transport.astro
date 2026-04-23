@@ -1,11 +1,55 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "Как добраться из аэропорта Неаполя до Атрани?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Удобнее всего — прямой шаттл-трансфер (1 ч 30 мин, от €80 за машину). Можно и по этапам: поезд Alibus до Napoli Centrale, далее поезд до Салерно и автобус SITA или паром до Амальфи/Атрани — займёт 3–4 часа."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Какой автобус ходит по Амальфитанскому побережью?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Основной перевозчик — SITA Sud. Автобусы связывают Салерно, Амальфи, Атрани, Позитано и Сорренто. Билеты продаются в табачных лавках и онлайн, проезд от €1,40."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Какие паромы ходят между городами побережья?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "С апреля по октябрь курсируют TravelMar, Alicost и Positano Jet. Маршруты соединяют Салерно, Амальфи, Позитано, Капри и Сорренто. Цена €10–22 в одну сторону."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Нужно ли арендовать машину на Амальфи?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Для перемещений между главными городами — нет: автобусы и паромы покрывают всё побережье. Машина полезна для выездов в горные деревни (Скала, Трамонти) и удалённые пляжи, но парковка в Атрани и Амальфи стоит €3–5 в час."
+            }
+        }
+    ]
+};
 ---
 
 <Layout
-    title="Транспорт на Побережье Амальфи — Автобусы, Паромы, Шаттл"
-    description="Расписания автобусов SITA, паромов TravelMar, шаттлов из аэропорта Неаполя. Полная информация о транспорте на Амальфитанском побережье."
+    title="Транспорт на Амальфи: автобусы SITA, паромы, шаттл | Atrani.ru"
+    description="Как добраться до Атрани и Амальфи: расписания автобусов SITA, паромов TravelMar и Alicost, трансферы из аэропорта Неаполя. Обновляется каждый сезон."
+    ogImage="/images/transport/sitasud-amalfi-bus-amalfi-1350x770.webp"
+    ogImageAlt="Автобус SITA на Амальфитанском побережье"
 >
+    <script type="application/ld+json" slot="head" set:html={JSON.stringify(faqSchema)} />
+    <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Транспорт', url: '/transport' }]} hideVisually={true} />
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-bg-text" aria-hidden="true">SITA</div>
@@ -24,7 +68,7 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <div class="hero-image">
-            <img src="/images/transport/sitasud-amalfi-bus-amalfi-1350x770.jpg" alt="Автобус SITA на побережье Амальфи" loading="eager">
+            <img src="/images/transport/sitasud-amalfi-bus-amalfi-1350x770.webp" alt="Автобус SITA на побережье Амальфи" loading="eager">
         </div>
 
         <div class="scroll-indicator">Scroll</div>
@@ -59,7 +103,7 @@ import Layout from '../layouts/Layout.astro';
                 </p>
             </div>
             <div class="intro-image reveal">
-                <img src="/images/transport/bus-amalfi-atrani-salerno.jpg" alt="Автобус на побережье" loading="lazy">
+                <img src="/images/transport/bus-amalfi-atrani-salerno.webp" alt="Автобус на побережье" loading="lazy">
             </div>
         </div>
     </section>
@@ -250,7 +294,7 @@ import Layout from '../layouts/Layout.astro';
                 </div>
             </div>
             <div class="tickets-image reveal">
-                <img src="/images/transport/bus-timetables-amalfi-coast-1536x816.jpg" alt="Автобусная остановка на побережье" loading="lazy">
+                <img src="/images/transport/bus-timetables-amalfi-coast-1536x816.webp" alt="Автобусная остановка на побережье" loading="lazy">
             </div>
         </div>
     </section>
@@ -271,7 +315,7 @@ import Layout from '../layouts/Layout.astro';
             <!-- TravelMar -->
             <article class="ferry-card reveal">
                 <div class="ferry-image">
-                    <img src="/images/transport/travelmar.jpeg" alt="Паром TravelMar" loading="lazy">
+                    <img src="/images/transport/travelmar.webp" alt="Паром TravelMar" loading="lazy">
                 </div>
                 <div class="ferry-content">
                     <h3 class="ferry-name">TravelMar</h3>
@@ -291,7 +335,7 @@ import Layout from '../layouts/Layout.astro';
             <!-- PositanoJet -->
             <article class="ferry-card reveal">
                 <div class="ferry-image">
-                    <img src="/images/transport/positanojet.jpeg" alt="Паром PositanoJet" loading="lazy">
+                    <img src="/images/transport/positanojet.webp" alt="Паром PositanoJet" loading="lazy">
                 </div>
                 <div class="ferry-content">
                     <h3 class="ferry-name">PositanoJet</h3>
@@ -317,7 +361,7 @@ import Layout from '../layouts/Layout.astro';
             <!-- Alicost -->
             <article class="ferry-card reveal">
                 <div class="ferry-image">
-                    <img src="/images/transport/alicost.jpeg" alt="Паром Alicost" loading="lazy">
+                    <img src="/images/transport/alicost.webp" alt="Паром Alicost" loading="lazy">
                 </div>
                 <div class="ferry-content">
                     <h3 class="ferry-name">Alicost</h3>

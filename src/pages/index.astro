@@ -9,12 +9,54 @@ import AboutCoast from '../components/AboutCoast.astro';
 import Apartments from '../components/Apartments.astro';
 import BlogPreview from '../components/BlogPreview.astro';
 import CTA from '../components/CTA.astro';
+
+const travelAgencySchema = {
+  "@context": "https://schema.org",
+  "@type": "TravelAgency",
+  "name": "Atrani.ru — АМАЛЬФИГЕТЬ",
+  "url": "https://atrani.ru",
+  "logo": "https://atrani.ru/meta.webp",
+  "image": "https://atrani.ru/images/index/atrani-4-index.webp",
+  "description": "Русскоязычный сервис на Амальфитанском побережье: апартаменты, экскурсии, фотосессии, трансферы и гастрономические впечатления от местных.",
+  "areaServed": [
+    { "@type": "City", "name": "Atrani" },
+    { "@type": "City", "name": "Amalfi" },
+    { "@type": "City", "name": "Ravello" },
+    { "@type": "City", "name": "Positano" }
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "IT",
+    "addressRegion": "Campania",
+    "addressLocality": "Atrani",
+    "postalCode": "84010"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 40.6383,
+    "longitude": 14.6078
+  },
+  "sameAs": [
+    "https://facebook.com/atrani.ru",
+    "https://instagram.com/atrani.ru",
+    "https://t.me/atraniru"
+  ],
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "availableLanguage": ["ru", "en", "it"],
+      "url": "https://wa.me/393270972329"
+    }
+  ]
+};
 ---
 
 <Layout
-  title="Atrani.ru — Атрани, Эно-Гастро-туры, Фото прогулки на Амальфитанском побережье"
-  description="Откройте настоящую Италию в Атрани. Эно-гастро туры, фото прогулки, лодочные туры и аутентичные апартаменты на Амальфитанском побережье."
+  title="Атрани и Амальфитанское побережье — апартаменты и экскурсии | Atrani.ru"
+  description="Отдых на Амальфитанском побережье с русскоязычным гидом: апартаменты от собственника в Атрани, экскурсии, фотосессии, трансферы и гастрономия."
 >
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(travelAgencySchema)} />
   <Hero />
   <Marquee />
   <Stats />

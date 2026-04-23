@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api-test
+Disallow: /blog/*/edit
+
+Sitemap: https://atrani.ru/sitemap-index.xml

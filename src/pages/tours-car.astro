@@ -1,11 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 ---
 
 <Layout
-  title="Экскурсии на машине по Амальфитанскому побережью | Atrani.ru"
-  description="Автомобильные экскурсии по Амальфитанскому побережью — увидеть все за один день. Три маршрута: вдоль побережья, горные вкусы, индивидуальный тур."
+  title="Экскурсии на машине по Амальфи — 3 маршрута | Atrani.ru"
+  description="Автомобильные экскурсии по Амальфи за один день: вдоль побережья, горные деревни с дегустациями или маршрут под вас. От €280 за группу до 4 человек."
+  ogImage="/images/index/excursion-by-car.webp"
+  ogImageAlt="Экскурсия на машине по Амальфитанскому побережью"
 >
+  <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Впечатления', url: '/experience' }, { name: 'Экскурсии на машине', url: '/tours-car' }]} hideVisually={true} />
   <!-- Hero -->
   <section class="hero">
     <div class="hero-bg-text" aria-hidden="true">AMALFI</div>

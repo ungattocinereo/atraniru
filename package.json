@@ -4,6 +4,8 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "optimize:images": "node scripts/optimize-images.mjs",
+    "prebuild": "npm run optimize:images",
     "build": "astro build",
     "compress": "gzipper compress ./dist --brotli --gzip --include html,css,js,svg,json,xml,woff,woff2",
     "build:prod": "npm run build && npm run compress",
@@ -11,6 +13,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
     "@tryghost/content-api": "^1.12.3",
     "astro": "^5.17.1",
     "astro-compress": "^2.3.9",

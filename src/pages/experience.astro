@@ -1,11 +1,15 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 ---
 
 <Layout
-  title="Впечатления на Амальфитанском побережье | Atrani.ru"
-  description="Экскурсии на машине, катере, мотоцикле. Фотосессии. Кулинарные мастер-классы. Создаем незабываемые впечатления на Амальфи."
+  title="Экскурсии и впечатления на Амальфи — от местных | Atrani.ru"
+  description="Экскурсии на машине и катере, фотосессии, винные дегустации и кулинарные мастер-классы. Индивидуальные впечатления от местных жителей Атрани."
+  ogImage="/images/index/photoshootings.webp"
+  ogImageAlt="Впечатления на Амальфитанском побережье"
 >
+  <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Впечатления', url: '/experience' }]} hideVisually={true} />
   <!-- Hero -->
   <section class="hero">
     <div class="hero-bg-text" aria-hidden="true">ВПЕЧАТЛЕНИЯ</div>
@@ -60,7 +64,7 @@ import Layout from '../layouts/Layout.astro';
           <span class="card-number">02</span>
         </div>
         <div class="card-image">
-          <img src="/images/index/excursion-boat.webp.jpeg" alt="Лодочная экскурсия вдоль скал Амальфи" loading="lazy">
+          <img src="/images/index/excursion-boat.webp" alt="Лодочная экскурсия вдоль скал Амальфи" loading="lazy">
         </div>
         <div class="card-body">
           <h3 class="card-title">На катере</h3>
@@ -104,7 +108,7 @@ import Layout from '../layouts/Layout.astro';
           <span class="card-number">04</span>
         </div>
         <div class="card-image">
-          <img src="/images/index/photoshootings.jpg" alt="Фотосессия на Амальфитанском побережье" loading="lazy">
+          <img src="/images/index/photoshootings.webp" alt="Фотосессия на Амальфитанском побережье" loading="lazy">
         </div>
         <div class="card-body">
           <h3 class="card-title">Фотосессии</h3>
@@ -127,7 +131,7 @@ import Layout from '../layouts/Layout.astro';
           <span class="coming-soon-badge">Открытие в 2026</span>
         </div>
         <div class="card-image">
-          <img src="/images/cooking-class.jpg" alt="Кулинарный мастер-класс - скоро открытие" loading="lazy">
+          <img src="/images/cooking-class.webp" alt="Кулинарный мастер-класс - скоро открытие" loading="lazy">
         </div>
         <div class="card-body">
           <h3 class="card-title">Кулинарные мастер-классы</h3>

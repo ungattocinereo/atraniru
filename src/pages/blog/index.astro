@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Newsletter from '../../components/Newsletter.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { getAllPosts, getFeaturedPosts, formatDate } from '../../lib/ghostApi';
 import { rewriteGhostUrl } from '../../lib/ghost';
 
@@ -15,20 +16,20 @@ const BATCH_SIZE = 12;
 const blogCount = allPosts.filter(p => p.primary_tag?.slug === 'blogh').length;
 const newsCount = allPosts.filter(p => p.primary_tag?.slug === 'novosti').length;
 
-// Exclude featured from regular grid
-const featuredIds = new Set(featuredPosts.map(p => p.id));
-const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
+// Show all posts in the regular grid (featured posts also appear in featured section above)
+const regularPosts = allPosts;
 ---
 
 <Layout
-  title="Блог об Амальфитанском побережье — новости и советы от местных | Atrani.ru"
-  description="Свежие статьи от тех, кто живёт на Амальфитанском побережье прямо сейчас. Маршруты, секретные места, гастрономия, практические советы — настоящая Италия без туристической шелухи."
-  ogImage="/images/index/atrani-4-index.jpg"
+  title="Блог об Амальфи — советы и истории от местных | Atrani.ru"
+  description="Свежие статьи от тех, кто живёт на Амальфи: маршруты, секретные места, гастрономия и практические советы. Настоящая Италия без туристической шелухи."
+  ogImage="/images/index/atrani-4-index.webp"
   ogImageWidth={2500}
   ogImageHeight={1667}
   ogImageAlt="Блог Atrani.ru — жизнь на Амальфитанском побережье"
   twitterSite="@atraniru"
 >
+  <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Блог', url: '/blog' }]} hideVisually={true} />
   <section class="blog-hero">
     <!-- Background decorative text -->
     <div class="blog-hero-bg-text" aria-hidden="true">БЛОЖЕ</div>
@@ -36,7 +37,7 @@ const regularPosts = allPosts.filter(p => !featuredIds.has(p.id));
     <!-- Hero background image -->
     <div class="blog-hero-bg-image">
       <img
-        src="/images/index/atrani-4-index.jpg"
+        src="/images/index/atrani-4-index.webp"
         alt="Атрани — вид на город у моря"
         loading="eager"
       />

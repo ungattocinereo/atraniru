@@ -1,0 +1,88 @@
+---
+interface Crumb {
+  name: string;
+  url: string;
+}
+
+interface Props {
+  items: Crumb[];
+  hideVisually?: boolean;
+}
+
+const { items, hideVisually = false } = Astro.props;
+const siteUrl = 'https://atrani.ru';
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": items.map((c, i) => ({
+    "@type": "ListItem",
+    "position": i + 1,
+    "name": c.name,
+    "item": c.url.startsWith('http') ? c.url : new URL(c.url, siteUrl).href,
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
+{!hideVisually && (
+  <nav class="breadcrumbs" aria-label="Хлебные крошки">
+    <ol>
+      {items.map((c, i) => (
+        <li>
+          {i < items.length - 1 ? (
+            <a href={c.url}>{c.name}</a>
+          ) : (
+            <span aria-current="page">{c.name}</span>
+          )}
+          {i < items.length - 1 && <span class="sep" aria-hidden="true">/</span>}
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}
+
+<style>
+  .breadcrumbs {
+    padding: 16px 40px;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--color-gray, #6b7280);
+  }
+  .breadcrumbs ol {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .breadcrumbs li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .breadcrumbs a {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+  }
+  .breadcrumbs a:hover {
+    opacity: 1;
+    color: var(--color-orange, #FF5722);
+  }
+  .breadcrumbs .sep {
+    opacity: 0.4;
+  }
+  .breadcrumbs [aria-current="page"] {
+    font-weight: 500;
+    color: var(--color-navy-deep, #000A27);
+  }
+  @media (max-width: 768px) {
+    .breadcrumbs { padding: 12px 20px; font-size: 12px; }
+  }
+</style>

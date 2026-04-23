@@ -29,3 +29,9 @@ data/queue/
 # legacy content (WordPress export)
 /kimi/
 /blog/
+
+# image optimization: local backup of originals before re-encoding
+public/images-original/
+
+# visual audit output (Playwright screenshots)
+screenshots/

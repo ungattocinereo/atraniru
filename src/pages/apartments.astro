@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 const apartments = [
   {
@@ -96,15 +97,18 @@ const apartments = [
 ---
 
 <Layout
-  title="Апартаменты — Atrani.ru"
-  description="Апартаменты и комнаты на Амальфитанском побережье. Проверьте доступность и забронируйте жильё в Атрани и Равелло."
+  title="Апартаменты в Атрани и Равелло от собственника | Atrani.ru"
+  description="10 апартаментов и комнат в Атрани и Равелло от местных. Прямое бронирование без посредников, проверенные квартиры с видом на Амальфитанское побережье."
+  ogImage="/apartments/aria-di-mare-for-amalfi-day-2.webp"
+  ogImageAlt="Апартаменты Aria di Mare в Атрани — вид на море"
 >
+  <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Апартаменты', url: '/apartments' }]} hideVisually={true} />
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-bg-text" aria-hidden="true">ATRANI</div>
 
     <div class="hero-bg-image">
-      <img src="/apartments/aria-di-mare-for-amalfi-day-2.webp" alt="" loading="eager" />
+      <img src="/apartments/aria-di-mare-for-amalfi-day-2.webp" alt="Апартаменты Aria di Mare в Атрани — вид на море с террасы" loading="eager" />
     </div>
     <div class="hero-overlay"></div>
 

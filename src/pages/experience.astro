@@ -360,6 +360,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
   @media (max-width: 768px) {
     .experiences-grid {
       grid-template-columns: 1fr;
+      gap: 24px;
     }
   }
 
@@ -373,9 +374,11 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
     flex-direction: column;
   }
 
-  .experience-card:not(.coming-soon):hover {
-    transform: translate(-8px, -8px);
-    box-shadow: 8px 8px 0 var(--color-navy);
+  @media (hover: hover) {
+    .experience-card:not(.coming-soon):hover {
+      transform: translate(-8px, -8px);
+      box-shadow: 8px 8px 0 var(--color-navy);
+    }
   }
 
   .card-header {
@@ -422,8 +425,10 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
     transition: transform 0.5s var(--ease-out);
   }
 
-  .experience-card:not(.coming-soon):hover .card-image img {
-    transform: scale(1.05);
+  @media (hover: hover) {
+    .experience-card:not(.coming-soon):hover .card-image img {
+      transform: scale(1.05);
+    }
   }
 
   /* Coming Soon Overlay */
@@ -482,9 +487,29 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
   }
 
   @media (max-width: 600px) {
+    .experiences {
+      padding: 60px 20px;
+    }
+
+    .card-image {
+      aspect-ratio: 16/10;
+    }
+
+    .card-body {
+      padding: 24px 20px;
+    }
+
     .card-footer {
       flex-direction: column;
       align-items: stretch;
+      padding: 20px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .card-title {
+      font-size: 22px;
+      letter-spacing: -0.5px;
     }
   }
 
@@ -507,7 +532,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
     font-size: 24px;
     font-weight: 900;
     color: var(--color-navy);
-    line-height: 1;
+    line-height: 1.1;
   }
 
   .coming-soon .price-amount {
@@ -678,15 +703,3 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
   }
 </style>
 
-<script>
-  // Scroll reveal animation
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>

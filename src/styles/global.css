@@ -795,7 +795,7 @@ body.menu-open .header {
   gap: 2px;
 }
 
-.experience-card {
+.experience-tile {
   position: relative;
   aspect-ratio: 1;
   overflow: hidden;
@@ -803,12 +803,12 @@ body.menu-open .header {
   background: var(--color-navy);
 }
 
-.experience-image {
+.experience-tile-image {
   position: absolute;
   inset: 0;
 }
 
-.experience-image img {
+.experience-tile-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -816,14 +816,14 @@ body.menu-open .header {
   transition: all 0.5s var(--ease-out);
 }
 
-.experience-overlay {
+.experience-tile-overlay {
   position: absolute;
   inset: 0;
   background: rgba(10, 22, 40, 0.7);
   transition: background 0.5s var(--ease-out);
 }
 
-.experience-content {
+.experience-tile-content {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -833,7 +833,7 @@ body.menu-open .header {
   z-index: 1;
 }
 
-.experience-number {
+.experience-tile-number {
   font-family: var(--font-display);
   font-size: 14px;
   font-weight: 700;
@@ -841,28 +841,28 @@ body.menu-open .header {
   transition: color 0.3s var(--ease-out);
 }
 
-.experience-title {
+.experience-tile-title {
   font-family: var(--font-display);
   font-size: 24px;
   font-weight: 700;
   margin: 8px 0;
 }
 
-.experience-text {
+.experience-tile-text {
   font-size: 14px;
   color: var(--color-gray);
 }
 
-.experience-card:hover .experience-image img {
+.experience-tile:hover .experience-tile-image img {
   filter: grayscale(0%);
   transform: scale(1.05);
 }
 
-.experience-card:hover .experience-overlay {
+.experience-tile:hover .experience-tile-overlay {
   background: rgba(255, 87, 34, 0.9);
 }
 
-.experience-card:hover .experience-number {
+.experience-tile:hover .experience-tile-number {
   color: white;
 }
 

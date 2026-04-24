@@ -29,15 +29,15 @@ const experiences = [
   </div>
   <div class="experiences-grid">
     {experiences.map((exp) => (
-      <article class="experience-card reveal">
-        <div class="experience-image">
+      <article class="experience-tile reveal">
+        <div class="experience-tile-image">
           <img src={exp.image} alt={exp.title} loading="lazy" />
         </div>
-        <div class="experience-overlay"></div>
-        <div class="experience-content">
-          <span class="experience-number">{String(exp.id).padStart(2, '0')}</span>
-          <h3 class="experience-title">{exp.title}</h3>
-          <p class="experience-text">{exp.description}</p>
+        <div class="experience-tile-overlay"></div>
+        <div class="experience-tile-content">
+          <span class="experience-tile-number">{String(exp.id).padStart(2, '0')}</span>
+          <h3 class="experience-tile-title">{exp.title}</h3>
+          <p class="experience-tile-text">{exp.description}</p>
         </div>
       </article>
     ))}

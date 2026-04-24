@@ -5,6 +5,9 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://atrani.ru',
   output: 'static',
+  redirects: {
+    '/photosessions': '/photos',
+  },
   vite: {
     server: {
       proxy: {

@@ -1,12 +1,16 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 ---
 
 <Layout
-  title="Фотосессии на побережье Амальфи | Atrani.ru"
-  description="Профессиональные фотосессии на Амальфитанском побережье. Индивидуальные, парные, свадебные съёмки в самых красивых местах Италии."
-  ogImage="/images/index/photoshootings.webp"
+  title="Фотосессии на Амальфи — пакеты от €200 | Atrani.ru"
+  description="Киношные фотосессии в Атрани, Равелло и Позитано. Для пар, соло и блогеров — с местным фотографом. Пакеты от €200, галерея за 7 дней."
+  ogImage="/images/photosessions/regan-tay-main.webp"
+  ogImageAlt="Фотосессия на Амальфитанском побережье — пара в Равелло"
 >
+  <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Фотосессии', url: '/photos' }]} hideVisually={true} />
+
   <!-- Hero -->
   <section class="hero">
     <div class="hero-bg-text" aria-hidden="true">FOTO</div>
@@ -31,7 +35,7 @@ import Layout from '../layouts/Layout.astro';
       </h1>
       <p class="hero-subtitle">Не просто фотографии — настоящие истории, рассказанные светом, цветом и итальянским ветром</p>
       <div class="hero-actions">
-        <a href="#portfolio" class="btn btn-white">Смотреть работы</a>
+        <a href="#pakety" class="btn btn-white">Выбрать пакет</a>
         <a href="/contacts#contact-form" class="btn btn-outline" style="border-color: white; color: white;">Забронировать съёмку</a>
       </div>
     </div>
@@ -50,156 +54,442 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <!-- Portfolio Gallery -->
-  <section class="portfolio" id="portfolio">
-    <div class="section-header reveal">
-      <p class="section-label">02 — Портфолио</p>
-      <h2 class="section-title">Каждый кадр —<br>целая история</h2>
+  <!-- Showcase Carousel (replaces "Каждый кадр") -->
+  <section class="showcase" aria-label="Локации съёмок">
+    <div class="showcase-slideshow">
+      <img src="/images/photosessions/hero-atrani.webp" alt="Фотосессия в Атрани" class="showcase-slide is-active" data-caption="Атрани" loading="lazy" decoding="async">
+      <img src="/images/photosessions/hero-ravello.webp" alt="Фотосессия в Равелло" class="showcase-slide" data-caption="Равелло" loading="lazy" decoding="async">
+      <img src="/images/photosessions/hero-amalfi.webp" alt="Фотосессия в Амальфи" class="showcase-slide" data-caption="Амальфи" loading="lazy" decoding="async">
+      <img src="/images/photosessions/hero-tramonti.webp" alt="Фотосессия в Трамонти" class="showcase-slide" data-caption="Трамонти" loading="lazy" decoding="async">
     </div>
-
-    <div class="gallery">
-      <div class="gallery-item gallery-wide reveal">
-        <img src="/images/index/photoshootings.webp" alt="Фотосессия на Амальфитанском побережье — пара на фоне моря" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-tag">Парная съёмка</span>
-          <span class="gallery-location">Атрани</span>
-        </div>
+    <div class="showcase-overlay">
+      <div class="showcase-content">
+        <p class="showcase-label">Локации съёмок</p>
+        <p class="showcase-title" id="showcase-title" aria-live="polite">Атрани</p>
+        <p class="showcase-sub">От тихих улочек до драматических панорам — каждый кадр рождается там, где свет ложится правильно</p>
       </div>
-      <div class="gallery-item gallery-tall reveal">
-        <img src="/images/DSC0053.webp" alt="Портретная фотосессия на побережье Амальфи" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-tag">Портрет</span>
-          <span class="gallery-location">Равелло</span>
-        </div>
-      </div>
-      <div class="gallery-item reveal">
-        <img src="/images/DSC0077-2.webp" alt="Индивидуальная фотосессия в Позитано" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-tag">Индивидуальная</span>
-          <span class="gallery-location">Позитано</span>
-        </div>
-      </div>
-      <div class="gallery-item reveal">
-        <img src="/images/index/atrani-4-index.webp" alt="Улочки Атрани — идеальный фон для фотосессии" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-tag">Улочки</span>
-          <span class="gallery-location">Атрани</span>
-        </div>
-      </div>
-      <div class="gallery-item gallery-wide reveal">
-        <img src="/images/4444_DSC0806_DxO.webp" alt="Панорамная съёмка на фоне Амальфитанского побережья" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-tag">Панорама</span>
-          <span class="gallery-location">Побережье Амальфи</span>
-        </div>
-      </div>
-      <div class="gallery-item gallery-tall reveal">
-        <img src="/images/555_DSC0806_DxO.webp" alt="Фотосессия на закате в Амальфи" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-tag">Закат</span>
-          <span class="gallery-location">Амальфи</span>
-        </div>
-      </div>
-      <div class="gallery-item reveal">
-        <img src="/images/vintage-interior-room-with-a-balcony.webp" alt="Интерьерная съёмка — балкон с видом на море" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-tag">Интерьер</span>
-          <span class="gallery-location">Атрани</span>
-        </div>
-      </div>
-      <div class="gallery-item reveal">
-        <img src="/images/orange-cozy-room-with-a-balcony.webp" alt="Уютный интерьер с балконом — съёмка апартаментов" loading="lazy">
-        <div class="gallery-overlay">
-          <span class="gallery-tag">Апартаменты</span>
-          <span class="gallery-location">Атрани</span>
-        </div>
+      <div class="showcase-dots" role="tablist" aria-label="Выбор локации">
+        <button class="showcase-dot is-active" type="button" aria-label="Атрани" data-index="0"></button>
+        <button class="showcase-dot" type="button" aria-label="Равелло" data-index="1"></button>
+        <button class="showcase-dot" type="button" aria-label="Амальфи" data-index="2"></button>
+        <button class="showcase-dot" type="button" aria-label="Трамонти" data-index="3"></button>
       </div>
     </div>
   </section>
 
-  <!-- Services / Formats -->
-  <section class="formats">
+  <!-- Packages -->
+  <section class="ps-section" id="pakety">
     <div class="section-header reveal">
-      <p class="section-label">03 — Форматы съёмок</p>
-      <h2 class="section-title">Выберите<br>свой сценарий</h2>
+      <p class="section-label">02 — Пакеты съёмок</p>
+      <h2 class="section-title">Четыре сценария —<br>одна Италия</h2>
     </div>
 
-    <div class="formats-grid">
-      <!-- Format 1 -->
-      <article class="format-card reveal">
-        <div class="format-header">
-          <span class="format-number">I</span>
-          <div class="format-duration">1–1.5 часа</div>
+    <div class="ps-packages-grid">
+      <!-- Solo 1 -->
+      <article class="ps-package reveal">
+        <div class="ps-package-tag">Соло</div>
+        <h3 class="ps-package-title">Портрет путешественника</h3>
+        <div class="ps-package-price">
+          <span class="ps-price-amount">€200</span>
+          <span class="ps-price-meta">≈ 45 минут</span>
         </div>
-        <h3 class="format-title">Прогулка</h3>
-        <p class="format-desc">Лёгкая прогулочная съёмка по улочкам побережья. Идеально для одного человека или пары, которые хотят естественные, живые кадры без постановки. Вы гуляете — мы ловим моменты.</p>
-        <ul class="format-includes">
-          <li>30+ обработанных фотографий</li>
-          <li>1 локация на выбор</li>
-          <li>Помощь с образом</li>
+        <ul class="ps-package-list">
+          <li>2 локации в Атрани</li>
+          <li>25+ обработанных фото</li>
+          <li>Утро или золотой час</li>
+          <li>Форматы под Instagram и LinkedIn</li>
+          <li>Онлайн-галерея — 7 рабочих дней</li>
         </ul>
-        <div class="format-footer">
-          <span class="format-price">от €250</span>
-          <a href="/contacts#contact-form" class="btn btn-primary btn-small">Забронировать</a>
-        </div>
+        <p class="ps-package-for">Для соло-путешественников, создателей контента, деловых портретов на выезде.</p>
       </article>
 
-      <!-- Format 2 -->
-      <article class="format-card format-featured reveal">
-        <div class="format-badge">Популярный</div>
-        <div class="format-header">
-          <span class="format-number">II</span>
-          <div class="format-duration">2–3 часа</div>
+      <!-- Solo 2 — Popular -->
+      <article class="ps-package ps-package-featured reveal">
+        <div class="ps-package-ribbon">Популярный</div>
+        <div class="ps-package-tag">Блогер</div>
+        <h3 class="ps-package-title">Истории побережья</h3>
+        <div class="ps-package-price">
+          <span class="ps-price-amount">€320</span>
+          <span class="ps-price-meta">≈ 1,5 часа</span>
         </div>
-        <h3 class="format-title">История</h3>
-        <p class="format-desc">Полноценная фотоистория: от рассвета в Атрани до кофе на террасе с видом на море. Несколько локаций, смена образов, максимум разнообразия в кадрах. Для тех, кто хочет всё и сразу.</p>
-        <ul class="format-includes">
-          <li>60+ обработанных фотографий</li>
-          <li>2–3 локации</li>
-          <li>Помощь с образом и маршрутом</li>
-          <li>Съёмка на закате</li>
+        <ul class="ps-package-list">
+          <li>3–4 локации: Атрани и окрестности</li>
+          <li>50+ обработанных фото</li>
+          <li>3 чёрно-белых варианта</li>
+          <li>Экспресс-превью (3 фото за 24 часа)</li>
+          <li>Скрытые места вне туристических троп</li>
+          <li>Онлайн-галерея — 7 рабочих дней</li>
         </ul>
-        <div class="format-footer">
-          <span class="format-price">от €400</span>
-          <a href="/contacts#contact-form" class="btn btn-primary btn-small">Забронировать</a>
-        </div>
+        <p class="ps-package-for">Для блогеров, тревел-авторов, подарка себе на день рождения, контента в портфолио.</p>
       </article>
 
-      <!-- Format 3 -->
-      <article class="format-card reveal">
-        <div class="format-header">
-          <span class="format-number">III</span>
-          <div class="format-duration">4–6 часов</div>
+      <!-- Couple 1 -->
+      <article class="ps-package reveal">
+        <div class="ps-package-tag">Пара</div>
+        <h3 class="ps-package-title">Золотой час в Атрани</h3>
+        <div class="ps-package-price">
+          <span class="ps-price-amount">€280</span>
+          <span class="ps-price-meta">≈ 1 час</span>
         </div>
-        <h3 class="format-title">Эпос</h3>
-        <p class="format-desc">Целый день на побережье: утренний свет в Равелло, обед в рыбацкой деревне, закат на террасе Позитано. Лодка, серпантины, лимонные сады — ваш персональный фотофильм об Амальфи.</p>
-        <ul class="format-includes">
-          <li>100+ обработанных фотографий</li>
-          <li>4–5 локаций</li>
-          <li>Смена 2–3 образов</li>
-          <li>Транспорт между локациями</li>
-          <li>Рассвет или закат</li>
+        <ul class="ps-package-list">
+          <li>2–3 локации в Атрани</li>
+          <li>40+ обработанных фото</li>
+          <li>Рассвет или закат — золотой свет</li>
+          <li>Консультация по образу</li>
+          <li>Онлайн-галерея — 7 рабочих дней</li>
         </ul>
-        <div class="format-footer">
-          <span class="format-price">от €700</span>
-          <a href="/contacts#contact-form" class="btn btn-primary btn-small">Забронировать</a>
-        </div>
+        <p class="ps-package-for">Для медового месяца, годовщины, романтического уикенда, save-the-date.</p>
       </article>
+
+      <!-- Couple 2 — Best Value -->
+      <article class="ps-package ps-package-featured reveal">
+        <div class="ps-package-ribbon">Лучшее предложение</div>
+        <div class="ps-package-tag">Пара</div>
+        <h3 class="ps-package-title">Панорама двух городков</h3>
+        <div class="ps-package-price">
+          <span class="ps-price-amount">€400</span>
+          <span class="ps-price-meta">≈ 2 часа</span>
+        </div>
+        <ul class="ps-package-list">
+          <li>4–6 локаций: Атрани + Амальфи</li>
+          <li>80+ обработанных фото</li>
+          <li>5 чёрно-белых вариантов</li>
+          <li>Экспресс-превью (3–5 фото за 24 часа)</li>
+          <li>И живой кадр на ходу, и классическая поза</li>
+          <li>Онлайн-галерея — 7 рабочих дней</li>
+        </ul>
+        <p class="ps-package-for">Для помолвки, proposal, побега-свадьбы, годовщины, больших соцсетей.</p>
+      </article>
+    </div>
+
+    <div class="ps-package-cta reveal">
+      <a href="/contacts#contact-form" class="btn btn-primary">Забронировать сессию</a>
+      <a href="https://wa.me/393270972329" target="_blank" rel="noopener" class="btn btn-outline">Спросить в WhatsApp</a>
     </div>
   </section>
 
-  <!-- Locations Marquee -->
-  <div class="marquee" aria-hidden="true">
-    <div class="marquee-content">
-      <div class="marquee-item">Атрани <span></span> Равелло <span></span> Позитано <span></span> Амальфи <span></span> Фуроре <span></span> Минори <span></span></div>
-      <div class="marquee-item">Атрани <span></span> Равелло <span></span> Позитано <span></span> Амальфи <span></span> Фуроре <span></span> Минори <span></span></div>
+  <!-- What's Included -->
+  <section class="ps-section ps-included">
+    <div class="section-header reveal">
+      <p class="section-label">03 — Включено в каждую сессию</p>
+      <h2 class="section-title">Без звёздочек<br>и мелкого шрифта</h2>
     </div>
-  </div>
 
-  <!-- Locations -->
+    <div class="ps-included-grid">
+      <div class="ps-included-item reveal">
+        <div class="ps-included-num">01</div>
+        <h3>Консультация до съёмки</h3>
+        <p>Созвон или переписка в WhatsApp — обсудим настроение, образ, места. Никаких сюрпризов в день съёмки.</p>
+      </div>
+      <div class="ps-included-item reveal">
+        <div class="ps-included-num">02</div>
+        <h3>Профессиональная ретушь</h3>
+        <p>Цветокоррекция, аккуратная работа с кожей, киношный колор. Каждый кадр доведён до финальной версии.</p>
+      </div>
+      <div class="ps-included-item reveal">
+        <div class="ps-included-num">03</div>
+        <h3>Фото в полном разрешении</h3>
+        <p>JPEG в максимальном качестве — хоть печатать 60×90, хоть выкладывать в сторис.</p>
+      </div>
+      <div class="ps-included-item reveal">
+        <div class="ps-included-num">04</div>
+        <h3>Локации от местного</h3>
+        <p>Проведу по тихим улочкам, террасам с видом и углам, которые не достать по Google. Знаю, во сколько туда приходит свет.</p>
+      </div>
+      <div class="ps-included-item reveal">
+        <div class="ps-included-num">05</div>
+        <h3>Направляю по ходу</h3>
+        <p>Никакого «постойте здесь неловко». Подскажу, куда повернуть голову, чем занять руки — чтобы получилось живо.</p>
+      </div>
+      <div class="ps-included-item reveal">
+        <div class="ps-included-num">06</div>
+        <h3>Онлайн-галерея</h3>
+        <p>Закрытая ссылка с доступом на 90 дней. Скачивайте сами, делитесь с родителями и друзьями.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Travel Zones -->
+  <section class="ps-section ps-zones">
+    <div class="section-header reveal">
+      <p class="section-label">04 — Выезд в другие городки</p>
+      <h2 class="section-title">Куда можем<br>доехать</h2>
+    </div>
+
+    <div class="ps-zones-table reveal">
+      <div class="ps-zone-row ps-zone-head">
+        <div>Зона</div>
+        <div>Города</div>
+        <div>Доплата</div>
+      </div>
+      <div class="ps-zone-row">
+        <div class="ps-zone-label">База</div>
+        <div>Атрани, Амальфи</div>
+        <div class="ps-zone-price">включено</div>
+      </div>
+      <div class="ps-zone-row">
+        <div class="ps-zone-label">Зона 1</div>
+        <div>Равелло, Минори, Майори</div>
+        <div class="ps-zone-price">+€30</div>
+      </div>
+      <div class="ps-zone-row">
+        <div class="ps-zone-label">Зона 2</div>
+        <div>Четара, Виетри-суль-Маре, Трамонти, Скала</div>
+        <div class="ps-zone-price">+€50</div>
+      </div>
+      <div class="ps-zone-row">
+        <div class="ps-zone-label">Зона 3</div>
+        <div>Позитано, Прайано, Фуроре</div>
+        <div class="ps-zone-price">+€70</div>
+      </div>
+      <div class="ps-zone-row">
+        <div class="ps-zone-label">Зона 4</div>
+        <div>Сорренто, Салерно</div>
+        <div class="ps-zone-price">+€100</div>
+      </div>
+      <div class="ps-zone-row">
+        <div class="ps-zone-label">Зона 5</div>
+        <div>Капри, Неаполь, Помпеи</div>
+        <div class="ps-zone-price">+€150 + транспорт</div>
+      </div>
+    </div>
+
+    <p class="ps-zones-note reveal">Время дороги не съедает вашу съёмку. Для 3–5 зон минимум — 1,5 часа. Если бронируете 2+ часа в зонах 1–2, доплата за выезд сокращается в два раза.</p>
+  </section>
+
+  <!-- Add-ons -->
+  <section class="ps-section">
+    <div class="section-header reveal">
+      <p class="section-label">05 — Дополнения</p>
+      <h2 class="section-title">Что можно<br>добавить</h2>
+    </div>
+
+    <div class="ps-addons-grid">
+      <div class="ps-addon reveal">
+        <span class="ps-addon-price">+€60</span>
+        <h3>Срочная доставка</h3>
+        <p>Все обработанные фото за 48 часов вместо недели.</p>
+      </div>
+      <div class="ps-addon reveal">
+        <span class="ps-addon-price">+€25</span>
+        <h3>Экспресс-превью</h3>
+        <p>5 лёгко отредактированных кадров через 12 часов после съёмки.</p>
+      </div>
+      <div class="ps-addon reveal">
+        <span class="ps-addon-price">+€40</span>
+        <h3>Полный чёрно-белый сет</h3>
+        <p>Весь пакет дополнительно в чёрно-белой версии.</p>
+      </div>
+      <div class="ps-addon reveal">
+        <span class="ps-addon-price">+€120/час</span>
+        <h3>Дополнительное время</h3>
+        <p>Продлить любую сессию на час сверху.</p>
+      </div>
+      <div class="ps-addon reveal">
+        <span class="ps-addon-price">+€80</span>
+        <h3>RAW-файлы</h3>
+        <p>Исходники без обработки — если хотите свой колор.</p>
+      </div>
+      <div class="ps-addon reveal">
+        <span class="ps-addon-price">+€120</span>
+        <h3>Эксклюзивные права</h3>
+        <p>Фото не пойдут в моё портфолио и соцсети — только ваши.</p>
+      </div>
+      <div class="ps-addon reveal">
+        <span class="ps-addon-price">+€50</span>
+        <h3>Комплект принтов</h3>
+        <p>10 архивных отпечатков 13×18 см — как открытки или для рамок.</p>
+      </div>
+      <div class="ps-addon reveal">
+        <span class="ps-addon-price">+€70</span>
+        <h3>Слайдшоу-ролик</h3>
+        <p>60-секундное видео с лучшими кадрами и музыкой.</p>
+      </div>
+      <div class="ps-addon reveal">
+        <span class="ps-addon-price">+€30/чел</span>
+        <h3>Дополнительный человек</h3>
+        <p>Если приехала подруга, ребёнок или собака — присоединяются без проблем.</p>
+      </div>
+    </div>
+
+    <p class="ps-addons-note reveal">В праздники (Рождество, Новый год, Пасха, 15 августа) доплата +20%.</p>
+  </section>
+
+  <!-- Seasons -->
+  <section class="ps-section ps-seasons">
+    <div class="section-header reveal">
+      <p class="section-label">06 — Сезоны и скидки</p>
+      <h2 class="section-title">А что<br>по скидкам?</h2>
+    </div>
+
+    <div class="ps-seasons-grid">
+      <article class="ps-season reveal">
+        <div class="ps-season-head">
+          <h3>Высокий сезон</h3>
+          <span class="ps-season-months">июнь — сентябрь</span>
+        </div>
+        <p class="ps-season-price">Стандартная цена</p>
+        <p class="ps-season-desc">Бронируйте за 2–4 недели. Рассветные сессии — чтобы обойти толпу и поймать тихое побережье.</p>
+      </article>
+
+      <article class="ps-season ps-season-featured ps-season-featured--orange reveal">
+        <div class="ps-season-badge">−20%</div>
+        <div class="ps-season-head">
+          <h3>Средний сезон</h3>
+          <span class="ps-season-months">апрель — май, октябрь</span>
+        </div>
+        <p class="ps-season-price">Акция 2026: минус 20%</p>
+        <p class="ps-season-desc">Лучший свет, минимум туристов. Идеальный баланс для неспешной, киношной съёмки — можно выдохнуть и не торопиться.</p>
+      </article>
+
+      <article class="ps-season ps-season-featured reveal">
+        <div class="ps-season-badge">−15%</div>
+        <div class="ps-season-head">
+          <h3>Низкий сезон</h3>
+          <span class="ps-season-months">ноябрь — март</span>
+        </div>
+        <p class="ps-season-price">Минус 15% + 10 бонусных фото</p>
+        <p class="ps-season-desc">Драматическое небо, зимнее море, пустые улицы. Совсем другая Амальфи — со своей тишиной и характером.</p>
+      </article>
+    </div>
+
+    <p class="ps-seasons-loyalty reveal">Вернувшимся клиентам — скидка 10% на следующую сессию. Приведёте друга — вам обоим по €30 скидки.</p>
+  </section>
+
+  <!-- Individual Portfolio -->
+  <section class="ps-section ps-portfolio">
+    <div class="section-header reveal">
+      <p class="section-label">07 — Портфолио: соло</p>
+      <h2 class="section-title">Индивидуальные<br>съёмки</h2>
+    </div>
+
+    <div class="ps-gallery">
+      <a href="/photosessions/shifa" class="ps-gallery-item reveal">
+        <img src="/images/photosessions/shifa-main.webp" alt="Фотосессия блогера в Амальфи — Шифа" loading="lazy" class="ps-img-main">
+        <img src="/images/photosessions/shifa-hover.webp" alt="" loading="lazy" class="ps-img-hover" aria-hidden="true">
+        <div class="ps-gallery-overlay">
+          <span class="ps-gallery-tag">Блогер</span>
+          <h3>Амальфи днём</h3>
+          <p>Смелые позы, солнечные улицы и контент, на котором залипают.</p>
+          <span class="ps-gallery-location">Амальфи</span>
+        </div>
+      </a>
+
+      <a href="/photosessions/loreana" class="ps-gallery-item reveal">
+        <img src="/images/photosessions/loreana-main.webp" alt="Фотосессия в Равелло — Лореана" loading="lazy" class="ps-img-main">
+        <img src="/images/photosessions/loreana-hover.webp" alt="" loading="lazy" class="ps-img-hover" aria-hidden="true">
+        <div class="ps-gallery-overlay">
+          <span class="ps-gallery-tag">Личная</span>
+          <h3>Подарок самой себе</h3>
+          <p>Одинокий побег по садам Равелло, террасы, золотой час.</p>
+          <span class="ps-gallery-location">Равелло</span>
+        </div>
+      </a>
+
+      <a href="/photosessions/lashada" class="ps-gallery-item reveal">
+        <img src="/images/photosessions/lashada-main.webp" alt="Утренняя фотосессия в Атрани — Лашанда" loading="lazy" class="ps-img-main">
+        <img src="/images/photosessions/lashada-hover.webp" alt="" loading="lazy" class="ps-img-hover" aria-hidden="true">
+        <div class="ps-gallery-overlay">
+          <span class="ps-gallery-tag">Личная</span>
+          <h3>Утренний свет. Настоящий Атрани</h3>
+          <p>Первые лучи на пастельных стенах — пока мир ещё спит.</p>
+          <span class="ps-gallery-location">Атрани</span>
+        </div>
+      </a>
+
+      <a href="/photosessions/julietta" class="ps-gallery-item reveal">
+        <img src="/images/photosessions/julietta-main.webp" alt="Фотосессия в Майори — Джулиетта" loading="lazy" class="ps-img-main">
+        <img src="/images/photosessions/julietta-hover.webp" alt="" loading="lazy" class="ps-img-hover" aria-hidden="true">
+        <div class="ps-gallery-overlay">
+          <span class="ps-gallery-tag">Личная</span>
+          <h3>Подарочный закат</h3>
+          <p>Тёплые тона, лесные тропы — золотой свет, упакованный как подарок.</p>
+          <span class="ps-gallery-location">Майори</span>
+        </div>
+      </a>
+
+      <a href="/photosessions/ravello-photoshooting" class="ps-gallery-item ps-gallery-wide reveal">
+        <img src="/images/photosessions/ravello-editorial-main.webp" alt="Редакторская съёмка в Равелло" loading="lazy" class="ps-img-main">
+        <img src="/images/photosessions/ravello-editorial-hover.webp" alt="" loading="lazy" class="ps-img-hover" aria-hidden="true">
+        <div class="ps-gallery-overlay">
+          <span class="ps-gallery-tag">Редакторская</span>
+          <h3>Равелло. Свет и шёлк</h3>
+          <p>Вилла Руфоло, струящиеся ткани, средиземноморская элегантность.</p>
+          <span class="ps-gallery-location">Равелло</span>
+        </div>
+      </a>
+
+      <a href="/photosessions/ayuna" class="ps-gallery-item reveal">
+        <img src="/images/photosessions/ayuna-main.webp" alt="Фотоистория в Атрани — Аюна" loading="lazy" class="ps-img-main">
+        <img src="/images/photosessions/ayuna-hover.webp" alt="" loading="lazy" class="ps-img-hover" aria-hidden="true">
+        <div class="ps-gallery-overlay">
+          <span class="ps-gallery-tag">Личная</span>
+          <h3>Фотодневник Аюны</h3>
+          <p>Визуальная история — по улочкам и лестницам Атрани.</p>
+          <span class="ps-gallery-location">Атрани</span>
+        </div>
+      </a>
+
+      <a href="/photosessions/camelia" class="ps-gallery-item reveal">
+        <img src="/images/photosessions/camelia-main.webp" alt="Фотосессия с Vespa в Трамонти — Камелия" loading="lazy" class="ps-img-main">
+        <img src="/images/photosessions/camelia-hover.webp" alt="" loading="lazy" class="ps-img-hover" aria-hidden="true">
+        <div class="ps-gallery-overlay">
+          <span class="ps-gallery-tag">Мото</span>
+          <h3>Камелия и Vespa</h3>
+          <p>Горные дороги, винтажная Vespa, кадры, как из кино.</p>
+          <span class="ps-gallery-location">Трамонти</span>
+        </div>
+      </a>
+
+      <a href="/photosessions/concept-editorial" class="ps-gallery-item reveal">
+        <img src="/images/photosessions/iiana-main.webp" alt="Концептуальная съёмка в Атрани — Иана" loading="lazy" class="ps-img-main">
+        <img src="/images/photosessions/iiana-hover.webp" alt="" loading="lazy" class="ps-img-hover" aria-hidden="true">
+        <div class="ps-gallery-overlay">
+          <span class="ps-gallery-tag">Редакторская</span>
+          <h3>Цвета Атрани</h3>
+          <p>Концептуальная съёмка — смелый стайлинг на фоне самого цветного городка побережья.</p>
+          <span class="ps-gallery-location">Атрани</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Couple Portfolio -->
+  <section class="ps-section ps-portfolio">
+    <div class="section-header reveal">
+      <p class="section-label">08 — Портфолио: пары</p>
+      <h2 class="section-title">Парные<br>истории</h2>
+    </div>
+
+    <div class="ps-gallery ps-gallery-2col">
+      <a href="/photosessions/regan-tay-ravello" class="ps-gallery-item reveal">
+        <img src="/images/photosessions/regan-tay-main.webp" alt="Парная фотосессия в Равелло — Тейлор и Риган" loading="lazy" class="ps-img-main">
+        <img src="/images/photosessions/regan-tay-hover.webp" alt="" loading="lazy" class="ps-img-hover" aria-hidden="true">
+        <div class="ps-gallery-overlay">
+          <span class="ps-gallery-tag">Пара</span>
+          <h3>Романтика Равелло</h3>
+          <p>Тейлор и Риган — бесконечные виды, старые сады, влюблённые взгляды.</p>
+          <span class="ps-gallery-location">Равелло</span>
+        </div>
+      </a>
+
+      <a href="/photosessions/olga-marat" class="ps-gallery-item reveal">
+        <img src="/images/photosessions/olga-marat-main.webp" alt="Парная фотосессия в Атрани — Ольга и Марат" loading="lazy" class="ps-img-main">
+        <img src="/images/photosessions/olga-marat-hover.webp" alt="" loading="lazy" class="ps-img-hover" aria-hidden="true">
+        <div class="ps-gallery-overlay">
+          <span class="ps-gallery-tag">Пара</span>
+          <h3>Симфония любви</h3>
+          <p>Ольга и Марат — украденные взгляды и смех в самом сердце Атрани.</p>
+          <span class="ps-gallery-location">Атрани</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- Locations Narrative -->
   <section class="locations">
     <div class="section-header reveal">
-      <p class="section-label">04 — Локации</p>
+      <p class="section-label">09 — Локации</p>
       <h2 class="section-title">Где мы снимаем</h2>
     </div>
 
@@ -254,10 +544,18 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <!-- How It Works -->
+  <!-- Locations Marquee -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-content">
+      <div class="marquee-item">Атрани <span></span> Равелло <span></span> Позитано <span></span> Амальфи <span></span> Фуроре <span></span> Минори <span></span></div>
+      <div class="marquee-item">Атрани <span></span> Равелло <span></span> Позитано <span></span> Амальфи <span></span> Фуроре <span></span> Минори <span></span></div>
+    </div>
+  </div>
+
+  <!-- Process -->
   <section class="process">
     <div class="section-header reveal">
-      <p class="section-label">05 — Как это работает</p>
+      <p class="section-label">10 — Как это работает</p>
       <h2 class="section-title">От заявки<br>до галереи</h2>
     </div>
 
@@ -289,11 +587,44 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <!-- Quote -->
-  <section class="quote-section">
-    <div class="quote-wrapper reveal">
-      <blockquote>
-        <p>Фотография на побережье Амальфи — это не про позирование. Это про то, как свет ложится на ваше лицо, когда вы впервые видите море из-за поворота серпантина.</p>
+  <!-- Testimonials -->
+  <section class="ps-section ps-testimonials">
+    <div class="section-header reveal">
+      <p class="section-label">11 — Отзывы</p>
+      <h2 class="section-title">Что говорят</h2>
+    </div>
+
+    <div class="ps-testimonials-grid">
+      <blockquote class="ps-testimonial reveal">
+        <p>«Спасибо ещё раз за то, что сделали путешествие нашей семьи по-настоящему запоминающимся. Мы неделю провели с Тейлор и Риган — фотографии невероятные. Они без остановки говорят о вашем терпении и гибкости. Возможно, у нас будет свадьба в Амальфи — и вы первыми в нашем списке.»</p>
+        <footer>
+          <cite>Estrallita Bloss</cite>
+          <span>Равелло · 2023</span>
+        </footer>
+      </blockquote>
+
+      <blockquote class="ps-testimonial reveal">
+        <p>«Грег — отличный фотограф. Ракурсы, свет, фокус — всё прекрасно. Снял меня на побережье Амальфи так, что я теперь одержима этими кадрами и не могу перестать смотреть. Рекомендую всем, кому нужны профессиональные фото.»</p>
+        <footer>
+          <cite>Bisaan Hanouneh</cite>
+          <span>Побережье Амальфи · 2020</span>
+        </footer>
+      </blockquote>
+
+      <blockquote class="ps-testimonial reveal">
+        <p>«Выражаю огромную благодарность Грегори — помимо увлекательной фотосессии он провёл нам настоящую экскурсию и показал места, которые сами мы вряд ли нашли бы. Вся любовь, доброта и настроение Амальфи.»</p>
+        <footer>
+          <cite>Alex Dolgov</cite>
+          <span>Гость · 2020</span>
+        </footer>
+      </blockquote>
+
+      <blockquote class="ps-testimonial reveal">
+        <p>«Чудесное, незабываемое путешествие. Всего одна ночь в уютной комнате со вкусом, о которой заботился очень внимательный и надёжный хозяин. Советы по маршруту и дополнительная помощь от Грега стали настоящим сюрпризом.»</p>
+        <footer>
+          <cite>У Хаою (吴昊游)</cite>
+          <span>Гость · 2019</span>
+        </footer>
       </blockquote>
     </div>
   </section>
@@ -320,12 +651,86 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="cta reveal">
-    <div class="cta-content">
-      <h2 class="section-title">Ваша история<br>ждёт свой кадр</h2>
-      <p>Расскажите нам о вашей поездке — мы предложим идеальный формат съёмки, подберём локации под свет и время года, и создадим фотографии, которые вы будете пересматривать годами.</p>
-      <a href="/contacts#contact-form" class="btn btn-white">Обсудить фотосессию</a>
+  <!-- Partners -->
+  <section class="ps-section ps-partners">
+    <div class="section-header reveal">
+      <p class="section-label">12 — Партнёрства</p>
+      <h2 class="section-title">Где ещё<br>меня найдут</h2>
+    </div>
+
+    <div class="ps-partners-grid">
+      <a href="https://www.localgrapher.com/profile/gregory/" target="_blank" rel="noopener" class="ps-partner reveal">
+        <span class="ps-partner-name">Localgrapher</span>
+        <span class="ps-partner-badge">Special Arrangement Hero</span>
+      </a>
+      <a href="https://www.getyourguide.com/atrani-l128528/amalfi-sunrise-photoshoot-t1013879/" target="_blank" rel="noopener" class="ps-partner reveal">
+        <span class="ps-partner-name">GetYourGuide</span>
+        <span class="ps-partner-badge">Featured Experience</span>
+      </a>
+      <a href="https://airbnb.com/sv/amalfiday" target="_blank" rel="noopener" class="ps-partner reveal">
+        <span class="ps-partner-name">Airbnb</span>
+        <span class="ps-partner-badge">Quality Photographer</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Policies -->
+  <section class="ps-section ps-policies">
+    <div class="section-header reveal">
+      <p class="section-label">13 — Условия</p>
+      <h2 class="section-title">Как проходит<br>бронирование</h2>
+    </div>
+
+    <div class="ps-policies-grid">
+      <div class="ps-policy reveal">
+        <h3>Оплата</h3>
+        <ul>
+          <li>Предоплата 30% для подтверждения даты</li>
+          <li>Остаток в день съёмки</li>
+          <li>Наличные (€), PayPal, Stripe, банковский перевод</li>
+          <li>Счёт от CristallPont S.R.L.</li>
+        </ul>
+      </div>
+      <div class="ps-policy reveal">
+        <h3>Отмена и перенос</h3>
+        <ul>
+          <li>За 7+ дней — полный возврат</li>
+          <li>За 3–7 дней — 50% возврата или бесплатный перенос</li>
+          <li>Менее 3 дней — предоплата не возвращается (перенос возможен)</li>
+          <li>Дождь? Переносим бесплатно, без вопросов</li>
+        </ul>
+      </div>
+      <div class="ps-policy reveal">
+        <h3>Доставка</h3>
+        <ul>
+          <li>Стандарт — 7 рабочих дней</li>
+          <li>Hi-res JPEG, подготовленные под печать и веб</li>
+          <li>Онлайн-галерея — 90 дней на скачивание</li>
+          <li>Повторная загрузка после 90 дней — €20</li>
+        </ul>
+      </div>
+      <div class="ps-policy reveal">
+        <h3>Права на фото</h3>
+        <ul>
+          <li>Неэксклюзивное использование — для личных целей без ограничений</li>
+          <li>Фотограф может показать кадры в портфолио и соцсетях</li>
+          <li>Эксклюзивные права — отдельной опцией</li>
+          <li>Коммерческое использование — обсуждаем отдельно</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="cta ps-final-cta">
+    <div class="cta-content reveal">
+      <p class="ps-cta-eyebrow">Готовы забронировать?</p>
+      <h2 class="section-title">Напишите даты, настроение<br>и идею — остальное я возьму на себя.</h2>
+      <p class="ps-cta-sub">План можно скинуть за пару минут. Говорю по-английски, по-итальянски и по-русски.</p>
+      <div class="ps-cta-actions">
+        <a href="/contacts#contact-form" class="btn btn-white">Написать</a>
+        <a href="https://wa.me/393270972329" target="_blank" rel="noopener" class="btn btn-outline ps-btn-whatsapp">WhatsApp</a>
+      </div>
     </div>
   </section>
 </Layout>
@@ -358,7 +763,6 @@ import Layout from '../layouts/Layout.astro';
     user-select: none;
   }
 
-  /* Diagonal photo strips in hero */
   .hero-image-strip {
     position: absolute;
     top: 0;
@@ -556,212 +960,640 @@ import Layout from '../layouts/Layout.astro';
     color: var(--color-gray-dark);
   }
 
-  /* ===== PORTFOLIO GALLERY ===== */
-  .portfolio {
+  /* ===== SHOWCASE CAROUSEL (replaces "Каждый кадр") ===== */
+  .showcase {
+    position: relative;
+    height: 80vh;
+    min-height: 560px;
+    max-height: 820px;
+    overflow: hidden;
+    background: var(--color-navy-deep);
+  }
+
+  .showcase-slideshow {
+    position: absolute;
+    inset: 0;
+  }
+
+  .showcase-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .showcase-slide.is-active {
+    opacity: 1;
+  }
+
+  .showcase-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 10, 39, 0.15) 0%, rgba(0, 10, 39, 0.35) 55%, rgba(0, 10, 39, 0.92) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px 40px;
+    color: white;
+    z-index: 1;
+  }
+
+  .showcase-content {
+    max-width: 1400px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .showcase-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-orange);
+    margin-bottom: 16px;
+  }
+
+  .showcase-title {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 9vw, 120px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin: 0 0 20px;
+    color: white;
+  }
+
+  .showcase-sub {
+    font-size: clamp(16px, 1.6vw, 20px);
+    max-width: 640px;
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.5;
+    margin: 0 0 32px;
+  }
+
+  .showcase-dots {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 12px;
+  }
+
+  .showcase-dot {
+    width: 44px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.25);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.4s, transform 0.4s;
+  }
+
+  .showcase-dot.is-active {
+    background: var(--color-orange);
+    transform: scaleY(1.6);
+  }
+
+  .showcase-dot:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  /* ===== PS SECTIONS ===== */
+  .ps-section {
     padding: 120px 40px;
+    background: white;
+  }
+
+  .ps-section .section-header {
+    max-width: 1200px;
+    margin: 0 auto 80px;
+  }
+
+  .ps-included {
+    background: var(--color-bg-light);
+  }
+
+  .ps-seasons {
+    background: var(--color-bg-light);
+  }
+
+  .ps-testimonials {
     background: var(--color-navy-deep);
     color: white;
   }
 
-  .portfolio .section-title {
-    color: white;
-  }
-
-  .gallery {
-    max-width: 1400px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: 280px;
-    gap: 4px;
-  }
-
-  .gallery-item {
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-  }
-
-  .gallery-wide {
-    grid-column: span 2;
-  }
-
-  .gallery-tall {
-    grid-row: span 2;
-  }
-
-  .gallery-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: all 0.6s var(--ease-out);
-    filter: grayscale(30%);
-  }
-
-  .gallery-item:hover img {
-    transform: scale(1.08);
-    filter: grayscale(0%);
-  }
-
-  .gallery-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0, 10, 39, 0.9) 0%, transparent 60%);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 24px;
-    opacity: 0;
-    transition: opacity 0.4s var(--ease-out);
-  }
-
-  .gallery-item:hover .gallery-overlay {
-    opacity: 1;
-  }
-
-  .gallery-tag {
-    font-family: var(--font-display);
-    font-size: 14px;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 4px;
-  }
-
-  .gallery-location {
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+  .ps-testimonials .section-label {
     color: var(--color-orange);
   }
 
-  /* ===== FORMATS ===== */
-  .formats {
-    padding: 120px 40px;
-    background: var(--color-bg-light);
+  .ps-testimonials .section-title {
+    color: white;
   }
 
-  .formats-grid {
+  .ps-partners {
+    background: var(--color-navy-deep);
+    color: white;
+    padding: 80px 40px;
+  }
+
+  .ps-partners .section-title {
+    color: white;
+  }
+
+  /* ===== PACKAGES ===== */
+  .ps-packages-grid {
     max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 2px;
+    background: var(--color-navy);
   }
 
-  .format-card {
+  @media (min-width: 769px) {
+    .ps-packages-grid > .ps-package:nth-child(3) {
+      order: 2;
+    }
+  }
+
+  .ps-package {
+    position: relative;
+    padding: 48px 40px;
     background: white;
-    border: 2px solid var(--color-navy);
-    padding: 40px;
     display: flex;
     flex-direction: column;
-    position: relative;
-    transition: all 0.3s var(--ease-out);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .format-card:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 4px 4px 0 var(--color-navy);
+  .ps-package:hover {
+    transform: translateY(-6px);
   }
 
-  .format-featured {
-    border-color: var(--color-orange);
-    border-width: 3px;
+  .ps-package-featured {
+    background: var(--color-navy-deep);
+    color: white;
   }
 
-  .format-badge {
+  .ps-package-ribbon {
     position: absolute;
-    top: -1px;
+    top: 24px;
     right: 24px;
+    padding: 8px 14px;
     background: var(--color-orange);
     color: white;
-    font-family: var(--font-display);
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 8px 16px;
+    letter-spacing: 2px;
   }
 
-  .format-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+  .ps-package-tag {
+    align-self: flex-start;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-orange);
+    margin-bottom: 20px;
+  }
+
+  .ps-package-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
     margin-bottom: 24px;
   }
 
-  .format-number {
+  .ps-package-price {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(139, 155, 180, 0.3);
+  }
+
+  .ps-package-featured .ps-package-price {
+    border-bottom-color: rgba(255, 255, 255, 0.15);
+  }
+
+  .ps-price-amount {
     font-family: var(--font-display);
     font-size: 48px;
     font-weight: 900;
     color: var(--color-orange);
     line-height: 1;
-    opacity: 0.3;
   }
 
-  .format-duration {
-    font-size: 12px;
-    font-weight: 600;
+  .ps-price-meta {
+    font-size: 14px;
+    color: var(--color-gray);
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--color-gray);
-    padding: 6px 12px;
-    border: 1px solid var(--color-gray-light);
   }
 
-  .format-title {
-    font-family: var(--font-display);
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: -1px;
-    color: var(--color-navy);
-    margin-bottom: 16px;
-  }
-
-  .format-desc {
-    font-size: 15px;
-    line-height: 1.7;
-    color: var(--color-gray-dark);
-    margin-bottom: 24px;
-  }
-
-  .format-includes {
+  .ps-package-list {
     list-style: none;
-    margin-bottom: 32px;
+    padding: 0;
+    margin: 0 0 24px;
     flex: 1;
   }
 
-  .format-includes li {
+  .ps-package-list li {
+    padding: 8px 0 8px 20px;
     position: relative;
-    padding-left: 20px;
-    font-size: 14px;
-    color: var(--color-navy);
-    margin-bottom: 8px;
+    font-size: 15px;
     line-height: 1.5;
   }
 
-  .format-includes li::before {
-    content: '';
+  .ps-package-list li::before {
+    content: '—';
     position: absolute;
     left: 0;
-    top: 8px;
-    width: 8px;
-    height: 2px;
-    background: var(--color-orange);
+    color: var(--color-orange);
+    font-weight: 700;
   }
 
-  .format-footer {
+  .ps-package-for {
+    font-size: 13px;
+    font-style: italic;
+    color: var(--color-gray);
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px solid rgba(139, 155, 180, 0.2);
+  }
+
+  .ps-package-featured .ps-package-for {
+    color: rgba(255, 255, 255, 0.6);
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .ps-package-cta {
+    max-width: 1200px;
+    margin: 60px auto 0;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 24px;
-    border-top: 2px solid var(--color-gray-light);
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
   }
 
-  .format-price {
+  /* ===== INCLUDED ===== */
+  .ps-included-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--color-navy);
+  }
+
+  .ps-included-item {
+    padding: 40px 32px;
+    background: var(--color-bg-light);
+  }
+
+  .ps-included-num {
     font-family: var(--font-display);
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--color-navy);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-orange);
+    margin-bottom: 20px;
+  }
+
+  .ps-included-item h3 {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+  }
+
+  .ps-included-item p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+  }
+
+  /* ===== ZONES ===== */
+  .ps-zones-table {
+    max-width: 960px;
+    margin: 0 auto;
+    border: 2px solid var(--color-navy);
+  }
+
+  .ps-zone-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 180px;
+    gap: 24px;
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--color-gray-light);
+    align-items: center;
+    font-size: 15px;
+  }
+
+  .ps-zone-row:last-child {
+    border-bottom: none;
+  }
+
+  .ps-zone-head {
+    background: var(--color-navy);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: none;
+  }
+
+  .ps-zone-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-orange);
+  }
+
+  .ps-zone-price {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 16px;
+    text-align: right;
+  }
+
+  .ps-zones-note {
+    max-width: 960px;
+    margin: 32px auto 0;
+    font-size: 14px;
+    color: var(--color-gray-dark);
+    font-style: italic;
+    line-height: 1.6;
+    text-align: center;
+  }
+
+  /* ===== ADD-ONS ===== */
+  .ps-addons-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--color-navy);
+  }
+
+  .ps-addon {
+    padding: 32px 28px;
+    background: white;
+    border: 1px solid var(--color-gray-light);
+    position: relative;
+  }
+
+  .ps-addon-price {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-orange);
+    margin-bottom: 12px;
+  }
+
+  .ps-addon h3 {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+  }
+
+  .ps-addon p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+    margin: 0;
+  }
+
+  .ps-addons-note {
+    max-width: 1200px;
+    margin: 32px auto 0;
+    font-size: 13px;
+    color: var(--color-gray-dark);
+    text-align: center;
+    font-style: italic;
+  }
+
+  /* ===== SEASONS ===== */
+  .ps-seasons-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--color-navy);
+  }
+
+  .ps-season {
+    position: relative;
+    padding: 40px 32px;
+    background: white;
+  }
+
+  .ps-season-featured {
+    background: var(--color-navy-deep);
+    color: white;
+  }
+
+  .ps-season-badge {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 14px;
+    background: var(--color-orange);
+    color: white;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  .ps-season-head {
+    margin-bottom: 20px;
+  }
+
+  .ps-season h3 {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  .ps-season-months {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-gray);
+  }
+
+  .ps-season-featured .ps-season-months {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .ps-season-price {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--color-orange);
+    margin-bottom: 14px;
+  }
+
+  .ps-season-desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+    margin: 0;
+  }
+
+  .ps-season-featured .ps-season-desc {
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .ps-season-featured--orange {
+    background: var(--color-orange);
+    color: white;
+  }
+
+  .ps-season-featured--orange .ps-season-months {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .ps-season-featured--orange .ps-season-price {
+    color: white;
+  }
+
+  .ps-season-featured--orange .ps-season-desc {
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .ps-season-featured--orange .ps-season-badge {
+    background: white;
+    color: var(--color-orange);
+  }
+
+  .ps-seasons-loyalty {
+    max-width: 800px;
+    margin: 40px auto 0;
+    font-size: 15px;
+    text-align: center;
+    color: var(--color-gray-dark);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* ===== PORTFOLIO GALLERY ===== */
+  .ps-portfolio {
+    padding: 120px 40px;
+  }
+
+  .ps-gallery {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--color-navy);
+  }
+
+  .ps-gallery-2col {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .ps-gallery-item {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: var(--color-navy-deep);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .ps-gallery-wide {
+    grid-column: span 2;
+    aspect-ratio: 3/2;
+  }
+
+  .ps-img-main,
+  .ps-img-hover {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .ps-img-hover {
+    opacity: 0;
+  }
+
+  .ps-gallery-item:hover .ps-img-main {
+    opacity: 0;
+  }
+
+  .ps-gallery-item:hover .ps-img-hover {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+
+  .ps-gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, transparent 45%, rgba(0, 10, 39, 0.92) 100%);
+    color: white;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .ps-gallery-tag {
+    align-self: flex-start;
+    padding: 4px 10px;
+    background: var(--color-orange);
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  .ps-gallery-overlay h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.3px;
+    line-height: 1.15;
+  }
+
+  .ps-gallery-overlay p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .ps-gallery-location {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.55);
   }
 
   /* ===== MARQUEE ===== */
@@ -972,44 +1804,64 @@ import Layout from '../layouts/Layout.astro';
     color: var(--color-gray-dark);
   }
 
-  /* ===== QUOTE ===== */
-  .quote-section {
-    padding: 100px 40px;
-    background: white;
-  }
-
-  .quote-wrapper {
-    max-width: 900px;
+  /* ===== TESTIMONIALS ===== */
+  .ps-testimonials-grid {
+    max-width: 1200px;
     margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
   }
 
-  blockquote {
-    padding: 32px 40px;
+  .ps-testimonial {
     background: transparent;
-    border: 2px solid var(--color-navy);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-left: 4px solid var(--color-orange);
+    padding: 36px 36px 28px;
+    margin: 0;
     position: relative;
   }
 
-  blockquote::before {
-    content: '\201C';
+  .ps-testimonial::before {
+    content: '"';
     position: absolute;
-    top: -10px;
-    left: 24px;
+    top: -8px;
+    left: 20px;
     font-family: var(--font-display);
     font-size: 80px;
     font-weight: 900;
     color: var(--color-orange);
-    opacity: 0.4;
+    opacity: 0.3;
+    line-height: 1;
   }
 
-  blockquote p {
+  .ps-testimonial p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.88);
+    margin: 0 0 24px;
+  }
+
+  .ps-testimonial footer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .ps-testimonial cite {
     font-family: var(--font-display);
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 1.4;
-    color: var(--color-navy);
-    margin: 0;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .ps-testimonial footer span {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.45);
   }
 
   /* ===== STATS ===== */
@@ -1043,27 +1895,140 @@ import Layout from '../layouts/Layout.astro';
     margin-top: 8px;
   }
 
-  /* ===== CTA ===== */
-  .cta {
-    padding: 120px 40px;
-    background: var(--color-orange);
-    color: white;
-    position: relative;
-    overflow: hidden;
+  /* ===== PARTNERS ===== */
+  .ps-partners-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: rgba(255, 255, 255, 0.08);
   }
 
-  .cta::before {
-    content: 'FOTO';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  .ps-partner {
+    padding: 40px 28px;
+    background: var(--color-navy-deep);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-decoration: none;
+    color: white;
+    transition: background 0.3s;
+  }
+
+  .ps-partner:hover {
+    background: var(--color-navy);
+  }
+
+  .ps-partner-name {
     font-family: var(--font-display);
-    font-size: clamp(100px, 20vw, 300px);
-    font-weight: 900;
-    color: rgba(255, 255, 255, 0.1);
-    pointer-events: none;
-    white-space: nowrap;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  .ps-partner-badge {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-orange);
+  }
+
+  /* ===== POLICIES ===== */
+  .ps-policies-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: var(--color-navy);
+  }
+
+  .ps-policy {
+    padding: 40px 36px;
+    background: white;
+  }
+
+  .ps-policy h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: -0.3px;
+    color: var(--color-navy);
+  }
+
+  .ps-policy ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ps-policy li {
+    padding: 10px 0 10px 22px;
+    position: relative;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-gray-dark);
+    border-bottom: 1px solid rgba(139, 155, 180, 0.2);
+  }
+
+  .ps-policy li:last-child {
+    border-bottom: none;
+  }
+
+  .ps-policy li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-orange);
+    font-weight: 700;
+  }
+
+  /* ===== FINAL CTA ===== */
+  .ps-final-cta {
+    background: var(--color-orange);
+    color: white;
+    padding: 120px 40px;
+    text-align: center;
+  }
+
+  .ps-final-cta .section-title {
+    color: white;
+    margin: 16px 0 20px;
+  }
+
+  .ps-cta-eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 600;
+    opacity: 0.85;
+  }
+
+  .ps-cta-sub {
+    font-size: 18px;
+    line-height: 1.5;
+    max-width: 540px;
+    margin: 0 auto 32px;
+    opacity: 0.95;
+  }
+
+  .ps-cta-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .ps-btn-whatsapp {
+    border-color: white;
+    color: white;
+  }
+
+  .ps-btn-whatsapp:hover {
+    background: white;
+    color: var(--color-orange);
   }
 
   .cta-content {
@@ -1074,19 +2039,7 @@ import Layout from '../layouts/Layout.astro';
     z-index: 1;
   }
 
-  .cta .section-title {
-    color: white;
-    margin-bottom: 24px;
-  }
-
-  .cta p {
-    font-size: 20px;
-    line-height: 1.6;
-    margin-bottom: 40px;
-    opacity: 0.95;
-  }
-
-  /* ===== SECTIONS SHARED ===== */
+  /* ===== SHARED ===== */
   .section-header {
     max-width: 1200px;
     margin: 0 auto 80px;
@@ -1110,7 +2063,6 @@ import Layout from '../layouts/Layout.astro';
     color: var(--color-navy);
   }
 
-  /* ===== REVEAL ANIMATION ===== */
   .reveal {
     opacity: 0;
     transform: translateY(30px);
@@ -1128,23 +2080,32 @@ import Layout from '../layouts/Layout.astro';
       display: none;
     }
 
-    .formats-grid {
-      grid-template-columns: 1fr;
-      gap: 24px;
-    }
-
     .process-steps {
       grid-template-columns: repeat(2, 1fr);
       gap: 24px;
     }
 
-    .gallery {
-      grid-template-columns: repeat(2, 1fr);
-      grid-auto-rows: 220px;
-    }
-
     .stats-grid {
       grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ps-packages-grid,
+    .ps-included-grid,
+    .ps-addons-grid,
+    .ps-seasons-grid,
+    .ps-partners-grid,
+    .ps-policies-grid,
+    .ps-testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ps-gallery {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ps-gallery-wide {
+      grid-column: span 1;
+      aspect-ratio: 3/4;
     }
   }
 
@@ -1158,12 +2119,8 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .manifesto,
-    .portfolio,
-    .formats,
     .locations,
-    .process,
-    .quote-section,
-    .cta {
+    .process {
       padding: 80px 20px;
     }
 
@@ -1176,15 +2133,63 @@ import Layout from '../layouts/Layout.astro';
       font-size: 80px;
     }
 
-    .gallery {
-      grid-template-columns: 1fr;
-      grid-auto-rows: 250px;
+    .showcase {
+      height: 70vh;
+      min-height: 460px;
     }
 
-    .gallery-wide,
-    .gallery-tall {
+    .showcase-overlay {
+      padding: 40px 20px;
+    }
+
+    .showcase-title {
+      letter-spacing: -1.5px;
+    }
+
+    .ps-section,
+    .ps-portfolio,
+    .ps-final-cta {
+      padding: 80px 20px;
+    }
+
+    .ps-section .section-header {
+      margin-bottom: 50px;
+    }
+
+    .ps-package {
+      padding: 36px 28px;
+    }
+
+    .ps-package-title {
+      font-size: 26px;
+    }
+
+    .ps-price-amount {
+      font-size: 38px;
+    }
+
+    .ps-gallery,
+    .ps-gallery-2col {
+      grid-template-columns: 1fr;
+    }
+
+    .ps-gallery-wide {
       grid-column: span 1;
-      grid-row: span 1;
+      aspect-ratio: 3/4;
+    }
+
+    .ps-zone-row {
+      grid-template-columns: 1fr;
+      gap: 6px;
+      padding: 16px 20px;
+    }
+
+    .ps-zone-head {
+      display: none;
+    }
+
+    .ps-zone-price {
+      text-align: left;
     }
 
     .location-item,
@@ -1225,6 +2230,13 @@ import Layout from '../layouts/Layout.astro';
       opacity: 1;
       transform: none;
     }
+
+    .showcase-slide,
+    .ps-img-main,
+    .ps-img-hover,
+    .ps-package {
+      transition: none;
+    }
   }
 </style>
 
@@ -1239,4 +2251,38 @@ import Layout from '../layouts/Layout.astro';
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Showcase carousel
+  const slides = document.querySelectorAll<HTMLImageElement>('.showcase-slide');
+  const dots = document.querySelectorAll<HTMLButtonElement>('.showcase-dot');
+  const titleEl = document.getElementById('showcase-title');
+  let current = 0;
+  let autoTimer: number | undefined;
+
+  const setSlide = (index: number) => {
+    slides[current]?.classList.remove('is-active');
+    dots[current]?.classList.remove('is-active');
+    current = (index + slides.length) % slides.length;
+    slides[current]?.classList.add('is-active');
+    dots[current]?.classList.add('is-active');
+    const caption = slides[current]?.dataset.caption;
+    if (titleEl && caption) titleEl.textContent = caption;
+  };
+
+  const startAuto = () => {
+    autoTimer = window.setInterval(() => setSlide(current + 1), 4500);
+  };
+
+  if (slides.length > 1) {
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        setSlide(i);
+        if (autoTimer) {
+          clearInterval(autoTimer);
+          startAuto();
+        }
+      });
+    });
+    startAuto();
+  }
 </script>

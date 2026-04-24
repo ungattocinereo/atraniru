@@ -138,7 +138,7 @@ const localBusinessSchema = {
         <h2 class="section-title">В Атрани отдых прекрасен<br>в любое время года</h2>
       </div>
 
-      <form class="contact-form reveal" id="contactForm">
+      <form class="contact-form reveal" id="contactForm" novalidate>
         <div class="form-fields" id="formFields">
           <div class="form-row">
             <div class="form-group">
@@ -151,19 +151,46 @@ const localBusinessSchema = {
                 placeholder="Ваше имя"
                 required
                 autocomplete="name"
+                maxlength="80"
               >
             </div>
 
             <div class="form-group">
-              <label for="email" class="form-label">Email <span class="required">*</span></label>
+              <label for="contact" class="form-label">Email или телефон <span class="required">*</span></label>
               <input
-                type="email"
-                id="email"
-                name="email"
+                type="text"
+                id="contact"
+                name="contact"
                 class="form-input"
-                placeholder="hello@example.com"
+                placeholder="hello@example.com или +39..."
                 required
                 autocomplete="email"
+                maxlength="120"
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="service" class="form-label">Что интересует</label>
+              <select id="service" name="service" class="form-input form-select">
+                <option value="">— Выберите —</option>
+                <option value="Апартаменты">Апартаменты</option>
+                <option value="Фотосессия">Фотосессия</option>
+                <option value="Трансфер / портер">Трансфер / портер</option>
+                <option value="Другое">Другое</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="dates" class="form-label">Даты и место</label>
+              <input
+                type="text"
+                id="dates"
+                name="dates"
+                class="form-input"
+                placeholder="15–22 июня, Атрани"
+                maxlength="160"
               >
             </div>
           </div>
@@ -177,8 +204,32 @@ const localBusinessSchema = {
               placeholder="Расскажите, чем мы можем помочь..."
               rows="6"
               required
+              maxlength="2000"
             ></textarea>
           </div>
+
+          <div class="form-checkbox-group">
+            <label class="form-checkbox-label" for="gdpr">
+              <input type="checkbox" id="gdpr" name="gdpr" class="form-checkbox" required>
+              <span class="checkbox-text">
+                Согласен на обработку персональных данных согласно
+                <a href="/privacy" class="privacy-link">политике конфиденциальности</a>.
+              </span>
+            </label>
+          </div>
+
+          <!-- Honeypot: leave empty, hidden from humans -->
+          <div class="form-honeypot" aria-hidden="true">
+            <label for="company_website">Company website</label>
+            <input
+              type="text"
+              id="company_website"
+              name="company_website"
+              tabindex="-1"
+              autocomplete="off"
+            >
+          </div>
+          <input type="hidden" id="formStartedAt" name="_form_started_at" value="0">
 
           <button type="submit" class="btn btn-primary btn-submit">
             <span class="btn-text">Отправить сообщение</span>
@@ -574,6 +625,26 @@ const localBusinessSchema = {
     min-height: 150px;
   }
 
+  .form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='8' viewBox='0 0 14 8'><path fill='%230A1628' d='M1 1l6 6 6-6'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 20px center;
+    padding-right: 48px;
+    cursor: pointer;
+  }
+
+  /* Honeypot field: visually hidden, still interactable for bots */
+  .form-honeypot {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
   /* Custom Checkbox */
   .form-checkbox-group {
     margin-top: 8px;
@@ -956,90 +1027,138 @@ const localBusinessSchema = {
 </style>
 
 <script>
-  // Form handling
-  const form = document.getElementById('contactForm') as HTMLFormElement;
-  const formFields = document.getElementById('formFields') as HTMLDivElement;
-  const formSuccess = document.getElementById('formSuccess') as HTMLDivElement;
-  const formMessage = document.getElementById('formMessage') as HTMLDivElement;
-  const sendAnotherBtn = document.getElementById('sendAnother') as HTMLButtonElement;
+  const form = document.getElementById('contactForm') as HTMLFormElement | null;
+  const formFields = document.getElementById('formFields') as HTMLDivElement | null;
+  const formSuccess = document.getElementById('formSuccess') as HTMLDivElement | null;
+  const formMessage = document.getElementById('formMessage') as HTMLDivElement | null;
+  const sendAnotherBtn = document.getElementById('sendAnother') as HTMLButtonElement | null;
+  const formStartedAt = document.getElementById('formStartedAt') as HTMLInputElement | null;
 
-  if (form) {
+  const ENDPOINT = '/hooks/send-telegram-atrani';
+  const COOLDOWN_KEY = 'atrani_contact_last_submit';
+  const COOLDOWN_MS = 60_000;
+
+  if (formStartedAt) formStartedAt.value = String(Date.now());
+
+  const showError = (msg: string, submitBtn: HTMLButtonElement, btnText: HTMLSpanElement, originalText: string | null) => {
+    if (formMessage) {
+      formMessage.className = 'form-message error';
+      formMessage.style.display = 'block';
+      formMessage.textContent = msg;
+      setTimeout(() => {
+        if (formMessage) formMessage.style.display = 'none';
+      }, 6000);
+    }
+    btnText.textContent = originalText || 'Отправить сообщение';
+    submitBtn.disabled = false;
+  };
+
+  if (form && formFields && formSuccess) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const formData = new FormData(form);
-      const data = {
-        name: formData.get('name') as string,
-        email: formData.get('email') as string,
-        message: formData.get('message') as string,
-      };
-
-      // Show loading state
       const submitBtn = form.querySelector('.btn-submit') as HTMLButtonElement;
       const btnText = submitBtn.querySelector('.btn-text') as HTMLSpanElement;
       const originalText = btnText.textContent;
+
+      const last = Number(localStorage.getItem(COOLDOWN_KEY) || 0);
+      if (last && Date.now() - last < COOLDOWN_MS) {
+        const wait = Math.ceil((COOLDOWN_MS - (Date.now() - last)) / 1000);
+        showError(`Подождите ${wait} с перед повторной отправкой.`, submitBtn, btnText, originalText);
+        return;
+      }
+
+      const formData = new FormData(form);
+      const name = String(formData.get('name') || '').trim();
+      const contact = String(formData.get('contact') || '').trim();
+      const service = String(formData.get('service') || '').trim();
+      const dates = String(formData.get('dates') || '').trim();
+      const message = String(formData.get('message') || '').trim();
+      const gdpr = formData.get('gdpr');
+      const honeypot = String(formData.get('company_website') || '');
+      const startedAt = Number(formData.get('_form_started_at') || 0);
+
+      if (!name || !contact || !message) {
+        showError('Пожалуйста, заполните имя, контакт и сообщение.', submitBtn, btnText, originalText);
+        return;
+      }
+      if (!gdpr) {
+        showError('Нужно согласие на обработку персональных данных.', submitBtn, btnText, originalText);
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneDigits = contact.replace(/\D/g, '');
+      if (!emailRegex.test(contact) && phoneDigits.length < 7) {
+        showError('Укажите корректный email или телефон.', submitBtn, btnText, originalText);
+        return;
+      }
+
       btnText.textContent = 'Отправка...';
       submitBtn.disabled = true;
+      if (formMessage) formMessage.style.display = 'none';
+
+      const payload = {
+        name,
+        contact,
+        service,
+        dates,
+        message,
+        company_website: honeypot,
+        _form_started_at: startedAt,
+        userAgent: navigator.userAgent,
+        referrer: document.referrer || '',
+        language: navigator.language || '',
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+        page: location.pathname + location.search,
+      };
 
       try {
-        const response = await fetch('/api/contact', {
+        const response = await fetch(ENDPOINT, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+          body: JSON.stringify(payload),
         });
 
-        const result = await response.json();
+        let result: any = {};
+        try { result = await response.json(); } catch {}
 
-        if (!response.ok || !result.success) {
-          throw new Error(result.error || 'Ошибка отправки');
+        if (response.status === 429) {
+          showError('Слишком много запросов. Попробуйте через пару минут.', submitBtn, btnText, originalText);
+          return;
+        }
+        if (!response.ok || result.ok === false) {
+          const serverError = typeof result.error === 'string' ? result.error : null;
+          const readable =
+            serverError === 'Missing required fields' ? 'Пожалуйста, заполните обязательные поля.' :
+            serverError === 'Invalid contact field' ? 'Укажите корректный email или телефон.' :
+            serverError === 'Invalid field length' ? 'Слишком длинное значение в одном из полей.' :
+            serverError === 'Rejected as spam' ? 'Сообщение отклонено фильтром. Уберите ссылки и попробуйте снова.' :
+            'Не удалось отправить. Попробуйте ещё раз или напишите на hello@atrani.ru.';
+          showError(readable, submitBtn, btnText, originalText);
+          return;
         }
 
-        // Hide form fields with animation
+        localStorage.setItem(COOLDOWN_KEY, String(Date.now()));
         formFields.classList.add('hiding');
-
-        // Wait for fade out animation
         setTimeout(() => {
           formFields.style.display = 'none';
           formSuccess.style.display = 'flex';
-
-          // Show success state with animation
-          setTimeout(() => {
-            formSuccess.classList.add('showing');
-          }, 50);
+          setTimeout(() => formSuccess.classList.add('showing'), 50);
         }, 500);
-
-      } catch (error) {
-        // Show error message
-        formMessage.className = 'form-message error';
-        formMessage.textContent = error instanceof Error
-          ? error.message
-          : 'Произошла ошибка. Пожалуйста, попробуйте еще раз или свяжитесь с нами напрямую.';
-
-        btnText.textContent = originalText;
-        submitBtn.disabled = false;
-
-        // Hide error after 5 seconds
-        setTimeout(() => {
-          formMessage.style.display = 'none';
-        }, 5000);
+      } catch (err) {
+        showError('Ошибка сети. Проверьте соединение и попробуйте снова.', submitBtn, btnText, originalText);
       }
     });
 
-    // "Send another message" button handler
     if (sendAnotherBtn) {
       sendAnotherBtn.addEventListener('click', () => {
-        // Hide success state
         formSuccess.classList.remove('showing');
-
         setTimeout(() => {
           formSuccess.style.display = 'none';
           formFields.style.display = 'flex';
           formFields.classList.remove('hiding');
-
-          // Reset form
           form.reset();
-
-          // Reset button state
+          if (formStartedAt) formStartedAt.value = String(Date.now());
           const submitBtn = form.querySelector('.btn-submit') as HTMLButtonElement;
           const btnText = submitBtn.querySelector('.btn-text') as HTMLSpanElement;
           btnText.textContent = 'Отправить сообщение';

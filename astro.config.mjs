@@ -5,6 +5,14 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://atrani.ru',
   output: 'static',
+  vite: {
+    server: {
+      proxy: {
+        '/hooks': 'http://127.0.0.1:40003',
+        '/webhook': 'http://127.0.0.1:40003',
+      },
+    },
+  },
   integrations: [
     sitemap({
       filter: (page) =>

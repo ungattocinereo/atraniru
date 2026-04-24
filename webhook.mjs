@@ -1,19 +1,23 @@
 #!/usr/bin/env node
 
 /**
- * Webhook server for Atrani.ru auto-rebuild.
+ * Webhook server for Atrani.ru.
  *
- * Handles two webhook sources:
- *   1. Ghost CMS  → POST /webhook/rebuild        (post publish/update/delete)
- *   2. GitHub      → POST /hooks/redeploy-atrani-ru  (git push to main)
+ * Handles three sources:
+ *   1. Ghost CMS    → POST /webhook/rebuild              (post publish/update/delete)
+ *   2. GitHub       → POST /hooks/redeploy-atrani-ru     (git push to main)
+ *   3. Contact form → POST /hooks/send-telegram-atrani   (public, hardened)
  *
  * Ghost uses x-ghost-signature header: "sha256=<hash>, t=<timestamp>"
  * GitHub uses x-hub-signature-256 header: "sha256=<hash>"
+ * Contact form is public; protected by honeypot + timing check + rate limit.
  *
  * Environment variables (loaded from .env):
- *   WEBHOOK_SECRET  - Ghost webhook secret
+ *   WEBHOOK_SECRET        - Ghost webhook secret
  *   GITHUB_WEBHOOK_SECRET - GitHub webhook secret
- *   WEBHOOK_PORT    - port to listen on (default: 40003)
+ *   TELEGRAM_BOT_TOKEN    - Telegram bot token (shared with amalfi.day)
+ *   TELEGRAM_CHAT_ID      - Destination chat/channel ID
+ *   WEBHOOK_PORT          - port to listen on (default: 40003)
  */
 
 import { createServer } from 'node:http';
@@ -50,12 +54,282 @@ loadEnv();
 
 const GHOST_SECRET = process.env.WEBHOOK_SECRET;
 const GITHUB_SECRET = process.env.GITHUB_WEBHOOK_SECRET;
+const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 const PORT = parseInt(process.env.WEBHOOK_PORT || '40003', 10);
 const REBUILD_SCRIPT = resolve(__dirname, 'rebuild.sh');
 
-if (!GHOST_SECRET && !GITHUB_SECRET) {
-  console.error('[webhook] Neither WEBHOOK_SECRET nor GITHUB_WEBHOOK_SECRET set — exiting');
+if (!GHOST_SECRET && !GITHUB_SECRET && !(TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID)) {
+  console.error('[webhook] No secrets configured (Ghost, GitHub, or Telegram) — exiting');
   process.exit(1);
+}
+
+if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+  console.warn('[webhook] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set — contact form will return 500');
+}
+
+// ---- Contact form: constants, rate limit, helpers ----
+
+const CONTACT_RATE_WINDOW_MS = 10 * 60 * 1000;
+const CONTACT_RATE_LIMIT_MAX = 6;
+const CONTACT_MIN_FORM_FILL_MS = 3500;
+const CONTACT_SPAM_WORDS = /\b(casino|porn|viagra|forex|escort|betting)\b/i;
+const CONTACT_FIELD_LIMITS = {
+  name: 80,
+  contact: 120,
+  dates: 160,
+  service: 80,
+  message: 2000,
+};
+
+const contactRequestBuckets = new Map();
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function countLinks(value) {
+  return (String(value || '').match(/https?:\/\/|www\./gi) || []).length;
+}
+
+function isSpamText(value) {
+  const text = String(value || '').trim();
+  if (!text) return false;
+  if (CONTACT_SPAM_WORDS.test(text)) return true;
+  if (countLinks(text) > 1) return true;
+  return /<a\s|<script|href=/i.test(text);
+}
+
+function withinLimit(value, maxLength) {
+  return String(value || '').length <= maxLength;
+}
+
+function takeRateLimitSlot(ip) {
+  const now = Date.now();
+  const bucket = contactRequestBuckets.get(ip) || [];
+  const fresh = bucket.filter((entry) => now - entry < CONTACT_RATE_WINDOW_MS);
+
+  if (fresh.length >= CONTACT_RATE_LIMIT_MAX) {
+    const retryAfterMs = CONTACT_RATE_WINDOW_MS - (now - fresh[0]);
+    return { allowed: false, retryAfterSec: Math.max(1, Math.ceil(retryAfterMs / 1000)) };
+  }
+
+  fresh.push(now);
+  contactRequestBuckets.set(ip, fresh);
+  return { allowed: true, retryAfterSec: 0 };
+}
+
+function headerValue(req, key) {
+  const value = req.headers[key];
+  if (!value) return '';
+  return Array.isArray(value) ? value[0] : value;
+}
+
+function payloadString(payload, key) {
+  const value = payload?.[key];
+  if (typeof value !== 'string') return '';
+  return value.trim();
+}
+
+function pickString(...values) {
+  for (const value of values) {
+    if (typeof value === 'string' && value.trim()) return value.trim();
+  }
+  return '';
+}
+
+function setCors(res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+}
+
+async function handleContactForm(req, res) {
+  setCors(res);
+
+  const body = await collectBody(req);
+  let payload = {};
+  try {
+    payload = body ? JSON.parse(body) : {};
+  } catch {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
+    return;
+  }
+
+  const forwardedFor = headerValue(req, 'x-forwarded-for');
+  const ip =
+    (forwardedFor ? forwardedFor.split(',')[0].trim() : '') ||
+    headerValue(req, 'x-real-ip') ||
+    headerValue(req, 'cf-connecting-ip') ||
+    payloadString(payload, 'ip') ||
+    req.socket?.remoteAddress ||
+    'unknown';
+
+  const honeypot = pickString(
+    payloadString(payload, 'company_website'),
+    payloadString(payload, 'company'),
+    payloadString(payload, 'website'),
+  );
+  if (honeypot) {
+    console.log(`[webhook] Contact: honeypot triggered from ${ip}`);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: true }));
+    return;
+  }
+
+  const startedAt = Number(payload?._form_started_at ?? payload?.form_started_at);
+  if (
+    Number.isFinite(startedAt) &&
+    startedAt > 0 &&
+    Date.now() - startedAt < CONTACT_MIN_FORM_FILL_MS
+  ) {
+    console.log(`[webhook] Contact: too-fast submission from ${ip}`);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: true }));
+    return;
+  }
+
+  const rate = takeRateLimitSlot(ip);
+  if (!rate.allowed) {
+    res.writeHead(429, {
+      'Content-Type': 'application/json',
+      'Retry-After': String(rate.retryAfterSec),
+    });
+    res.end(JSON.stringify({ error: 'Too many requests. Please try again later.' }));
+    return;
+  }
+
+  if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
+    console.error('[webhook] Contact: missing Telegram credentials');
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Missing Telegram credentials' }));
+    return;
+  }
+
+  const name = payloadString(payload, 'name');
+  const contact = payloadString(payload, 'contact');
+  const dates = payloadString(payload, 'dates');
+  const service = payloadString(payload, 'service');
+  const message = payloadString(payload, 'message');
+
+  if (!contact || !message) {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Missing required fields' }));
+    return;
+  }
+
+  if (
+    !withinLimit(name, CONTACT_FIELD_LIMITS.name) ||
+    !withinLimit(contact, CONTACT_FIELD_LIMITS.contact) ||
+    !withinLimit(dates, CONTACT_FIELD_LIMITS.dates) ||
+    !withinLimit(service, CONTACT_FIELD_LIMITS.service) ||
+    !withinLimit(message, CONTACT_FIELD_LIMITS.message)
+  ) {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Invalid field length' }));
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneDigits = contact.replace(/\D/g, '');
+  if (!emailRegex.test(contact) && phoneDigits.length < 7) {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Invalid contact field' }));
+    return;
+  }
+
+  if (countLinks(contact) > 0 || isSpamText(name) || isSpamText(dates) || isSpamText(message)) {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Rejected as spam' }));
+    return;
+  }
+
+  const payloadLocation = payloadString(payload, 'location');
+  const payloadCoords = payloadString(payload, 'coords');
+  const location = payloadLocation || 'unknown';
+  const coords = payloadCoords || 'unknown';
+  const userAgent =
+    pickString(headerValue(req, 'user-agent'), payloadString(payload, 'userAgent')) || 'unknown';
+  const referer =
+    pickString(
+      headerValue(req, 'referer'),
+      payloadString(payload, 'referrer'),
+      payloadString(payload, 'page'),
+    ) || 'unknown';
+  const language =
+    pickString(headerValue(req, 'accept-language'), payloadString(payload, 'language')) ||
+    'unknown';
+  const timezone = payloadString(payload, 'timezone') || 'unknown';
+  const timestamp = new Date().toISOString();
+
+  const safeName = escapeHtml(name || '—');
+  const safeContact = escapeHtml(contact);
+  const safeDates = escapeHtml(dates || '—');
+  const safeService = escapeHtml(service || '—');
+  const safeMessage = escapeHtml(message);
+
+  const technical = [
+    `ip: ${ip}`,
+    `location: ${location}`,
+    `coords: ${coords}`,
+    `user_agent: ${userAgent}`,
+    `referrer: ${referer}`,
+    `locale: ${language}`,
+    `timezone: ${timezone}`,
+    `time: ${timestamp}`,
+  ].join('\n');
+
+  const text = [
+    '📩 <b>New Atrani.ru inquiry</b>',
+    '',
+    `👤 <b>Имя:</b> ${safeName}`,
+    `📞 <b>Контакт:</b> ${safeContact}`,
+    `🧭 <b>Услуга:</b> ${safeService}`,
+    `📅 <b>Даты и место:</b> ${safeDates}`,
+    `💬 <b>Сообщение:</b> ${safeMessage}`,
+    '',
+    '🧾 <b>Technical</b>',
+    `<pre>${escapeHtml(technical)}</pre>`,
+  ].join('\n');
+
+  try {
+    const response = await fetch(
+      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text,
+          parse_mode: 'HTML',
+          disable_web_page_preview: true,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      const details = await response.text();
+      console.error('[webhook] Contact: Telegram API failed:', details.slice(0, 200));
+      res.writeHead(502, { 'Content-Type': 'application/json' });
+      res.end(
+        JSON.stringify({ error: 'Telegram request failed', details: details.slice(0, 200) }),
+      );
+      return;
+    }
+
+    console.log(`[webhook] Contact: delivered to Telegram from ${ip}`);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: true }));
+  } catch (err) {
+    console.error('[webhook] Contact: fetch failed:', err.message);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Telegram request failed' }));
+  }
 }
 
 let rebuilding = false;
@@ -167,6 +441,20 @@ function collectBody(req) {
 }
 
 const server = createServer(async (req, res) => {
+  // CORS preflight for the public contact endpoint
+  if (req.method === 'OPTIONS' && req.url === '/hooks/send-telegram-atrani') {
+    setCors(res);
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  // Contact form (public, hardened)
+  if (req.method === 'POST' && req.url === '/hooks/send-telegram-atrani') {
+    await handleContactForm(req, res);
+    return;
+  }
+
   // Health check
   if (req.method === 'GET' && req.url === '/webhook/health') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -244,10 +532,13 @@ const server = createServer(async (req, res) => {
   res.end();
 });
 
-server.listen(PORT, '127.0.0.1', () => {
-  console.log(`[webhook] Listening on 127.0.0.1:${PORT}`);
-  console.log(`[webhook] Ghost:  POST /webhook/rebuild`);
-  console.log(`[webhook] GitHub: POST /hooks/redeploy-atrani-ru`);
-  console.log(`[webhook] Health: GET  /webhook/health`);
-  console.log(`[webhook] Secrets: Ghost=${GHOST_SECRET ? 'set' : 'MISSING'}, GitHub=${GITHUB_SECRET ? 'set' : 'MISSING'}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`[webhook] Listening on 0.0.0.0:${PORT}`);
+  console.log(`[webhook] Ghost:   POST /webhook/rebuild`);
+  console.log(`[webhook] GitHub:  POST /hooks/redeploy-atrani-ru`);
+  console.log(`[webhook] Contact: POST /hooks/send-telegram-atrani`);
+  console.log(`[webhook] Health:  GET  /webhook/health`);
+  console.log(
+    `[webhook] Secrets: Ghost=${GHOST_SECRET ? 'set' : 'MISSING'}, GitHub=${GITHUB_SECRET ? 'set' : 'MISSING'}, Telegram=${TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID ? 'set' : 'MISSING'}`,
+  );
 });

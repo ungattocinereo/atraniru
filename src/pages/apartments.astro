@@ -56,6 +56,7 @@ const apartments = [
     guests: 2,
     beds: 1,
     image: '/apartments/2room-in-atrani-in-center.webp',
+    inquiryOnly: true,
   },
   {
     id: 'orange-room',
@@ -92,6 +93,7 @@ const apartments = [
     guests: 6,
     beds: 3,
     image: '/apartments/villa-ravello-amalfiday-rent-1500x770.webp',
+    inquiryOnly: true,
   },
 ];
 ---
@@ -181,25 +183,39 @@ const apartments = [
                 </span>
               </div>
             </div>
-            <div class="apt-calendar-wrapper">
-              <div class="apt-calendar-header">
-                <p class="calendar-label">Календарь занятости</p>
+            {apt.inquiryOnly ? (
+              <div class="apt-calendar-wrapper apt-inquiry">
+                <div class="apt-calendar-header">
+                  <p class="calendar-label">Бронирование</p>
+                </div>
+                <p class="apt-inquiry-headline">Даты — по запросу</p>
+                <p class="apt-inquiry-sub">Эта комната бронируется напрямую: уточним свободные даты и условия в переписке.</p>
+                <a href="/contacts/" class="apt-inquiry-cta">
+                  Уточнить даты
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
               </div>
-              <div class="apt-calendar" data-apartment-id={apt.id}>
-                <div class="calendar-loading">Загрузка...</div>
+            ) : (
+              <div class="apt-calendar-wrapper">
+                <div class="apt-calendar-header">
+                  <p class="calendar-label">Календарь занятости</p>
+                </div>
+                <div class="apt-calendar" data-apartment-id={apt.id}>
+                  <div class="calendar-loading">Загрузка...</div>
+                </div>
+                <div class="calendar-legend">
+                  <span class="legend-item legend-available">
+                    <span class="legend-dot"></span> Свободно
+                  </span>
+                  <span class="legend-item legend-booked">
+                    <span class="legend-dot"></span> Занято
+                  </span>
+                  <span class="legend-item legend-today">
+                    <span class="legend-dot"></span> Сегодня
+                  </span>
+                </div>
               </div>
-              <div class="calendar-legend">
-                <span class="legend-item legend-available">
-                  <span class="legend-dot"></span> Свободно
-                </span>
-                <span class="legend-item legend-booked">
-                  <span class="legend-dot"></span> Занято
-                </span>
-                <span class="legend-item legend-today">
-                  <span class="legend-dot"></span> Сегодня
-                </span>
-              </div>
-            </div>
+            )}
           </div>
         </article>
       ))}
@@ -534,6 +550,61 @@ const apartments = [
 
   .legend-today .legend-dot {
     background: var(--color-orange);
+  }
+
+  /* Inquiry-only block (rooms without a connected calendar) */
+  .apt-inquiry {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 180px;
+    justify-content: center;
+  }
+
+  .apt-inquiry-headline {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--color-navy);
+    line-height: 1.15;
+  }
+
+  .apt-inquiry-sub {
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--color-gray-dark);
+    max-width: 38ch;
+  }
+
+  .apt-inquiry-cta {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: var(--color-navy-deep);
+    color: white;
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none;
+    transition: background 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+  }
+
+  .apt-inquiry-cta:hover {
+    background: var(--color-orange);
+    transform: translateX(2px);
+  }
+
+  .apt-inquiry-cta svg {
+    transition: transform 0.2s var(--ease-out);
+  }
+
+  .apt-inquiry-cta:hover svg {
+    transform: translateX(3px);
   }
 
   /* Responsive */

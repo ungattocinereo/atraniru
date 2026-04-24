@@ -285,7 +285,7 @@ async function handleContactForm(req, res) {
   ].join('\n');
 
   const text = [
-    '📩 <b>New Atrani.ru inquiry</b>',
+    '📩 New 🟣  Atrani.ru 🇷🇺🇷🇺🇷🇺 inquiry',
     '',
     `👤 <b>Имя:</b> ${safeName}`,
     `📞 <b>Контакт:</b> ${safeContact}`,

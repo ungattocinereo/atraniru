@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "optimize:images": "node scripts/optimize-images.mjs",
-    "prebuild": "npm run optimize:images",
+    "check:availability": "node scripts/check-availability.mjs",
+    "prebuild": "npm run check:availability && npm run optimize:images",
     "build": "astro build",
     "compress": "gzipper compress ./dist --brotli --gzip --include html,css,js,svg,json,xml,woff,woff2",
     "build:prod": "npm run build && npm run compress",

@@ -8,7 +8,7 @@
  * Output: public/data/availability.json
  */
 
-import { writeFileSync, mkdirSync } from 'fs';
+import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -16,77 +16,68 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = join(__dirname, '..', 'public', 'data');
 const OUTPUT_FILE = join(OUTPUT_DIR, 'availability.json');
 
-// Apartment definitions with their iCal feed URLs
+// Apartment definitions with their iCal feed URLs.
+// Source: greg, 2026-04-24. Each apartment merges all of its OTA feeds
+// (Booking.com + Airbnb) into a single set of booked dates.
 const apartments = [
-  {
-    id: 'awesome-view',
-    name: 'Apartments with an awesome view',
-    feeds: [
-      'https://www.airbnb.com/calendar/ical/3456236.ics?s=b68c893b2de331892cf36544c1c12e63'
-    ]
-  },
-  {
-    id: 'solo-room',
-    name: 'Solo Room',
-    feeds: [
-      'https://ical.booking.com/v1/export?t=50eb167d-a617-4f6e-862b-7b474516e903'
-    ]
-  },
-  {
-    id: 'central-room',
-    name: 'Central Room',
-    feeds: [
-      'https://ical.booking.com/v1/export?t=66c7dc38-0d5e-45dc-b22a-9d8e075ec149',
-      'https://ical.booking.com/v1/export?t=9dc9bc5e-c0d8-4727-9a6d-9a769afc138c'
-    ]
-  },
-  {
-    id: 'bunkbed-room',
-    name: 'Bunkbed Room',
-    feeds: [
-      'https://ical.booking.com/v1/export?t=b7023f35-c3ae-44bb-b122-ddc15f4d7e26'
-    ]
-  },
   {
     id: 'vintage-room',
     name: 'Vintage Room',
     feeds: [
-      'https://ical.booking.com/v1/export?t=e7b18790-16b3-4000-b2e0-c4b5076f20d5'
+      'https://ical.booking.com/v1/export/t/ea3e0ad0-f516-43af-a678-dd860ca9e8df.ics',
+      'https://www.airbnb.com/calendar/ical/1491803199632820467.ics?t=c7afc2b8c66841ddb0a4a34de5861fb0'
     ]
   },
   {
     id: 'orange-room',
     name: 'Orange Room',
     feeds: [
-      'https://ical.booking.com/v1/export?t=ac4e5066-83f2-4720-8d10-dd865612e91d'
+      'https://ical.booking.com/v1/export/t/acb8b56c-0940-4aeb-ab6d-3de433afab7f.ics',
+      'https://www.airbnb.com/calendar/ical/1622640206186838346.ics?t=717921b0057141649a080db157013617'
+    ]
+  },
+  {
+    id: 'solo-room',
+    name: 'Solo Room',
+    feeds: [
+      'https://ical.booking.com/v1/export/t/5299de87-de9b-499a-a1a2-311fe09f6774.ics',
+      'https://www.airbnb.com/calendar/ical/1623848144637841636.ics?t=59d5a4dd90cb45da90493feafb555e39'
+    ]
+  },
+  {
+    id: 'youth-room',
+    name: 'Youth Room',
+    feeds: [
+      'https://ical.booking.com/v1/export/t/940e8ee6-25a3-4966-9eab-c83b54827e78.ics',
+      'https://www.airbnb.com/calendar/ical/1624089061068359230.ics?t=7cbf451bfed643a5a403dd2d9489df63'
+    ]
+  },
+  {
+    id: 'awesome-view',
+    name: 'Apartments with an awesome view',
+    feeds: [
+      'https://www.airbnb.com/calendar/ical/3456236.ics?t=eb37cdcccf9a4865b675311c819e0fd2'
     ]
   },
   {
     id: 'casa-carina',
     name: 'Casa Carina',
     feeds: [
-      'https://www.airbnb.com/calendar/ical/20551225.ics?s=dbbc3c718fa519684c8b4bc62d4e0708'
+      'https://www.airbnb.com/calendar/ical/20551225.ics?t=d02159c760e14554aa6b68ff6c99baf6'
     ]
   },
   {
     id: 'harmony-suite',
     name: 'Harmony Suite',
     feeds: [
-      'https://www.airbnb.com/calendar/ical/37988248.ics?s=6146074b67a4454d6bb616ce31309606'
+      'https://www.airbnb.com/calendar/ical/37988248.ics?t=522d3bd9a171444ca1f131daf4c21443'
     ]
   },
   {
     id: 'royal-suite',
     name: 'Royal Suite',
     feeds: [
-      'https://www.airbnb.com/calendar/ical/973032288955949308.ics?s=bca25b1a63503b216e54dd0d673c9e31'
-    ]
-  },
-  {
-    id: 'villa-ravello',
-    name: 'Villa In Ravello',
-    feeds: [
-      'https://ical.booking.com/v1/export?t=d1d7f32f-23b9-4914-b348-07719a6bd239'
+      'https://www.airbnb.com/calendar/ical/973032288955949308.ics?t=06b2618b55984543b0d88662b90ccffd'
     ]
   }
 ];
@@ -206,52 +197,67 @@ async function fetchFeed(url) {
   }
 }
 
+async function fetchApartment(apt) {
+  const fetched = await Promise.all(apt.feeds.map((url) => fetchFeed(url)));
+
+  let feedsFailed = 0;
+  const allEvents = [];
+  for (const text of fetched) {
+    if (text) {
+      allEvents.push(...parseIcal(text));
+    } else {
+      feedsFailed++;
+    }
+  }
+
+  const bookedDates = expandBookedDates(allEvents);
+  return {
+    id: apt.id,
+    name: apt.name,
+    bookedDates: [...bookedDates].sort(),
+    feedsFailed,
+    totalFeeds: apt.feeds.length,
+    eventsCount: allEvents.length
+  };
+}
+
 async function main() {
-  console.log('Checking apartment availability...\n');
+  console.log(`Checking availability for ${apartments.length} apartments...\n`);
 
   const result = {
     generated: new Date().toISOString(),
     apartments: {}
   };
 
-  for (const apt of apartments) {
-    console.log(`Fetching: ${apt.name} (${apt.feeds.length} feed(s))`);
+  // Fetch all apartments in parallel — worst case ~15s (single fetch timeout),
+  // not feeds × 15s as the previous serial loop allowed.
+  const settled = await Promise.all(apartments.map((apt) => fetchApartment(apt)));
 
-    const allEvents = [];
-    let feedsFailed = 0;
-
-    for (const feedUrl of apt.feeds) {
-      const icalText = await fetchFeed(feedUrl);
-      if (icalText) {
-        const events = parseIcal(icalText);
-        allEvents.push(...events);
-        console.log(`  - Got ${events.length} events`);
-      } else {
-        feedsFailed++;
-      }
-    }
-
-    const bookedDates = expandBookedDates(allEvents);
-
-    result.apartments[apt.id] = {
-      name: apt.name,
-      bookedDates: [...bookedDates].sort(),
-      feedsFailed,
-      totalFeeds: apt.feeds.length,
-      eventsCount: allEvents.length
-    };
-
-    console.log(`  Total booked dates: ${bookedDates.size}\n`);
+  for (const apt of settled) {
+    const { id, ...rest } = apt;
+    result.apartments[id] = rest;
+    const status = rest.feedsFailed > 0 ? `(${rest.feedsFailed}/${rest.totalFeeds} feed failed)` : '';
+    console.log(`  ${rest.name}: ${rest.bookedDates.length} booked days, ${rest.eventsCount} events ${status}`);
   }
 
-  // Write output
   mkdirSync(OUTPUT_DIR, { recursive: true });
   writeFileSync(OUTPUT_FILE, JSON.stringify(result, null, 2));
-  console.log(`\nAvailability data written to: ${OUTPUT_FILE}`);
-  console.log(`Generated at: ${result.generated}`);
+  console.log(`\nWrote ${OUTPUT_FILE} (generated ${result.generated})`);
 }
 
-main().catch(err => {
-  console.error('Fatal error:', err);
-  process.exit(1);
+main().catch((err) => {
+  console.error('Availability fetch failed:', err.message);
+  // Never block the build: keep the previous JSON if it exists, otherwise
+  // write an empty stub so the page still loads.
+  if (!existsSync(OUTPUT_FILE)) {
+    mkdirSync(OUTPUT_DIR, { recursive: true });
+    writeFileSync(
+      OUTPUT_FILE,
+      JSON.stringify({ generated: new Date().toISOString(), apartments: {} }, null, 2),
+    );
+    console.error(`Wrote empty fallback at ${OUTPUT_FILE}`);
+  } else {
+    console.error(`Keeping previous ${OUTPUT_FILE}`);
+  }
+  process.exit(0);
 });

@@ -33,5 +33,8 @@ data/queue/
 # image optimization: local backup of originals before re-encoding
 public/images-original/
 
+# regenerated each build by scripts/check-availability.mjs (prebuild step)
+public/data/availability.json
+
 # visual audit output (Playwright screenshots)
 screenshots/

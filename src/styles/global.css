@@ -2,8 +2,8 @@
    Atrani.ru - Navy Brutalist Design System (Concept 8)
    ========================================================================== */
 
-/* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700;800;900&display=swap');
+/* Self-hosted fonts (cyrillic + latin subsets) */
+@import './fonts.css';
 
 /* ==========================================================================
    CSS Variables

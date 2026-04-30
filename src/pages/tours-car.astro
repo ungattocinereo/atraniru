@@ -1,6 +1,105 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const SITE = 'https://atrani.ru';
+
+const toursCarSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Автомобильные экскурсии по Амальфитанскому побережью",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "TouristTrip",
+        "name": "Вдоль побережья Амальфи — от Сорренто до Равелло",
+        "description": "Классическое путешествие по трассе SS163: Позитано, Амальфи, Атрани, Равелло. Смотровые площадки, галереи, пляжи и местные деликатесы.",
+        "image": `${SITE}/images/index/excursion-by-car.webp`,
+        "url": `${SITE}/tours-car`,
+        "itinerary": {
+          "@type": "ItemList",
+          "itemListElement": [
+            { "@type": "City", "name": "Sorrento" },
+            { "@type": "City", "name": "Positano" },
+            { "@type": "City", "name": "Amalfi" },
+            { "@type": "City", "name": "Atrani" },
+            { "@type": "City", "name": "Ravello" }
+          ]
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "400",
+          "priceCurrency": "EUR",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": "400",
+            "maxPrice": "600",
+            "priceCurrency": "EUR",
+            "description": "до 3 часов / 4-6 часов"
+          },
+          "availability": "https://schema.org/InStock"
+        },
+        "touristType": "Independent travelers",
+        "provider": {
+          "@type": "TravelAgency",
+          "@id": `${SITE}/#agency`,
+          "name": "Atrani.ru — АМАЛЬФИГЕТЬ",
+          "url": SITE,
+          "telephone": "+39 327 097 2329"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "TouristTrip",
+        "name": "Вкус гор — гастрономическое путешествие в Трамонти",
+        "description": "Винодельни, сыроварни и горные деревни долины Трамонти. Дегустации местных продуктов с видами на побережье Амальфи.",
+        "itinerary": {
+          "@type": "ItemList",
+          "itemListElement": [
+            { "@type": "City", "name": "Tramonti" },
+            { "@type": "City", "name": "Ravello" }
+          ]
+        },
+        "offers": {
+          "@type": "Offer",
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock"
+        },
+        "provider": {
+          "@type": "TravelAgency",
+          "@id": `${SITE}/#agency`,
+          "name": "Atrani.ru — АМАЛЬФИГЕТЬ"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "TouristTrip",
+        "name": "Персональный маршрут по Амальфитанскому побережью",
+        "description": "Маршрут под вас: точки старта, продолжительность и точки интереса выбираете сами. Гибкий план от местных.",
+        "offers": {
+          "@type": "Offer",
+          "price": "280",
+          "priceCurrency": "EUR",
+          "description": "От €280 за группу до 4 человек",
+          "availability": "https://schema.org/InStock"
+        },
+        "provider": {
+          "@type": "TravelAgency",
+          "@id": `${SITE}/#agency`,
+          "name": "Atrani.ru — АМАЛЬФИГЕТЬ"
+        }
+      }
+    }
+  ]
+};
 ---
 
 <Layout
@@ -9,6 +108,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
   ogImage="/images/index/excursion-by-car.webp"
   ogImageAlt="Экскурсия на машине по Амальфитанскому побережью"
 >
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(toursCarSchema)} />
   <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Впечатления', url: '/experience' }, { name: 'Экскурсии на машине', url: '/tours-car' }]} hideVisually={true} />
   <!-- Hero -->
   <section class="hero">

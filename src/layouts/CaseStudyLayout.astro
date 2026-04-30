@@ -1,5 +1,6 @@
 ---
 import Layout from './Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 interface Props {
   title: string;
@@ -10,12 +11,52 @@ interface Props {
   heroAccent?: string;
   location: string;
   heroImage: string;
+  galleryImages?: string[];
+  caseStudyName?: string;
 }
 
-const { title, description, ogImage, eyebrow, heroTitle, heroAccent, location, heroImage } = Astro.props;
+const { title, description, ogImage, eyebrow, heroTitle, heroAccent, location, heroImage, galleryImages, caseStudyName } = Astro.props;
+
+const SITE = 'https://atrani.ru';
+const slug = Astro.url.pathname.split('/').filter(Boolean).pop() || '';
+const galleryName = caseStudyName || `${heroTitle}${heroAccent ? ' ' + heroAccent : ''}`;
+
+const allImages = [heroImage, ...(galleryImages ?? [])];
+
+const imageGallerySchema = {
+  "@context": "https://schema.org",
+  "@type": "ImageGallery",
+  "name": galleryName,
+  "description": description,
+  "url": new URL(Astro.url.pathname, SITE).href,
+  "creator": {
+    "@type": "Organization",
+    "@id": `${SITE}/#agency`,
+    "name": "Atrani.ru — АМАЛЬФИГЕТЬ",
+    "url": SITE
+  },
+  "locationCreated": {
+    "@type": "Place",
+    "name": location
+  },
+  "image": allImages.map((img) => ({
+    "@type": "ImageObject",
+    "contentUrl": img.startsWith('http') ? img : `${SITE}${img}`,
+    "name": galleryName
+  }))
+};
 ---
 
-<Layout title={title} description={description} ogImage={ogImage}>
+<Layout title={title} description={description} ogImage={ogImage} ogImageAlt={galleryName}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(imageGallerySchema)} />
+  <Breadcrumbs
+    items={[
+      { name: 'Главная', url: '/' },
+      { name: 'Фотосессии', url: '/photos' },
+      { name: galleryName, url: `/photosessions/${slug}` }
+    ]}
+    hideVisually={true}
+  />
   <article class="cs">
     <nav class="cs-back">
       <a href="/photos">← Все фотосессии</a>

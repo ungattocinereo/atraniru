@@ -38,8 +38,8 @@ export default defineConfig({
             ['/apartments/', '/experience/', '/contacts/', '/blog/'].includes(path)) {
           return { ...item, priority: 0.9, changefreq: 'weekly' };
         }
-        if (['/tours-car', '/transport', '/photos', '/orel-i-reshka-amalfi'].includes(path) ||
-            ['/tours-car/', '/transport/', '/photos/', '/orel-i-reshka-amalfi/'].includes(path)) {
+        if (['/tours-car', '/transport', '/photos', '/orel-i-reshka-amalfi', '/parking'].includes(path) ||
+            ['/tours-car/', '/transport/', '/photos/', '/orel-i-reshka-amalfi/', '/parking/'].includes(path)) {
           return { ...item, priority: 0.8, changefreq: 'monthly' };
         }
         if (path.startsWith('/blog/')) {

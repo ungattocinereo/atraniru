@@ -1,0 +1,1497 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+        {
+            "@type": "Question",
+            "name": "Сколько стоит парковка на Амальфитанском побережье в 2026 году?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "В среднем €3–5 в час в платных зонах, в Позитано — €8–12 в час. Самые дорогие частные гаражи доходят до €50–90 в сутки. Дешевле всего в Виетри-суль-Маре (€1,50–2 в час). Цены в высокий сезон (апрель–октябрь) выше."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Что такое ZTL и какой штраф за въезд?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "ZTL (Zona a Traffico Limitato) — зоны ограниченного движения в исторических центрах Амальфи, Позитано, Равелло и Атрани. Контролируются камерами по номерам. Штраф — от €150 плюс эвакуация при необходимости. Гости отелей могут быть освобождены, если отель зарегистрирует номер машины."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Можно ли парковаться в Атрани?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "С июня по сентябрь только 4 часа подряд по €3/час с 8:00 до 20:00. Ночная парковка с 20:00 до 8:00 запрещена. Атрани не подходит как база для дневной стоянки летом — лучше использовать гараж Luna Rossa в Амальфи (туннель напрямую соединяет города)."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Где парковаться в Позитано в высокий сезон?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Лучшая стратегия — приехать до 9:00 утра или оставить машину в Ночелле/Монтепертузо (бесплатно) и спуститься на автобусе Flavio Gioia за €1,60. Платные синие зоны — €3/час, частные гаражи в центре — €8–12/час. После 10:00 летом свободных мест почти нет."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Какие приложения для оплаты парковки работают в Италии?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "EasyPark — самое популярное приложение по всей Италии. Работает в большинстве городов побережья: можно платить и продлевать парковку удалённо в синих зонах. Не нужно бегать к паркомату с монетами."
+            }
+        },
+        {
+            "@type": "Question",
+            "name": "Как сэкономить на парковке на Амальфи?",
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Три рабочих стратегии: 1) Park & Ride — оставить машину в Салерно или Виетри-суль-Маре и ездить паромами TravelMar или автобусами SITA. Экономия €30–50/сутки. 2) Бронировать отель с парковкой (часто бесплатно). 3) Использовать дневной абонемент в Прайано: €15 за 6 часов или €30 за 14 часов."
+            }
+        }
+    ]
+};
+
+const towns = [
+    {
+        name: 'Амальфи',
+        badge: 'Лучший для ночёвки',
+        options: [
+            {
+                name: 'Гараж Luna Rossa',
+                perHour: '2–4€',
+                perDay: '25–45€',
+                notes: '170 авто + 30 мото. Долгая стоянка: 40€/сутки в высокий сезон (Пасха – 3 ноября, 27 дек. – 6 янв.); 25€/сутки в межсезонье. Туннель напрямую соединяет с Атрани.',
+                limits: 'Запрет газовых машин (метан). Макс. высота 2 м. Заезд/выезд в 12:00.',
+                source: 'official'
+            },
+            {
+                name: 'Il Porto (Piazza Flavio Gioia)',
+                perHour: '3–6€',
+                notes: 'У самого порта. На первые 2 часа возможна надбавка.',
+                limits: 'Цены меняются по сезону — внимательно читайте знаки.',
+                source: 'aggregate'
+            }
+        ],
+        tip: 'Luna Rossa — самый предсказуемый вариант на 1+ ночь. Официальный тариф lunga sosta убирает почасовую путаницу.'
+    },
+    {
+        name: 'Позитано',
+        badge: 'Самый сложный',
+        options: [
+            {
+                name: 'Синие зоны (strisce blu)',
+                perHour: '3€',
+                perDay: '8€',
+                notes: 'Самый дешёвый вариант, если повезёт найти место. По данным туристического бюро Позитано.',
+                limits: 'Мест очень мало, оборачиваются быстро в высокий сезон.',
+                source: 'official'
+            },
+            {
+                name: 'Частные гаражи в центре',
+                perHour: '8–12€',
+                perDay: '50–90€',
+                notes: 'Самые дорогие на побережье. Часто заняты к 10:00 летом.',
+                limits: 'Каждый начатый час — полный. Внимательно читайте прайс.',
+                source: 'private'
+            },
+            {
+                name: 'Ночелле / Монтепертузо',
+                perHour: 'бесплатно',
+                perDay: 'бесплатно',
+                notes: 'Парковка в горах над Позитано. Вниз — на автобусе Flavio Gioia (€1,60) или пешком ~35 минут по лестницам.',
+                limits: 'Даже здесь мест мало в пик.',
+                source: 'local'
+            }
+        ],
+        tip: 'Приезжайте до 9:00 или паркуйтесь в горах и спускайтесь автобусом. Договаривайтесь с отелем заранее.'
+    },
+    {
+        name: 'Равелло',
+        badge: 'Горный город',
+        options: [
+            {
+                name: 'Parcheggio Auditorium (Оскар Нимейер)',
+                perHour: '4€',
+                perDay: '40€',
+                notes: 'Официально: 4€/час с 08:00 до 24:00, 2,50€/час ночью. 80 мест.',
+                limits: 'Разные секции — разные правила (lato monte/valle). Читайте знаки.',
+                source: 'official'
+            },
+            {
+                name: 'Зона Piazza Duomo',
+                perHour: '2,50–5€',
+                perDay: '15–30€',
+                notes: '~140 мест. Цены меняются по сезону.',
+                limits: 'Может закрываться на фестивали, свадьбы, праздники.',
+                source: 'aggregate'
+            }
+        ],
+        tip: 'Базовый бюджет: 4€/час или 40€/сутки. Но всегда сверяйтесь с разметкой на месте.'
+    },
+    {
+        name: 'Атрани',
+        badge: 'Жёсткие лимиты',
+        options: [
+            {
+                name: 'Синие зоны',
+                perHour: '3€',
+                notes: 'Официально: с июня по сентябрь для нерезидентов 3€/час, максимум 4 часа подряд (08:00–20:00).',
+                limits: 'Ночная парковка летом запрещена с 20:00 до 08:00. Не подходит как база на день.',
+                source: 'official'
+            }
+        ],
+        tip: 'НЕ планируйте Атрани как место дневной стоянки летом. Лимит 4 часа и запрет на ночь делают его непрактичным.'
+    },
+    {
+        name: 'Прайано',
+        badge: 'Прозрачный прайс',
+        options: [
+            {
+                name: 'Синие зоны (strisce blu)',
+                perHour: '3€',
+                perDay: '30€',
+                notes: 'Официально: 3€/час круглый год. Дневные пакеты: 15€ за 6 часов, 30€ за 14 часов. Месячный абонемент для нерезидентов: 100€.',
+                limits: 'Апр.–окт.: 08:00–22:00. Нояб.–март: 08:00–20:00. Праздники тоже платные.',
+                source: 'official'
+            }
+        ],
+        tip: 'Если стоите 6+ часов, дневной пакет за €15 выгоднее почасового. Месячный абонемент идеален для регулярных поездок.'
+    },
+    {
+        name: 'Майори',
+        badge: 'Удобнее всего',
+        options: [
+            {
+                name: 'Синие зоны на набережной',
+                perHour: '3€',
+                notes: 'Мест больше, чем в Позитано или Амальфи.',
+                limits: 'Сезонные цены.',
+                source: 'aggregate'
+            },
+            {
+                name: 'Costa d\'Angolo Pietra di Luna',
+                perHour: '3–5€',
+                perDay: '20–30€',
+                notes: '100+ мест, шлагбаум, видеонаблюдение. Будни 3€/час (20–25€/сутки). Выходные 5€/час (25–30€/сутки).',
+                limits: 'Охраняемая парковка с прозрачным прайсом.',
+                source: 'private'
+            }
+        ],
+        tip: 'Один из самых лёгких городов для парковки. Хорошая база для вылазок в Минори и Амальфи.'
+    },
+    {
+        name: 'Минори',
+        badge: 'Маленький город',
+        options: [
+            {
+                name: 'Via Pioppi / набережная',
+                perHour: '3€',
+                notes: 'Мест немного, но доступнее, чем у соседей.',
+                limits: 'Общая ёмкость небольшая.',
+                source: 'aggregate'
+            }
+        ],
+        tip: 'Тихая альтернатива Амальфи с приличным автобусным сообщением.'
+    },
+    {
+        name: 'Четара',
+        badge: 'Рыбацкий городок',
+        options: [
+            {
+                name: 'Синие зоны у порта',
+                perHour: '1,50–4€',
+                notes: 'Места исчезают быстро в часы рестораном и активности порта.',
+                limits: 'Очень ограниченная ёмкость.',
+                source: 'aggregate'
+            }
+        ],
+        tip: 'Отлично для ужина, но после полудня летом на место не рассчитывайте.'
+    },
+    {
+        name: 'Виетри-суль-Маре',
+        badge: 'Самое дешёвое',
+        options: [
+            {
+                name: 'Piazza Matteotti / Marina',
+                perHour: '1,50–2€',
+                notes: 'Самые низкие цены на побережье. Две большие муниципальные стоянки у пляжа.',
+                limits: 'Близко к Салерно, отличное автобусное и паромное сообщение.',
+                source: 'aggregate'
+            }
+        ],
+        tip: 'Лучшая бюджетная стратегия: оставить машину тут и ездить паромами или автобусами по побережью. Экономия €30–50/сутки против Позитано.'
+    },
+    {
+        name: 'Конка-деи-Марини',
+        badge: 'Очень мало мест',
+        options: [
+            {
+                name: 'Муниципальные синие зоны',
+                perDay: '20€',
+                notes: 'Мест действительно очень мало. Узкие дороги.',
+                limits: '«Парковка как повезёт» — мест реально не хватает.',
+                source: 'official'
+            }
+        ],
+        tip: 'Не рассчитывайте найти тут место. Планируйте альтернативу.'
+    },
+    {
+        name: 'Фуроре',
+        badge: 'Удалённый',
+        options: [
+            {
+                name: 'La Praia',
+                perHour: '2,50€',
+                notes: '2 км пешком до фьорда.',
+                limits: 'Мест ограниченное число.',
+                source: 'aggregate'
+            }
+        ],
+        tip: 'Готовьтесь идти пешком. Фьорд того стоит.'
+    }
+];
+
+const sourceLabels = {
+    official: 'Официально',
+    aggregate: 'По данным',
+    private: 'Частный',
+    local: 'Местная инфо'
+};
+
+const strategies = [
+    {
+        accent: 'Стратегия',
+        title: 'Park & Ride',
+        text: 'Оставьте машину в большой и дешёвой парковке (Салерно, Виетри-суль-Маре или Сорренто) и перемещайтесь по побережью паромами или автобусами SITA. В пик сезон проблема не в цене — в наличии мест.'
+    },
+    {
+        accent: 'До 9:00 утра',
+        title: 'Приезжайте рано',
+        text: 'После 10:00 летом даже платные гаражи в Позитано и Амальфи заняты. Ранний приезд — самая эффективная одиночная стратегия, чтобы найти место.'
+    },
+    {
+        accent: 'Удалённо',
+        title: 'Приложение EasyPark',
+        text: 'Оплачивайте и продлевайте парковку в синих зонах удалённо по всей Италии. Не нужно бегать к паркомату. Работает в большинстве городов побережья.'
+    },
+    {
+        accent: 'Включена',
+        title: 'Отель с парковкой',
+        text: 'Многие отели и B&B предлагают парковку (бесплатно или €15–25/сутки). Это сэкономит €25–50/сутки против общественных гаражей в популярных городах.'
+    }
+];
+
+const routes = [
+    {
+        title: 'Бюджет + комфорт',
+        recommended: true,
+        base: 'Майори или Минори',
+        benefits: [
+            'Доступная парковка (3€/час)',
+            'Хорошее автобусное и паромное сообщение',
+            'Менее людные пляжи',
+            'Много ресторанов'
+        ]
+    },
+    {
+        title: 'Без машины',
+        base: 'Салерно или Виетри-суль-Маре',
+        benefits: [
+            'Самая дешёвая парковка (1,50–2€/час)',
+            'Перемещения паромами TravelMar',
+            'Экономия €30–50/сутки на парковке',
+            'Без стресса серпантина'
+        ]
+    },
+    {
+        title: 'Полная мобильность',
+        base: 'Отель с парковкой в Равелло',
+        benefits: [
+            'Парковка часто включена',
+            'Тихая горная база',
+            'Захватывающие виды',
+            'Лёгкий выезд в любой город'
+        ]
+    }
+];
+
+const warnings = [
+    {
+        title: 'Не паркуйтесь на обочине SS163',
+        text: 'Никогда не ставьте машину на обочине SS163 (прибрежного шоссе). Массовая эвакуация — обычное дело. Штраф + эвакуатор = €150–250+.'
+    },
+    {
+        title: 'Цвет линий разметки',
+        text: 'Белые линии = только резиденты. Жёлтые = только спецслужбы. Парковка там — гарантированный штраф. Ищите знаки «Solo Residenti».'
+    },
+    {
+        title: 'Заправок почти нет',
+        text: 'На самом побережье заправок почти не найти. Заправляйтесь в Салерно или ДО въезда на прибрежную дорогу.'
+    },
+    {
+        title: 'Наличные на парковку',
+        text: 'Многие паркоматы и небольшие стоянки принимают только наличные. Держите при себе мелкие купюры и монеты.'
+    }
+];
+---
+
+<Layout
+    title="Парковка на Амальфи 2026: цены, ZTL, гаражи | Atrani.ru"
+    description="Полный гид по парковкам Амальфитанского побережья: цены 2026, зоны ZTL, гаражи в Позитано, Амальфи, Равелло. Стратегии экономии и предупреждения о штрафах."
+    ogImage="/images/atrani-with-3-bikes-no-plates.webp"
+    ogImageAlt="Парковка на Амальфитанском побережье"
+>
+    <script type="application/ld+json" slot="head" set:html={JSON.stringify(faqSchema)} />
+    <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Парковки', url: '/parking' }]} hideVisually={true} />
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg-text" aria-hidden="true">PARKING</div>
+
+        <div class="hero-content">
+            <p class="hero-label">Амальфитанское побережье</p>
+            <h1>
+                <span class="highlight">ПАРКОВ-</span>
+                КИ
+            </h1>
+            <p class="hero-subtitle">Где, по чём и как не получить штраф. Полный гайд 2026 — цены, ZTL и стратегии экономии.</p>
+            <div class="hero-actions">
+                <a href="#prices" class="btn btn-white">Цены по городам</a>
+                <a href="#ztl" class="btn btn-outline" style="border-color: white; color: white;">Зоны ZTL</a>
+            </div>
+        </div>
+
+        <div class="hero-image">
+            <img src="/images/atrani-with-3-bikes-no-plates.webp" alt="Атрани, узкие улицы и припаркованные мотоциклы" decoding="async" loading="eager">
+        </div>
+
+        <div class="scroll-indicator">Scroll</div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee" aria-hidden="true">
+        <div class="marquee-content">
+            <div class="marquee-item">
+                POSITANO <span></span> AMALFI <span></span> RAVELLO <span></span> ATRANI <span></span> ZTL <span></span> EASYPARK <span></span>
+            </div>
+            <div class="marquee-item">
+                POSITANO <span></span> AMALFI <span></span> RAVELLO <span></span> ATRANI <span></span> ZTL <span></span> EASYPARK <span></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reality Check -->
+    <section class="intro-section">
+        <div class="intro-grid">
+            <div class="intro-content reveal">
+                <div class="section-header">
+                    <p class="section-label">Честно о главном</p>
+                    <h2 class="section-title">Парковка тут — это реально сложно</h2>
+                </div>
+                <p class="intro-text">
+                    Амальфитанское побережье остаётся одним из самых неудобных мест Италии для парковки. Города построены вертикально по скалам, ровного места почти нет. В пик сезона (апрель–октябрь) средний тариф €5–8 в час, а после 10:00 утра найти место в Позитано или Амальфи практически невозможно.
+                </p>
+                <p class="intro-text">
+                    Этот гайд собирает официальные муниципальные тарифы, проверенные цены частных гаражей и рабочие стратегии экономии. Мы обновляем его каждый сезон.
+                </p>
+
+                <div class="line-legend">
+                    <div class="legend-item legend-blue">
+                        <span class="legend-bar"></span>
+                        <span><strong>Синие линии</strong> — платная парковка (strisce blu)</span>
+                    </div>
+                    <div class="legend-item legend-white">
+                        <span class="legend-bar"></span>
+                        <span><strong>Белые линии</strong> — бесплатно, но обычно только резиденты</span>
+                    </div>
+                    <div class="legend-item legend-yellow">
+                        <span class="legend-bar"></span>
+                        <span><strong>Жёлтые линии</strong> — спецслужбы. Штраф гарантирован.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="intro-image reveal">
+                <img src="/images/transport/bus-amalfi-atrani-salerno.webp" alt="Серпантин Амальфитанского побережья" decoding="async" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <!-- Prices by Town -->
+    <section class="towns" id="prices">
+        <div class="section-header reveal">
+            <p class="section-label">01 — Цены</p>
+            <h2 class="section-title">В каждом городе разная цена</h2>
+        </div>
+
+        <p class="section-intro reveal">
+            Цены ниже отражают официальные муниципальные тарифы 2025–2026 (где опубликованы) и проверенные диапазоны частных гаражей. В высокий сезон цены могут меняться.
+        </p>
+
+        <div class="towns-grid">
+            {towns.map((town) => (
+                <article class="town-card reveal">
+                    <div class="town-header">
+                        <h3 class="town-name">{town.name}</h3>
+                        <span class="town-badge">{town.badge}</span>
+                    </div>
+
+                    <div class="town-options">
+                        {town.options.map((opt) => (
+                            <div class="parking-option">
+                                <div class="option-head">
+                                    <span class="option-name">{opt.name}</span>
+                                    <span class={`option-source source-${opt.source}`}>{sourceLabels[opt.source]}</span>
+                                </div>
+                                <div class="option-prices">
+                                    {opt.perHour && (
+                                        <div class="price-block">
+                                            <span class="price-label">в час</span>
+                                            <span class="price-value">{opt.perHour}</span>
+                                        </div>
+                                    )}
+                                    {opt.perDay && (
+                                        <div class="price-block">
+                                            <span class="price-label">в сутки</span>
+                                            <span class="price-value">{opt.perDay}</span>
+                                        </div>
+                                    )}
+                                </div>
+                                {opt.notes && <p class="option-notes">{opt.notes}</p>}
+                                {opt.limits && <p class="option-limits"><strong>Ограничения:</strong> {opt.limits}</p>}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div class="town-tip">
+                        <span class="tip-icon" aria-hidden="true">→</span>
+                        <span>{town.tip}</span>
+                    </div>
+                </article>
+            ))}
+        </div>
+    </section>
+
+    <!-- ZTL Zones -->
+    <section class="ztl" id="ztl">
+        <div class="ztl-bg-text" aria-hidden="true">ZTL</div>
+        <div class="ztl-content">
+            <div class="section-header reveal">
+                <p class="section-label">02 — Внимание</p>
+                <h2 class="section-title">ZTL: Зоны ограниченного движения</h2>
+            </div>
+
+            <p class="ztl-intro reveal">
+                Зоны ограниченного движения (Zona a Traffico Limitato) действуют в исторических центрах <strong>Амальфи, Позитано, Равелло и Атрани</strong>. Контроль ведётся камерами, которые автоматически считывают номера.
+            </p>
+
+            <div class="ztl-checks reveal">
+                <div class="check-item">
+                    <span class="check-num">01</span>
+                    <div class="check-content">
+                        <h4>Время действия</h4>
+                        <p>Указано на знаках при въезде в каждую зону. Внимательно читайте.</p>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <span class="check-num">02</span>
+                    <div class="check-content">
+                        <h4>Класс машины</h4>
+                        <p>Действуют ограничения. Машины Euro 0–3 обычно запрещены.</p>
+                    </div>
+                </div>
+                <div class="check-item">
+                    <span class="check-num">03</span>
+                    <div class="check-content">
+                        <h4>Гости отелей</h4>
+                        <p>Могут быть освобождены при предварительной регистрации. Спросите на ресепшене.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ztl-alert reveal">
+                <div class="alert-head">
+                    <span class="alert-icon" aria-hidden="true">!</span>
+                    <h4>Штраф: от €150 и выше</h4>
+                </div>
+                <p>Нарушения наказываются штрафом от €150 плюс расходы на эвакуатор при необходимости.</p>
+                <p class="alert-note">Полезно знать: даже если вы уже выехали из отеля, проживание обычно может зарегистрировать ваш номер задним числом. Документы о проживании коммуна обычно собирает в течение 1–2 месяцев.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategies -->
+    <section class="strategies-section">
+        <div class="section-header reveal">
+            <p class="section-label">03 — Стратегии</p>
+            <h2 class="section-title">Как сэкономить деньги и нервы</h2>
+        </div>
+
+        <div class="strategies-grid">
+            {strategies.map((s) => (
+                <article class="strategy-card reveal">
+                    <span class="strategy-accent">{s.accent}</span>
+                    <h3 class="strategy-title">{s.title}</h3>
+                    <p class="strategy-text">{s.text}</p>
+                </article>
+            ))}
+        </div>
+    </section>
+
+    <!-- Routes (3 scenarios) -->
+    <section class="routes-section">
+        <div class="section-header reveal">
+            <p class="section-label">04 — Сценарии</p>
+            <h2 class="section-title">Три способа сделать всё правильно</h2>
+        </div>
+
+        <div class="routes-grid">
+            {routes.map((r, i) => (
+                <article class={`route-scenario reveal ${r.recommended ? 'recommended' : ''}`}>
+                    {r.recommended && <span class="route-star">Рекомендуем</span>}
+                    <span class="route-num">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 class="route-title">{r.title}</h3>
+                    <p class="route-base"><strong>База:</strong> {r.base}</p>
+                    <ul class="route-benefits">
+                        {r.benefits.map((b) => <li>{b}</li>)}
+                    </ul>
+                </article>
+            ))}
+        </div>
+    </section>
+
+    <!-- Warnings -->
+    <section class="warnings-section">
+        <div class="section-header reveal">
+            <p class="section-label">05 — Чего НЕ делать</p>
+            <h2 class="section-title">Не учитесь на своих ошибках</h2>
+        </div>
+
+        <div class="warnings-grid">
+            {warnings.map((w, i) => (
+                <article class="warning-card reveal">
+                    <span class="warning-num">{String(i + 1).padStart(2, '0')}</span>
+                    <h3 class="warning-title">{w.title}</h3>
+                    <p class="warning-text">{w.text}</p>
+                </article>
+            ))}
+        </div>
+    </section>
+
+    <!-- Alternatives -->
+    <section class="alternatives">
+        <div class="section-header reveal">
+            <p class="section-label">06 — Альтернативы</p>
+            <h2 class="section-title">А может, ну её, эту машину?</h2>
+        </div>
+
+        <p class="section-intro reveal">
+            Честно говоря, лучшая стратегия парковки на Амальфитанском побережье — вообще не искать парковку.
+        </p>
+
+        <div class="alt-cards">
+            <article class="alt-card reveal">
+                <div class="alt-image">
+                    <img src="/images/transport/travelmar.webp" alt="Паром TravelMar" decoding="async" loading="lazy">
+                </div>
+                <div class="alt-content">
+                    <h3 class="alt-name">Паромы TravelMar</h3>
+                    <p class="alt-desc">
+                        Связывают Салерно, Четару, Майори, Минори, Амальфи и Позитано. Ходят с апреля по октябрь. От €5 за поездку.
+                    </p>
+                    <a href="/transport" class="btn btn-primary btn-small">Расписание паромов</a>
+                </div>
+            </article>
+
+            <article class="alt-card reveal">
+                <div class="alt-image">
+                    <img src="/images/transport/sitasud-amalfi-bus-amalfi-1350x770.webp" alt="Автобус SITA на побережье" decoding="async" loading="lazy">
+                </div>
+                <div class="alt-content">
+                    <h3 class="alt-name">Автобусы SITA</h3>
+                    <p class="alt-desc">
+                        Покрывают всё побережье. €1,40–2,40 за поездку. Часто переполнены летом, но работают круглый год и надёжны.
+                    </p>
+                    <a href="/transport" class="btn btn-primary btn-small">Расписание автобусов</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Tools & Contacts -->
+    <section class="tools-section">
+        <div class="section-header reveal">
+            <p class="section-label">07 — Инструменты</p>
+            <h2 class="section-title">Перед поездкой</h2>
+        </div>
+
+        <div class="tools-grid">
+            <div class="tools-list reveal">
+                <h3 class="tools-subtitle">Полезные ссылки</h3>
+                <a href="https://www.easypark.com/" target="_blank" rel="noopener noreferrer" class="tool-link">
+                    <span class="tool-name">EasyPark</span>
+                    <span class="tool-desc">Оплата и продление парковки удалённо по всей Италии</span>
+                    <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17L17 7M9 7h8v8"/>
+                    </svg>
+                </a>
+                <a href="https://www.travelmar.it/en/index" target="_blank" rel="noopener noreferrer" class="tool-link">
+                    <span class="tool-name">TravelMar</span>
+                    <span class="tool-desc">Расписание паромов и онлайн-билеты</span>
+                    <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17L17 7M9 7h8v8"/>
+                    </svg>
+                </a>
+                <a href="/transport" class="tool-link">
+                    <span class="tool-name">Транспорт по побережью</span>
+                    <span class="tool-desc">Наша страница с расписаниями автобусов и паромов</span>
+                    <svg class="tool-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+
+            <div class="contacts-card reveal">
+                <h3 class="tools-subtitle">Прямые контакты</h3>
+                <a href="tel:+390898710820" class="contact-item">
+                    <span class="contact-name">Luna Rossa, Амальфи</span>
+                    <span class="contact-phone">+39 089 871 082</span>
+                </a>
+                <a href="https://wa.me/393338146221" target="_blank" rel="noopener noreferrer" class="contact-item">
+                    <span class="contact-name">Parcheggio MA.CRI, Позитано</span>
+                    <span class="contact-phone">+39 333 814 6221 (WhatsApp)</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta">
+        <div class="cta-content reveal">
+            <h2 class="section-title">Готовы исследовать побережье?</h2>
+            <p>Забронируйте апартаменты с парковкой и начните своё путешествие без головной боли</p>
+            <div class="cta-actions">
+                <a href="/apartments" class="btn btn-white">Апартаменты</a>
+                <a href="/contacts" class="btn btn-outline" style="border-color: white; color: white;">Связаться</a>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Intro / Reality check */
+        .intro-section {
+            padding: 120px 40px;
+            background: white;
+        }
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+        .intro-text {
+            font-size: 18px;
+            line-height: 1.7;
+            color: var(--color-gray-dark);
+            margin-bottom: 20px;
+        }
+        .intro-image {
+            position: relative;
+            overflow: hidden;
+        }
+        .intro-image::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: -20px;
+            bottom: -20px;
+            border: 3px solid var(--color-orange);
+            z-index: -1;
+        }
+        .intro-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Line color legend */
+        .line-legend {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 24px;
+            background: var(--color-bg-light);
+            border-left: 4px solid var(--color-orange);
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 15px;
+            line-height: 1.5;
+            color: var(--color-gray-dark);
+        }
+        .legend-bar {
+            display: inline-block;
+            width: 40px;
+            height: 6px;
+            flex-shrink: 0;
+        }
+        .legend-blue .legend-bar { background: #2563eb; }
+        .legend-white .legend-bar {
+            background: white;
+            border: 1px solid var(--color-gray-light);
+        }
+        .legend-yellow .legend-bar { background: #facc15; }
+
+        /* Towns Section */
+        .towns {
+            padding: 120px 40px;
+            background: var(--color-bg-light);
+        }
+        .section-intro {
+            text-align: center;
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--color-gray-dark);
+            margin: -20px auto 60px;
+            max-width: 700px;
+        }
+        .towns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .town-card {
+            background: white;
+            padding: 32px;
+            border: 2px solid var(--color-navy);
+            transition: all 0.3s var(--ease-out);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        .town-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--color-navy);
+        }
+        .town-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--color-bg-light);
+        }
+        .town-name {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--color-navy-deep);
+            letter-spacing: -0.5px;
+        }
+        .town-badge {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 12px;
+            background: var(--color-navy-deep);
+            color: white;
+            white-space: nowrap;
+        }
+        .town-options {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .parking-option {
+            padding: 20px;
+            background: var(--color-bg-light);
+            border-left: 3px solid var(--color-orange);
+        }
+        .option-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .option-name {
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--color-navy-deep);
+        }
+        .option-source {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 4px 8px;
+        }
+        .source-official {
+            background: var(--color-navy-deep);
+            color: white;
+        }
+        .source-aggregate {
+            background: var(--color-gray-light);
+            color: var(--color-navy-deep);
+        }
+        .source-private {
+            background: var(--color-orange);
+            color: white;
+        }
+        .source-local {
+            background: white;
+            color: var(--color-navy-deep);
+            border: 1px solid var(--color-navy-deep);
+        }
+        .option-prices {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .price-block {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .price-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-gray);
+        }
+        .price-value {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--color-orange);
+        }
+        .option-notes {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--color-gray-dark);
+            margin: 0 0 8px;
+        }
+        .option-limits {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--color-gray-dark);
+            margin: 0;
+        }
+        .option-limits strong {
+            color: var(--color-navy-deep);
+        }
+        .town-tip {
+            display: flex;
+            gap: 12px;
+            padding: 16px;
+            background: var(--color-navy-deep);
+            color: white;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .tip-icon {
+            color: var(--color-orange);
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        /* ZTL Section */
+        .ztl {
+            background: var(--color-navy-deep);
+            color: white;
+            padding: 120px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        .ztl-bg-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-display);
+            font-size: clamp(150px, 25vw, 400px);
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.03);
+            pointer-events: none;
+            white-space: nowrap;
+            letter-spacing: -8px;
+        }
+        .ztl-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .ztl .section-title {
+            color: white;
+        }
+        .ztl-intro {
+            font-size: 19px;
+            line-height: 1.7;
+            color: var(--color-gray);
+            max-width: 800px;
+            margin: 0 0 60px;
+        }
+        .ztl-intro strong {
+            color: white;
+        }
+        .ztl-checks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 32px;
+            margin-bottom: 60px;
+        }
+        .check-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .check-num {
+            font-family: var(--font-display);
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--color-orange);
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .check-content h4 {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 8px;
+        }
+        .check-content p {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--color-gray);
+        }
+        .ztl-alert {
+            background: var(--color-orange);
+            color: white;
+            padding: 32px 40px;
+            position: relative;
+        }
+        .alert-head {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .alert-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: white;
+            color: var(--color-orange);
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+        .alert-head h4 {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 800;
+            color: white;
+        }
+        .ztl-alert p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        .alert-note {
+            font-size: 14px;
+            opacity: 0.9;
+            font-style: italic;
+            margin: 0;
+        }
+
+        /* Strategies Section */
+        .strategies-section {
+            padding: 120px 40px;
+            background: white;
+        }
+        .strategies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .strategy-card {
+            padding: 32px;
+            background: var(--color-bg-light);
+            border: 2px solid transparent;
+            transition: all 0.3s var(--ease-out);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .strategy-card:hover {
+            border-color: var(--color-navy);
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--color-navy);
+        }
+        .strategy-accent {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--color-orange);
+        }
+        .strategy-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--color-navy-deep);
+            line-height: 1.1;
+        }
+        .strategy-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--color-gray-dark);
+            margin: 0;
+        }
+
+        /* Routes Section */
+        .routes-section {
+            padding: 120px 40px;
+            background: var(--color-bg-light);
+        }
+        .routes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        .route-scenario {
+            position: relative;
+            padding: 40px 32px 32px;
+            background: white;
+            border: 2px solid var(--color-navy);
+            transition: all 0.3s var(--ease-out);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .route-scenario:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--color-navy);
+        }
+        .route-scenario.recommended {
+            border-color: var(--color-orange);
+            background: var(--color-navy-deep);
+            color: white;
+        }
+        .route-scenario.recommended:hover {
+            box-shadow: 4px 4px 0 var(--color-orange);
+        }
+        .route-star {
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            background: var(--color-orange);
+            color: white;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 6px 14px;
+        }
+        .route-num {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-orange);
+            letter-spacing: 2px;
+        }
+        .route-title {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.05;
+            color: var(--color-navy-deep);
+            letter-spacing: -0.5px;
+        }
+        .route-scenario.recommended .route-title {
+            color: white;
+        }
+        .route-base {
+            font-size: 15px;
+            color: var(--color-gray-dark);
+            margin: 0;
+        }
+        .route-scenario.recommended .route-base {
+            color: var(--color-gray);
+        }
+        .route-base strong {
+            color: var(--color-navy-deep);
+        }
+        .route-scenario.recommended .route-base strong {
+            color: white;
+        }
+        .route-benefits {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .route-benefits li {
+            position: relative;
+            padding-left: 24px;
+            font-size: 14px;
+            line-height: 1.5;
+            color: var(--color-gray-dark);
+        }
+        .route-benefits li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--color-orange);
+            font-weight: 800;
+        }
+        .route-scenario.recommended .route-benefits li {
+            color: var(--color-gray-light);
+        }
+
+        /* Warnings Section */
+        .warnings-section {
+            padding: 120px 40px;
+            background: white;
+        }
+        .warnings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 0;
+            max-width: 1400px;
+            margin: 0 auto;
+            border: 2px solid var(--color-navy-deep);
+        }
+        .warning-card {
+            padding: 32px;
+            background: white;
+            border-right: 2px solid var(--color-navy-deep);
+            border-bottom: 2px solid var(--color-navy-deep);
+            transition: all 0.3s var(--ease-out);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .warning-card:hover {
+            background: var(--color-navy-deep);
+            color: white;
+        }
+        .warning-num {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-orange);
+            letter-spacing: 2px;
+        }
+        .warning-title {
+            font-family: var(--font-display);
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--color-navy-deep);
+            line-height: 1.2;
+        }
+        .warning-card:hover .warning-title {
+            color: white;
+        }
+        .warning-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--color-gray-dark);
+            margin: 0;
+        }
+        .warning-card:hover .warning-text {
+            color: var(--color-gray-light);
+        }
+
+        /* Alternatives Section */
+        .alternatives {
+            padding: 120px 40px;
+            background: var(--color-bg-light);
+        }
+        .alt-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .alt-card {
+            background: white;
+            border: 2px solid var(--color-navy);
+            overflow: hidden;
+            transition: all 0.3s var(--ease-out);
+            display: flex;
+            flex-direction: column;
+        }
+        .alt-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 4px 4px 0 var(--color-navy);
+        }
+        .alt-image {
+            aspect-ratio: 16/10;
+            overflow: hidden;
+        }
+        .alt-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s var(--ease-out);
+        }
+        .alt-card:hover .alt-image img {
+            transform: scale(1.05);
+        }
+        .alt-content {
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .alt-name {
+            font-family: var(--font-display);
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--color-navy-deep);
+            letter-spacing: -0.5px;
+        }
+        .alt-desc {
+            font-size: 15px;
+            line-height: 1.7;
+            color: var(--color-gray-dark);
+            margin: 0;
+        }
+
+        /* Tools Section */
+        .tools-section {
+            padding: 120px 40px;
+            background: white;
+        }
+        .tools-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tools-subtitle {
+            font-family: var(--font-display);
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--color-orange);
+            margin-bottom: 24px;
+        }
+        .tools-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .tool-link {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            grid-template-areas: 'name arrow' 'desc desc';
+            gap: 8px 16px;
+            padding: 20px 24px;
+            background: var(--color-bg-light);
+            color: var(--color-navy-deep);
+            text-decoration: none;
+            transition: all 0.3s var(--ease-out);
+            border-left: 3px solid transparent;
+        }
+        .tool-link:hover {
+            background: var(--color-navy-deep);
+            color: white;
+            border-left-color: var(--color-orange);
+        }
+        .tool-name {
+            grid-area: name;
+            font-weight: 700;
+            font-size: 17px;
+        }
+        .tool-arrow {
+            grid-area: arrow;
+            color: var(--color-orange);
+        }
+        .tool-link:hover .tool-arrow {
+            color: var(--color-orange);
+        }
+        .tool-desc {
+            grid-area: desc;
+            font-size: 14px;
+            color: var(--color-gray-dark);
+        }
+        .tool-link:hover .tool-desc {
+            color: var(--color-gray-light);
+        }
+
+        .contacts-card {
+            background: var(--color-navy-deep);
+            color: white;
+            padding: 32px;
+        }
+        .contacts-card .tools-subtitle {
+            color: var(--color-orange);
+        }
+        .contact-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s var(--ease-out);
+        }
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+        .contact-item:hover {
+            padding-left: 8px;
+            color: var(--color-orange);
+        }
+        .contact-name {
+            font-size: 14px;
+            color: var(--color-gray);
+        }
+        .contact-phone {
+            font-family: var(--font-display);
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+        .contact-item:hover .contact-phone {
+            color: var(--color-orange);
+        }
+
+        /* CTA Section */
+        .cta {
+            background: var(--color-orange);
+            padding: 120px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta::before {
+            content: 'AMALFI';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: var(--font-display);
+            font-size: clamp(150px, 25vw, 400px);
+            font-weight: 900;
+            color: rgba(0, 0, 0, 0.05);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .cta .section-title {
+            color: white;
+            margin-bottom: 24px;
+        }
+        .cta p {
+            font-size: 20px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+        }
+        .cta-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .intro-grid,
+            .tools-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
+            }
+            .alt-cards {
+                grid-template-columns: 1fr;
+            }
+            .towns-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .intro-section,
+            .towns,
+            .ztl,
+            .strategies-section,
+            .routes-section,
+            .warnings-section,
+            .alternatives,
+            .tools-section,
+            .cta {
+                padding: 80px 20px;
+            }
+            .town-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .ztl-alert {
+                padding: 24px 20px;
+            }
+            .alert-head {
+                flex-wrap: wrap;
+            }
+            .warnings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+    <script>
+        // Scroll reveal animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</Layout>

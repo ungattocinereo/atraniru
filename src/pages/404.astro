@@ -1,0 +1,387 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+  title="Страница не найдена — 404 | Atrani.ru"
+  description="Этот уголок Амальфи мы ещё не открыли. Вернитесь на главную или выберите раздел: апартаменты, экскурсии, фотосессии, блог."
+  noindex={true}
+>
+  <section class="nf-hero" aria-labelledby="nf-title">
+    <div class="nf-bg-text" aria-hidden="true">АТРАНИ</div>
+
+    <div class="nf-hero-content">
+      <p class="nf-label">Ошибка 404 — страница не найдена</p>
+
+      <div class="nf-number" aria-hidden="true">
+        <span>4</span><span class="nf-number-accent">0</span><span>4</span>
+      </div>
+
+      <h1 id="nf-title" class="nf-title">
+        <span class="nf-title-highlight">ЗАБЛУ-</span>ДИЛИСЬ?
+      </h1>
+
+      <p class="nf-subtitle">
+        Этот уголок Амальфи мы ещё не открыли. Но не беда — в Атрани
+        и без него есть куда пойти. Выберите направление ниже.
+      </p>
+
+      <div class="nf-actions">
+        <a href="/" class="btn btn-white">Вернуться на главную</a>
+        <a href="/contacts" class="btn btn-outline nf-btn-outline-light">Написать нам</a>
+      </div>
+    </div>
+
+    <div class="scroll-indicator">Куда дальше</div>
+  </section>
+
+  <section class="nf-nav" aria-label="Основные разделы">
+    <div class="nf-nav-header">
+      <p class="section-label">Навигация</p>
+      <h2 class="section-title">Самые тропы Атрани</h2>
+    </div>
+
+    <ul class="nf-nav-grid" role="list">
+      <li>
+        <a href="/" class="nf-card">
+          <span class="nf-card-num">01</span>
+          <h3 class="nf-card-title">Главная</h3>
+          <p class="nf-card-text">Начать знакомство с побережьем с самого начала.</p>
+          <span class="nf-card-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="/experience" class="nf-card">
+          <span class="nf-card-num">02</span>
+          <h3 class="nf-card-title">Экскурсии</h3>
+          <p class="nf-card-text">Лодки, гастрономия, прогулки по Амальфи и Равелло.</p>
+          <span class="nf-card-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="/apartments" class="nf-card">
+          <span class="nf-card-num">03</span>
+          <h3 class="nf-card-title">Апартаменты</h3>
+          <p class="nf-card-text">Жильё в Атрани от собственников — без посредников.</p>
+          <span class="nf-card-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="/photos" class="nf-card">
+          <span class="nf-card-num">04</span>
+          <h3 class="nf-card-title">Фотосессии</h3>
+          <p class="nf-card-text">Снимаем побережье, вас и закаты — как в журнале.</p>
+          <span class="nf-card-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="/blog" class="nf-card">
+          <span class="nf-card-num">05</span>
+          <h3 class="nf-card-title">Блог</h3>
+          <p class="nf-card-text">Истории, маршруты и наблюдения с побережья.</p>
+          <span class="nf-card-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+      <li>
+        <a href="/contacts" class="nf-card">
+          <span class="nf-card-num">06</span>
+          <h3 class="nf-card-title">Контакты</h3>
+          <p class="nf-card-text">WhatsApp, Telegram, email — отвечаем в течение часа.</p>
+          <span class="nf-card-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+</Layout>
+
+<style>
+  /* Hero */
+  .nf-hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    background: var(--color-navy-deep);
+    color: white;
+    overflow: hidden;
+    padding: 140px 40px 100px;
+  }
+
+  .nf-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--font-display);
+    font-size: clamp(180px, 28vw, 460px);
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.03);
+    letter-spacing: -8px;
+    pointer-events: none;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .nf-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .nf-label {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-gray);
+    margin-bottom: 32px;
+    position: relative;
+    padding-left: 60px;
+    opacity: 0;
+    animation: nfFadeUp 0.9s var(--ease-out) 0.15s forwards;
+  }
+
+  .nf-label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 2px;
+    background: var(--color-orange);
+  }
+
+  .nf-number {
+    font-family: var(--font-display);
+    font-size: clamp(140px, 24vw, 360px);
+    font-weight: 900;
+    line-height: 0.85;
+    letter-spacing: -10px;
+    color: white;
+    display: flex;
+    gap: clamp(4px, 1vw, 16px);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: nfFadeUp 1.1s var(--ease-out) 0.25s forwards;
+  }
+
+  .nf-number-accent {
+    color: var(--color-orange);
+    position: relative;
+    display: inline-block;
+    animation: nfFloat 6s ease-in-out infinite;
+  }
+
+  .nf-title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: nfFadeUp 1s var(--ease-out) 0.4s forwards;
+  }
+
+  .nf-title-highlight {
+    color: var(--color-orange);
+  }
+
+  .nf-subtitle {
+    font-size: clamp(16px, 1.6vw, 20px);
+    color: var(--color-gray);
+    max-width: 560px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+    opacity: 0;
+    animation: nfFadeUp 1s var(--ease-out) 0.5s forwards;
+  }
+
+  .nf-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: nfFadeUp 1s var(--ease-out) 0.6s forwards;
+  }
+
+  .nf-btn-outline-light {
+    border-color: white;
+    color: white;
+  }
+
+  .nf-btn-outline-light:hover {
+    background: white;
+    color: var(--color-navy-deep);
+  }
+
+  /* Navigation Section */
+  .nf-nav {
+    padding: 100px 40px 120px;
+    background: white;
+  }
+
+  .nf-nav-header {
+    max-width: 1400px;
+    margin: 0 auto 56px;
+  }
+
+  .nf-nav-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--color-gray-light);
+    list-style: none;
+    padding: 0;
+    border: 2px solid var(--color-gray-light);
+  }
+
+  .nf-card {
+    display: block;
+    background: white;
+    padding: 36px 32px 32px;
+    height: 100%;
+    position: relative;
+    transition: background 0.35s var(--ease-out), color 0.35s var(--ease-out);
+    color: var(--color-navy-deep);
+  }
+
+  .nf-card-num {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--color-orange);
+    display: block;
+    margin-bottom: 20px;
+  }
+
+  .nf-card-title {
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 12px;
+    color: var(--color-navy-deep);
+    transition: color 0.35s var(--ease-out);
+  }
+
+  .nf-card-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+    margin-bottom: 32px;
+    transition: color 0.35s var(--ease-out);
+  }
+
+  .nf-card-arrow {
+    position: absolute;
+    bottom: 28px;
+    right: 28px;
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--color-navy-deep);
+    transition: transform 0.35s var(--ease-out), color 0.35s var(--ease-out);
+  }
+
+  .nf-card:hover,
+  .nf-card:focus-visible {
+    background: var(--color-navy-deep);
+    color: white;
+  }
+
+  .nf-card:hover .nf-card-title,
+  .nf-card:focus-visible .nf-card-title {
+    color: white;
+  }
+
+  .nf-card:hover .nf-card-text,
+  .nf-card:focus-visible .nf-card-text {
+    color: var(--color-gray);
+  }
+
+  .nf-card:hover .nf-card-arrow,
+  .nf-card:focus-visible .nf-card-arrow {
+    color: var(--color-orange);
+    transform: translateX(6px);
+  }
+
+  /* Animations */
+  @keyframes nfFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes nfFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .nf-nav-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .nf-hero {
+      padding: 120px 20px 80px;
+    }
+
+    .nf-number {
+      letter-spacing: -6px;
+      margin-bottom: 20px;
+    }
+
+    .nf-title {
+      letter-spacing: -1px;
+    }
+
+    .nf-nav {
+      padding: 80px 20px 100px;
+    }
+
+    .nf-nav-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .nf-card {
+      padding: 32px 24px 28px;
+    }
+
+    .nf-card-arrow {
+      bottom: 24px;
+      right: 24px;
+    }
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .nf-label,
+    .nf-number,
+    .nf-title,
+    .nf-subtitle,
+    .nf-actions {
+      opacity: 1;
+      animation: none;
+    }
+
+    .nf-number-accent {
+      animation: none;
+    }
+  }
+</style>

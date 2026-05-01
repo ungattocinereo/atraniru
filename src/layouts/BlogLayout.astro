@@ -41,6 +41,11 @@ const wordCount = post.html
 
 // Article section from primary tag
 const articleSection = post.primary_tag?.name || undefined;
+
+// Keywords from all tags (CSV string per schema.org spec)
+const keywords = post.tags && post.tags.length > 0
+  ? post.tags.map((t) => t.name).join(', ')
+  : undefined;
 ---
 
 <Layout
@@ -86,6 +91,7 @@ const articleSection = post.primary_tag?.name || undefined;
     "inLanguage": "ru",
     ...(wordCount ? { "wordCount": wordCount } : {}),
     ...(articleSection ? { "articleSection": articleSection } : {}),
+    ...(keywords ? { "keywords": keywords } : {}),
     "author": post.primary_author ? {
       "@type": "Person",
       "name": post.primary_author.name,

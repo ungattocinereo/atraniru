@@ -5,19 +5,22 @@ const experiences = [
     id: 1,
     title: "Фото прогулки",
     description: "Запечатлейте красоту Атрани",
-    image: "/images/index/photoshootings.webp"
+    image: "/images/index/photoshootings.webp",
+    href: "/photos"
   },
   {
     id: 2,
     title: "Лодочные туры",
     description: "Откройте скрытые бухты и гроты",
-    image: "/images/index/excursion-boat.webp"
+    image: "/images/index/excursion-boat.webp",
+    href: "/experience#experiences"
   },
   {
     id: 3,
-    title: "Эно-гастро туры",
-    description: "Вкусы Амальфитанского побережья",
-    image: "/images/index/excursion-by-car.webp"
+    title: "Эно-гастро туры на машине",
+    description: "Вкус Амальфи: 3 маршрута от €280",
+    image: "/images/index/excursion-by-car.webp",
+    href: "/tours-car"
   }
 ];
 ---
@@ -29,9 +32,9 @@ const experiences = [
   </div>
   <div class="experiences-grid">
     {experiences.map((exp) => (
-      <article class="experience-tile reveal">
+      <a href={exp.href} class="experience-tile reveal">
         <div class="experience-tile-image">
-          <img src={exp.image} alt={exp.title} loading="lazy" />
+          <img src={exp.image} alt={exp.title} loading="lazy" decoding="async" />
         </div>
         <div class="experience-tile-overlay"></div>
         <div class="experience-tile-content">
@@ -39,7 +42,7 @@ const experiences = [
           <h3 class="experience-tile-title">{exp.title}</h3>
           <p class="experience-tile-text">{exp.description}</p>
         </div>
-      </article>
+      </a>
     ))}
   </div>
 </section>

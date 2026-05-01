@@ -5,6 +5,10 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://atrani.ru',
   output: 'static',
+  trailingSlash: 'never',
+  build: {
+    format: 'directory',
+  },
   redirects: {
     '/photosessions': '/photos',
   },

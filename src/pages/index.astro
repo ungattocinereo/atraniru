@@ -13,11 +13,21 @@ import CTA from '../components/CTA.astro';
 const travelAgencySchema = {
   "@context": "https://schema.org",
   "@type": "TravelAgency",
+  "@id": "https://atrani.ru/#agency",
   "name": "Atrani.ru — АМАЛЬФИГЕТЬ",
+  "alternateName": "АМАЛЬФИГЕТЬ",
+  "slogan": "Аутентичный отдых на Амальфитанском побережье",
   "url": "https://atrani.ru",
   "logo": "https://atrani.ru/meta.webp",
-  "image": "https://atrani.ru/images/index/atrani-4-index.webp",
+  "image": [
+    "https://atrani.ru/images/index/atrani-4-index.webp",
+    "https://atrani.ru/images/index/imagehero.webp",
+    "https://atrani.ru/images/index/photoshootings.webp"
+  ],
   "description": "Русскоязычный сервис на Амальфитанском побережье: апартаменты, экскурсии, фотосессии, трансферы и гастрономические впечатления от местных.",
+  "priceRange": "€€",
+  "telephone": "+39 327 097 2329",
+  "email": "hello@atrani.ru",
   "areaServed": [
     { "@type": "City", "name": "Atrani" },
     { "@type": "City", "name": "Amalfi" },
@@ -47,6 +57,12 @@ const travelAgencySchema = {
       "contactType": "customer support",
       "availableLanguage": ["ru", "en", "it"],
       "url": "https://wa.me/393270972329"
+    },
+    {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "availableLanguage": ["ru", "en", "it"],
+      "email": "hello@atrani.ru"
     }
   ]
 };
@@ -55,6 +71,8 @@ const travelAgencySchema = {
 <Layout
   title="Атрани и Амальфитанское побережье — апартаменты и экскурсии | Atrani.ru"
   description="Отдых на Амальфитанском побережье с русскоязычным гидом: апартаменты от собственника в Атрани, экскурсии, фотосессии, трансферы и гастрономия."
+  ogImage="/images/index/atrani-4-index.webp"
+  ogImageAlt="Атрани ночью — самый маленький город Италии на Амальфитанском побережье"
 >
   <script type="application/ld+json" slot="head" set:html={JSON.stringify(travelAgencySchema)} />
   <Hero />

@@ -96,6 +96,58 @@ const apartments = [
     inquiryOnly: true,
   },
 ];
+
+const SITE = 'https://atrani.ru';
+
+const apartmentsListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Апартаменты Atrani.ru в Атрани и Равелло",
+  "numberOfItems": apartments.length,
+  "itemListElement": apartments.map((apt, idx) => {
+    const isVilla = apt.id === 'villa-ravello';
+    const isRoom = apt.number.startsWith('RM');
+    const city = isVilla ? 'Ravello' : 'Atrani';
+    const accommodationType = isRoom ? 'Room' : (isVilla ? 'House' : 'Apartment');
+    return {
+      "@type": "ListItem",
+      "position": idx + 1,
+      "item": {
+        "@type": isRoom ? "BedAndBreakfast" : "LodgingBusiness",
+        "@id": `${SITE}/apartments#${apt.id}`,
+        "name": apt.title,
+        "description": apt.description,
+        "image": `${SITE}${apt.image}`,
+        "url": `${SITE}/apartments#apt-${apt.id}`,
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": city,
+          "addressRegion": "Campania",
+          "postalCode": city === "Ravello" ? "84010" : "84010",
+          "addressCountry": "IT"
+        },
+        "telephone": "+39 327 097 2329",
+        "containedInPlace": {
+          "@type": "TouristDestination",
+          "name": `${city}, Amalfi Coast`
+        },
+        "amenityFeature": [
+          { "@type": "LocationFeatureSpecification", "name": "Wi-Fi", "value": true },
+          { "@type": "LocationFeatureSpecification", "name": "Кухня", "value": !isRoom }
+        ],
+        "petsAllowed": false,
+        "numberOfRooms": apt.beds,
+        "occupancy": {
+          "@type": "QuantitativeValue",
+          "maxValue": apt.guests,
+          "unitCode": "C62"
+        },
+        "accommodationCategory": accommodationType,
+        ...(apt.inquiryOnly ? {} : { "priceRange": "€€" })
+      }
+    };
+  })
+};
 ---
 
 <Layout
@@ -104,6 +156,7 @@ const apartments = [
   ogImage="/apartments/aria-di-mare-for-amalfi-day-2.webp"
   ogImageAlt="Апартаменты Aria di Mare в Атрани — вид на море"
 >
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(apartmentsListSchema)} />
   <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Апартаменты', url: '/apartments' }]} hideVisually={true} />
   <!-- Hero Section -->
   <section class="hero">
@@ -165,7 +218,7 @@ const apartments = [
       {apartments.map((apt, index) => (
         <article class="apt-card reveal" id={`apt-${apt.id}`}>
           <div class="apt-card-image">
-            <img src={apt.image} alt={apt.title} loading="lazy" />
+            <img src={apt.image} alt={`${apt.title} — апартаменты в ${apt.id === 'villa-ravello' ? 'Равелло' : 'Атрани'} от Atrani.ru`} width="1200" height="800" loading="lazy" decoding="async" />
             <span class="apt-card-number">{apt.number}</span>
           </div>
           <div class="apt-card-body">

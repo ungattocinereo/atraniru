@@ -1,6 +1,99 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const SITE = 'https://atrani.ru';
+
+const provider = {
+  "@type": "TravelAgency",
+  "@id": `${SITE}/#agency`,
+  "name": "Atrani.ru — АМАЛЬФИГЕТЬ",
+  "url": SITE,
+  "telephone": "+39 327 097 2329"
+};
+
+const experiencesSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Впечатления и экскурсии на Амальфитанском побережье",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "TouristTrip",
+        "@id": `${SITE}/tours-car#trip`,
+        "name": "Экскурсия на машине по Амальфитанскому побережью",
+        "description": "Классические маршруты вдоль SS163 и гастрономические путешествия в горы Трамонти. Персональный тур от местных.",
+        "image": `${SITE}/images/index/excursion-by-car.webp`,
+        "url": `${SITE}/tours-car`,
+        "provider": provider,
+        "offers": {
+          "@type": "Offer",
+          "price": "400",
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock"
+        },
+        "touristType": "Independent travelers"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "TouristTrip",
+        "name": "Лодочная экскурсия по Амальфитанскому побережью",
+        "description": "Изумрудный грот, скрытые бухты, Позитано с моря, купание в уединённых местах. Побережье открывается с воды совсем иначе.",
+        "image": `${SITE}/images/index/excursion-boat.webp`,
+        "provider": provider,
+        "touristType": "Independent travelers"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "TouristTrip",
+        "name": "Экскурсии на мотоцикле и Vespa по Амальфи",
+        "description": "Туры на мотоциклах с гидом по самым живописным горным серпантинам Амальфитанского побережья.",
+        "image": `${SITE}/images/atrani-with-3-bikes-no-plates.webp`,
+        "provider": provider,
+        "offers": {
+          "@type": "Offer",
+          "price": "350",
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock"
+        },
+        "touristType": "Independent travelers"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@type": "Service",
+        "@id": `${SITE}/photos#service`,
+        "name": "Фотосессии на Амальфитанском побережье",
+        "description": "Соло, пары, блогеры — четыре пакета от €200 до €400. Локации: Атрани, Равелло, Амальфи, Позитано. С местным фотографом.",
+        "image": `${SITE}/images/index/photoshootings.webp`,
+        "url": `${SITE}/photos`,
+        "provider": provider,
+        "areaServed": [
+          { "@type": "City", "name": "Atrani" },
+          { "@type": "City", "name": "Ravello" },
+          { "@type": "City", "name": "Amalfi" },
+          { "@type": "City", "name": "Positano" }
+        ],
+        "offers": {
+          "@type": "Offer",
+          "price": "200",
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    }
+  ]
+};
 ---
 
 <Layout
@@ -9,6 +102,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
   ogImage="/images/index/photoshootings.webp"
   ogImageAlt="Впечатления на Амальфитанском побережье"
 >
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(experiencesSchema)} />
   <Breadcrumbs items={[{ name: 'Главная', url: '/' }, { name: 'Впечатления', url: '/experience' }]} hideVisually={true} />
   <!-- Hero -->
   <section class="hero">

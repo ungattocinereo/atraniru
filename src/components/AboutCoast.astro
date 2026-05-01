@@ -1,52 +1,139 @@
 ---
-// AboutCoast component - combined info about coast + dolce far niente
+// AboutCoast — editorial section about the Amalfi coast and Atrani
 ---
 
-<section class="about-coast">
-  <div class="container">
-    <div class="coast-grid">
-      <div class="coast-content reveal">
-        <div class="section-header">
-          <p class="section-label">03 — О побережье</p>
-          <h2 class="section-title">Жемчужина Италии</h2>
-        </div>
+<section class="about-coast" id="about-coast">
+  <div class="coast-container">
+
+    <!-- Section header -->
+    <header class="coast-section-header reveal">
+      <p class="section-label">03 — О побережье</p>
+      <h2 class="coast-title">
+        Место, которое<br>
+        <span class="text-orange">нельзя придумать</span>
+      </h2>
+    </header>
+
+    <!-- Lead — 2 columns with drop cap -->
+    <div class="coast-lead reveal">
+      <p class="coast-lead-text">
+        <span class="dropcap">Е</span>сть вещи, которые сложно объяснить словами — их нужно просто увидеть. Амальфитанское побережье — одно из таких. Узкая дорога, вырубленная в скалах над морем, города, как будто налепленные на обрывы, вода такого цвета, которого не бывает на фотографиях — только вживую.
+      </p>
+      <p class="coast-lead-text coast-hide-mobile">
+        Неудивительно, что ЮНЕСКО охраняет это место как часть мирового наследия. Удивительно другое: сколько людей проезжают мимо, так и не поняв, что видели.
+      </p>
+    </div>
+
+    <!-- Stats strip — 3 columns, navy rules -->
+    <ul class="coast-stats reveal">
+      <li>
+        <span class="coast-stat-num">50</span>
+        <span class="coast-stat-label">км побережья от Сорренто до Салерно</span>
+      </li>
+      <li>
+        <span class="coast-stat-num">20</span>
+        <span class="coast-stat-label">городов и деревень — каждый со своим миром</span>
+      </li>
+      <li>
+        <span class="coast-stat-num">1997</span>
+        <span class="coast-stat-label">год — побережье в наследии ЮНЕСКО</span>
+      </li>
+    </ul>
+
+    <!-- One-liner accent -->
+    <p class="coast-accent reveal">
+      Одни — прямо у моря.<br>
+      Другие — <span class="text-orange">выше, в горах</span>, куда автобусы уже не добираются.
+    </p>
+
+    <!-- Big pullquote bridging to Atrani -->
+    <blockquote class="coast-pullquote reveal">
+      <span class="text-orange">300 метров</span> от толпы<br>
+      — и другая эпоха
+    </blockquote>
+
+    <!-- Atrani — body + sticky marginalia -->
+    <div class="coast-atrani reveal">
+      <div class="coast-atrani-body">
+        <p class="coast-eyebrow">Атрани</p>
         <p>
-          От <strong>Сорренто до Салерно</strong> вдоль одного из самых красивых ландшафтов в мире
-          (это вам даже в ЮНЕСКО подтвердят) раскинулось драгоценное ожерелье из <strong>18 больших
-          и малых городов</strong> Амальфитанского побережья.
+          Большинство гостей Амальфи так его и не находят. А он прямо рядом — пять минут пешком, один поворот. Атрани — официально <strong>самый маленький муниципалитет Южной Италии</strong>. Один пляж, одна площадь, несколько улиц, которые помнят ещё средневековье.
         </p>
         <p>
-          50 километров извилистой дороги между скалами и морем входят в число объектов всемирного
-          наследия как идеальный средиземноморский пейзаж, имеющий колоссальное культурное и
-          природное значение. А это значит, что <strong>Амальфитанское побережье – самое итальянское
-          из всего, что есть в Италии.</strong>
+          И не в переносном смысле. Когда Амальфи был одним из главных торговых портов Средиземноморья, в Атрани жила аристократия республики. Здесь короновали дожей.
         </p>
-        <p>
-          <strong>Для многих становится открытием, что буквально в 300 метрах, на расстоянии
-          пятиминутной пешей прогулки от раскрученного Амальфи расположился другой, не менее
-          интересный город, пока свободный от толп туристов – Атрани!</strong>
+        <p class="coast-coda">
+          Потом слава ушла.<br>
+          И Атрани остался собой.
         </p>
       </div>
+      <aside class="coast-marginalia">
+        <p class="coast-marginalia-label">XI век</p>
+        <p>В соборе Атрани до сих пор стоят бронзовые ворота, отлитые в Константинополе теми же мастерами, что работали для великого собора в Амальфи.</p>
+      </aside>
+    </div>
 
-      <div class="dolce-content reveal">
-        <h3>Dolce far niente</h3>
-        <p>
-          <strong>В Атрани время как будто остановилось</strong>, каждый, кто сюда попадает,
-          переносится в прошлое и видит Италию такой, какой она была когда-то, без наигранного блеска
-          и туристических клише.
+    <!-- Escher — quote left, author note right -->
+    <div class="coast-escher reveal">
+      <div class="coast-escher-quote">
+        <p class="coast-eyebrow">М. К. Эшер · 1930-е</p>
+        <p class="coast-quote-text">
+          «Атрани — место с особой геометрией. Узкие переходы, арки, лестницы, тени. Формы, которые повторяются и множатся».
         </p>
-        <p>
-          Счастье в Италии сконцентрировано в выражении <strong>dolce far niente</strong> и
-          переводится как «наслаждение отсутствием дел». Спорим, вы именно за этим приехали в Италию?
-        </p>
-        <p>
-          Правильное «ничегонеделание» перевернет ваше представление об отдыхе и заставит влюбиться
-          в эту благословенную страну раз и навсегда. Так, когда-то мы всей семьей влюбились в Атрани
-          и решили остаться здесь, чтобы стать мостиком для русскоговорящих туристов в самое сердце
-          Италии.
+        <p class="coast-quote-cite">— приезжая сюда, художник нашёл идею серии «Метаморфозы»</p>
+      </div>
+      <p class="coast-escher-author">
+        Я понял это сразу, когда впервые поднял камеру. <span class="text-orange">Этот город снимается сам</span> — нужно просто успевать за светом.
+      </p>
+    </div>
+
+    <!-- Piazza — 3-column day cycle -->
+    <div class="coast-piazza reveal">
+      <h3 class="coast-h3">Площадь, которая живёт</h3>
+      <div class="coast-piazza-grid">
+        <div class="coast-piazza-item">
+          <p class="coast-piazza-time">Утро</p>
+          <p>Кофе пьют те, кто рыбачил с ночи.</p>
+        </div>
+        <div class="coast-piazza-item">
+          <p class="coast-piazza-time">День</p>
+          <p>Носятся дети. Площадь принадлежит им.</p>
+        </div>
+        <div class="coast-piazza-item">
+          <p class="coast-piazza-time">Вечер</p>
+          <p>Выходят все. Никаких ценников для иностранцев, никаких меню на десяти языках.</p>
+        </div>
+      </div>
+      <p class="coast-piazza-note coast-hide-mobile">
+        Рядом — церковь Санта Мария Маддалена с майоликовым куполом, единственным в своём роде на всём побережье. Внутри тихо и прохладно. Снаружи — снова море.
+      </p>
+    </div>
+
+    <!-- Outro — personal voice -->
+    <div class="coast-outro reveal">
+      <p class="coast-outro-text">
+        Я фотограф. Объехал много мест. Именно здесь, в Атрани, поймал ощущение, которое давно искал — когда не хочется никуда торопиться, потому что <span class="text-orange">всё нужное уже есть вокруг</span>.
+      </p>
+      <p class="coast-outro-text">
+        Мы с семьёй влюбились в это место и решили остаться. Не чтобы открыть очередной туристический бизнес, — а чтобы быть рядом для тех, кто хочет почувствовать побережье так, как чувствуем его мы. Без посредников, без скриптов, по-настоящему.
+      </p>
+      <div class="coast-signature">
+        <img
+          src="/avatar-greg.webp"
+          alt="Граф Монтегриша"
+          class="coast-signature-avatar"
+          loading="lazy"
+          decoding="async"
+          width="72"
+          height="72"
+        />
+        <p class="coast-signature-text">
+          — Граф Монтегриша.<br>
+          <span class="coast-signature-role">Знать побережья Амальфи.</span>
         </p>
       </div>
     </div>
+
   </div>
 </section>
 
@@ -54,41 +141,374 @@
   .about-coast {
     padding: 120px 0;
     background: white;
+    color: var(--color-navy-deep);
   }
 
-  .coast-grid {
+  .coast-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    gap: 96px;
+  }
+
+  .text-orange {
+    color: var(--color-orange);
+  }
+
+  /* ── Section header ── */
+  .coast-section-header {
+    text-align: center;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .coast-title {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6vw, 84px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    margin: 16px 0 0;
+    text-wrap: balance;
+  }
+
+  /* ── Lead ── */
+  .coast-lead {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
+    gap: 60px;
     align-items: start;
   }
 
-  .coast-content p,
-  .dolce-content p {
-    margin-bottom: 20px;
-    line-height: 1.8;
-    font-size: 16px;
+  .coast-lead-text {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--color-gray-dark);
+    margin: 0;
   }
 
-  .dolce-content h3 {
+  .dropcap {
+    float: left;
+    font-family: var(--font-display);
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 0.9;
+    color: var(--color-orange);
+    padding: 6px 12px 0 0;
+  }
+
+  /* ── Stats strip ── */
+  .coast-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    list-style: none;
+    padding: 36px 0;
+    margin: 0;
+    border-top: 2px solid var(--color-navy-deep);
+    border-bottom: 2px solid var(--color-navy-deep);
+  }
+
+  .coast-stats li {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .coast-stat-num {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 1;
+    color: var(--color-orange);
+    letter-spacing: -2px;
+  }
+
+  .coast-stat-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-gray-dark);
+    line-height: 1.4;
+    max-width: 220px;
+  }
+
+  /* ── One-line accent ── */
+  .coast-accent {
+    font-family: var(--font-display);
+    font-size: clamp(18px, 1.8vw, 24px);
+    font-weight: 600;
+    line-height: 1.4;
+    color: var(--color-navy-deep);
+    text-align: center;
+    margin: 0 auto;
+    max-width: 720px;
+    text-wrap: balance;
+  }
+
+  /* ── Pullquote ── */
+  .coast-pullquote {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    border: none;
+    color: var(--color-navy-deep);
+    background: none;
+    text-wrap: balance;
+  }
+
+  /* ── Atrani body + marginalia ── */
+  .coast-atrani {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  .coast-eyebrow {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-orange);
+    margin: 0 0 20px;
+  }
+
+  .coast-atrani-body p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-gray-dark);
+    margin: 0 0 20px;
+  }
+
+  .coast-atrani-body strong {
+    color: var(--color-navy-deep);
+    font-weight: 600;
+  }
+
+  .coast-coda {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 2.4vw, 28px) !important;
+    font-weight: 700;
+    line-height: 1.2 !important;
+    color: var(--color-navy-deep) !important;
+    letter-spacing: -0.5px;
+    margin-top: 32px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .coast-marginalia {
+    position: sticky;
+    top: 100px;
+    padding: 28px 24px;
+    border-left: 4px solid var(--color-orange);
+    background: var(--color-bg-light);
+  }
+
+  .coast-marginalia-label {
     font-family: var(--font-display);
     font-size: 32px;
     font-weight: 800;
-    color: var(--color-navy);
-    margin-bottom: 24px;
     letter-spacing: -1px;
+    color: var(--color-navy-deep);
+    margin: 0 0 12px;
+    line-height: 1;
   }
 
+  .coast-marginalia p:not(.coast-marginalia-label) {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-gray-dark);
+    margin: 0;
+  }
+
+  /* ── Escher block ── */
+  .coast-escher {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 64px;
+    align-items: end;
+  }
+
+  .coast-quote-text {
+    font-family: var(--font-display);
+    font-size: clamp(20px, 2.2vw, 28px);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+    color: var(--color-navy-deep);
+    margin: 0 0 16px;
+    padding-left: 32px;
+    border-left: 4px solid var(--color-orange);
+  }
+
+  .coast-quote-cite {
+    font-size: 13px;
+    color: var(--color-gray);
+    font-style: italic;
+    margin: 0;
+    padding-left: 36px;
+  }
+
+  .coast-escher-author {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+    margin: 0;
+  }
+
+  /* ── Piazza day cycle ── */
+  .coast-h3 {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    color: var(--color-navy-deep);
+    margin: 0 0 32px;
+  }
+
+  .coast-piazza-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: var(--color-navy-deep);
+    border: 2px solid var(--color-navy-deep);
+  }
+
+  .coast-piazza-item {
+    background: white;
+    padding: 32px 28px;
+    transition: background 0.4s var(--ease-out);
+  }
+
+  .coast-piazza-item:hover {
+    background: var(--color-bg-light);
+  }
+
+  .coast-piazza-time {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--color-orange);
+    margin: 0 0 16px;
+  }
+
+  .coast-piazza-item p:not(.coast-piazza-time) {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-navy-deep);
+    margin: 0;
+    font-weight: 500;
+  }
+
+  .coast-piazza-note {
+    margin: 32px 0 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+    max-width: 720px;
+  }
+
+  /* ── Outro ── */
+  .coast-outro {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .coast-outro-text {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--color-gray-dark);
+    margin: 0 0 24px;
+  }
+
+  .coast-outro-text:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .coast-signature {
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+    margin: 40px 0 0;
+  }
+
+  .coast-signature-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: 2px solid var(--color-orange);
+  }
+
+  .coast-signature-text {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-navy-deep);
+    margin: 0;
+    line-height: 1.4;
+    text-align: left;
+  }
+
+  .coast-signature-role {
+    display: block;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-orange);
+    margin-top: 6px;
+  }
+
+  /* ── Responsive ── */
   @media (max-width: 1024px) {
-    .coast-grid {
+    .coast-lead,
+    .coast-atrani,
+    .coast-escher {
       grid-template-columns: 1fr;
-      gap: 60px;
+      gap: 32px;
+    }
+
+    .coast-stats {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding: 28px 0;
+    }
+
+    .coast-marginalia {
+      position: static;
     }
   }
 
   @media (max-width: 768px) {
     .about-coast {
       padding: 80px 0;
+    }
+
+    .coast-container {
+      padding: 0 20px;
+      gap: 64px;
+    }
+
+    .coast-piazza-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .coast-hide-mobile {
+      display: none !important;
     }
   }
 </style>

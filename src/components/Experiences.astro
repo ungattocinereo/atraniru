@@ -2,24 +2,27 @@
 // Experiences component - grid of 3 experiences
 const experiences = [
   {
-    id: 1,
-    title: "Фото прогулки",
-    description: "Запечатлейте красоту Атрани",
-    image: "/images/index/photoshootings.webp",
+    title: "Фотопрогулки",
+    description: "Съёмка в Атрани, Равелло, Амальфи и Позитано",
+    price: "от €200",
+    image: "/index/photoshootings.jpg",
+    video: "/index/photoshootings.mp4",
     href: "/photos"
   },
   {
-    id: 2,
     title: "Лодочные туры",
-    description: "Откройте скрытые бухты и гроты",
-    image: "/images/index/excursion-boat.webp",
+    description: "Скрытые бухты и гроты Амальфитанского побережья",
+    price: "от €350",
+    image: "/index/boat.jpg",
+    video: "/index/boat.mp4",
     href: "/experience#experiences"
   },
   {
-    id: 3,
     title: "Эно-гастро туры на машине",
-    description: "Вкус Амальфи: 3 маршрута от €280",
-    image: "/images/index/excursion-by-car.webp",
+    description: "Дегустации, водитель и горные деревни Амальфи",
+    price: "от €280",
+    image: "/index/gastronomy.jpg",
+    video: "/index/gastronomy.mp4",
     href: "/tours-car"
   }
 ];
@@ -32,17 +35,115 @@ const experiences = [
   </div>
   <div class="experiences-grid">
     {experiences.map((exp) => (
-      <a href={exp.href} class="experience-tile reveal">
-        <div class="experience-tile-image">
-          <img src={exp.image} alt={exp.title} loading="lazy" decoding="async" />
-        </div>
-        <div class="experience-tile-overlay"></div>
-        <div class="experience-tile-content">
-          <span class="experience-tile-number">{String(exp.id).padStart(2, '0')}</span>
+      <a href={exp.href} class="experience-tile reveal" aria-label={exp.title}>
+        <div class="experience-tile-media">
+          <img
+            class="experience-tile-img"
+            src={exp.image}
+            alt={exp.title}
+            loading="lazy"
+            decoding="async"
+          />
+          <video
+            class="experience-tile-video"
+            src={exp.video}
+            poster={exp.image}
+            muted
+            playsinline
+            preload="none"
+            aria-hidden="true"
+            tabindex="-1"
+          ></video>
+          <video
+            class="experience-tile-video"
+            src={exp.video}
+            poster={exp.image}
+            muted
+            playsinline
+            preload="none"
+            aria-hidden="true"
+            tabindex="-1"
+          ></video>
+          <div class="experience-tile-scrim" aria-hidden="true"></div>
           <h3 class="experience-tile-title">{exp.title}</h3>
+        </div>
+        <div class="experience-tile-info">
           <p class="experience-tile-text">{exp.description}</p>
+          <p class="experience-tile-price">{exp.price}</p>
         </div>
       </a>
     ))}
   </div>
 </section>
+
+<script>
+  const FADE_SECONDS = 0.6;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduce) {
+    document.querySelectorAll<HTMLAnchorElement>('.experience-tile').forEach((tile) => {
+      const videos = tile.querySelectorAll<HTMLVideoElement>('.experience-tile-video');
+      if (videos.length < 2) return;
+
+      let current = videos[0];
+      let next = videos[1];
+      let rafId = 0;
+      let playing = false;
+      let crossfading = false;
+
+      const tick = () => {
+        if (!playing) return;
+        const dur = current.duration;
+        if (!crossfading && dur > 0 && !Number.isNaN(dur)) {
+          const remaining = dur - current.currentTime;
+          if (remaining < FADE_SECONDS) {
+            crossfading = true;
+            next.currentTime = 0;
+            next.play().catch(() => {});
+            next.classList.add('is-active');
+            current.classList.remove('is-active');
+            const fading = current;
+            window.setTimeout(() => {
+              fading.pause();
+              if (!playing) return;
+              [current, next] = [next, fading];
+              crossfading = false;
+            }, FADE_SECONDS * 1000);
+          }
+        }
+        rafId = requestAnimationFrame(tick);
+      };
+
+      const play = () => {
+        if (playing) return;
+        playing = true;
+        crossfading = false;
+        videos.forEach((v) => {
+          v.currentTime = 0;
+          v.classList.remove('is-active');
+        });
+        current = videos[0];
+        next = videos[1];
+        current.play().catch(() => {});
+        current.classList.add('is-active');
+        rafId = requestAnimationFrame(tick);
+      };
+
+      const stop = () => {
+        playing = false;
+        crossfading = false;
+        cancelAnimationFrame(rafId);
+        videos.forEach((v) => {
+          v.pause();
+          v.currentTime = 0;
+          v.classList.remove('is-active');
+        });
+      };
+
+      tile.addEventListener('mouseenter', play);
+      tile.addEventListener('mouseleave', stop);
+      tile.addEventListener('focus', play);
+      tile.addEventListener('blur', stop);
+    });
+  }
+</script>

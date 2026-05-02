@@ -27,7 +27,7 @@ Inherits all colors, typography, and base styles from `atrani-static-page` skill
 ### Typography
 ```css
 --font-display: 'Unbounded', sans-serif;  /* Headlines, titles */
---font-body: 'Space Grotesk', sans-serif; /* Body text, UI */
+--font-body: 'Manrope', sans-serif;       /* Body text, UI — supports Cyrillic */
 ```
 
 ### Blog-Specific Components

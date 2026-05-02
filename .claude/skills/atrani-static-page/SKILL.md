@@ -29,12 +29,12 @@ Generate static HTML pages for atrani.ru using the Navy Brutalist design system 
 ### Typography
 ```css
 --font-display: 'Unbounded', sans-serif;  /* Headlines, logo, numbers */
---font-body: 'Space Grotesk', sans-serif; /* Body text, UI */
+--font-body: 'Manrope', sans-serif;       /* Body text, UI — supports Cyrillic */
 ```
 
 Google Fonts link:
 ```html
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Unbounded:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 ```
 
 ### Core Components

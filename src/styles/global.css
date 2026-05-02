@@ -25,7 +25,7 @@
 
   /* Typography */
   --font-display: 'Unbounded', sans-serif;
-  --font-body: 'Space Grotesk', sans-serif;
+  --font-body: 'Manrope', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
 
   /* Easing */
@@ -246,7 +246,7 @@ a {
 }
 
 .mobile-nav-num {
-  font-family: 'Space Grotesk', monospace;
+  font-family: 'Manrope', monospace;
   font-size: 14px;
   font-weight: 400;
   color: rgba(255,255,255,0.35);

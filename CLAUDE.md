@@ -21,7 +21,7 @@ Navy Brutalist (Concept 8) — dark navy backgrounds with orange accents.
 - Navy: `#0A1628`
 - Orange accent: `#FF5722`
 
-**Fonts:** Unbounded (display) + Space Grotesk (body)
+**Fonts:** Unbounded (display) + Manrope (body, supports Cyrillic)
 
 ## Reference Files
 

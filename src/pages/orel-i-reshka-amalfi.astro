@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import CldImage from '../components/CldImage.astro';
 ---
 
 <Layout
@@ -26,7 +27,7 @@ import Layout from '../layouts/Layout.astro';
     </div>
 
     <div class="hero-image">
-      <img src="/images/Orel-and-reshka-Amalfi-Kolya-Serga-1.webp" alt="Съемки Орел и Решка в Амальфи" decoding="async" loading="eager">
+      <CldImage src="/images/Orel-and-reshka-Amalfi-Kolya-Serga-1.webp" alt="Съемки Орел и Решка в Амальфи" width={1500} height={1000} sizes="(max-width: 1024px) 0px, 50vw" priority />
     </div>
 
     <div class="scroll-indicator">Scroll</div>
@@ -88,7 +89,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="highlight-container">
       <div class="highlight-image-wrapper reveal">
         <div class="highlight-image-frame">
-          <img src="/images/orel-reshka-positano-beach3.webp" alt="Пляж Позитано - импровизация" decoding="async" loading="lazy">
+          <CldImage src="/images/orel-reshka-positano-beach3.webp" alt="Пляж Позитано - импровизация" width={1500} height={1000} sizes="(max-width: 768px) 100vw, 50vw" />
         </div>
         <div class="highlight-image-label">Позитано, август 2018</div>
       </div>
@@ -126,7 +127,7 @@ import Layout from '../layouts/Layout.astro';
     <div class="gallery-grid">
       <article class="gallery-item reveal">
         <div class="gallery-image">
-          <img src="/images/Orel-reshka-brosanie-monety-napoli.webp" alt="Бросание монеты в Неаполе" decoding="async" loading="lazy">
+          <CldImage src="/images/Orel-reshka-brosanie-monety-napoli.webp" alt="Бросание монеты в Неаполе" width={2400} height={1220} sizes="(max-width: 768px) 100vw, 50vw" />
         </div>
         <div class="gallery-overlay"></div>
         <div class="gallery-content">
@@ -137,7 +138,7 @@ import Layout from '../layouts/Layout.astro';
 
       <article class="gallery-item reveal">
         <div class="gallery-image">
-          <img src="/images/Orel-and-reshka-Amalfi-Kolya-Serga-2.webp" alt="Коля и Гриша на побережье" decoding="async" loading="lazy">
+          <CldImage src="/images/Orel-and-reshka-Amalfi-Kolya-Serga-2.webp" alt="Коля и Гриша на побережье" width={1500} height={1000} sizes="(max-width: 768px) 100vw, 50vw" />
         </div>
         <div class="gallery-overlay"></div>
         <div class="gallery-content">
@@ -148,7 +149,7 @@ import Layout from '../layouts/Layout.astro';
 
       <article class="gallery-item reveal">
         <div class="gallery-image">
-          <img src="/images/orel-reshka-positano-beach3.webp" alt="Пляж Позитано" decoding="async" loading="lazy">
+          <CldImage src="/images/orel-reshka-positano-beach3.webp" alt="Пляж Позитано" width={1500} height={1000} sizes="(max-width: 768px) 100vw, 50vw" />
         </div>
         <div class="gallery-overlay"></div>
         <div class="gallery-content">
@@ -159,7 +160,7 @@ import Layout from '../layouts/Layout.astro';
 
       <article class="gallery-item reveal">
         <div class="gallery-image">
-          <img src="/images/Orel-and-reshka-Amalfi-2018-2.webp" alt="Съемочная группа" decoding="async" loading="lazy">
+          <CldImage src="/images/Orel-and-reshka-Amalfi-2018-2.webp" alt="Съемочная группа" width={1500} height={1000} sizes="(max-width: 768px) 100vw, 50vw" />
         </div>
         <div class="gallery-overlay"></div>
         <div class="gallery-content">
@@ -170,7 +171,7 @@ import Layout from '../layouts/Layout.astro';
 
       <article class="gallery-item reveal">
         <div class="gallery-image">
-          <img src="/images/Orel-and-reshka-Amalfi-Kolya-Serga-3.webp" alt="На видовой площадке" decoding="async" loading="lazy">
+          <CldImage src="/images/Orel-and-reshka-Amalfi-Kolya-Serga-3.webp" alt="На видовой площадке" width={1500} height={1000} sizes="(max-width: 768px) 100vw, 50vw" />
         </div>
         <div class="gallery-overlay"></div>
         <div class="gallery-content">
@@ -181,7 +182,7 @@ import Layout from '../layouts/Layout.astro';
 
       <article class="gallery-item reveal">
         <div class="gallery-image">
-          <img src="/images/Orel-and-reshka-Amalfi-2018-5.webp" alt="Амальфитанское побережье" decoding="async" loading="lazy">
+          <CldImage src="/images/Orel-and-reshka-Amalfi-2018-5.webp" alt="Амальфитанское побережье" width={1500} height={1000} sizes="(max-width: 768px) 100vw, 50vw" />
         </div>
         <div class="gallery-overlay"></div>
         <div class="gallery-content">

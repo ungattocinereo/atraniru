@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CldImage from '../components/CldImage.astro';
 
 const faqSchema = {
     "@context": "https://schema.org",
@@ -68,7 +69,7 @@ const faqSchema = {
         </div>
 
         <div class="hero-image">
-            <img src="/images/transport/sitasud-amalfi-bus-amalfi-1350x770.webp" alt="Автобус SITA на побережье Амальфи" decoding="async" loading="eager">
+            <CldImage src="/images/transport/sitasud-amalfi-bus-amalfi-1350x770.webp" alt="Автобус SITA на побережье Амальфи" width={1350} height={770} sizes="(max-width: 1024px) 0px, 50vw" priority />
         </div>
 
         <div class="scroll-indicator">Scroll</div>
@@ -103,7 +104,7 @@ const faqSchema = {
                 </p>
             </div>
             <div class="intro-image reveal">
-                <img src="/images/transport/bus-amalfi-atrani-salerno.webp" alt="Автобус на побережье" decoding="async" loading="lazy">
+                <CldImage src="/images/transport/bus-amalfi-atrani-salerno.webp" alt="Автобус на побережье" width={950} height={1000} sizes="(max-width: 1024px) 100vw, 50vw" />
             </div>
         </div>
     </section>
@@ -294,7 +295,7 @@ const faqSchema = {
                 </div>
             </div>
             <div class="tickets-image reveal">
-                <img src="/images/transport/bus-timetables-amalfi-coast-1536x816.webp" alt="Автобусная остановка на побережье" decoding="async" loading="lazy">
+                <CldImage src="/images/transport/bus-timetables-amalfi-coast-1536x816.webp" alt="Автобусная остановка на побережье" width={1536} height={816} sizes="(max-width: 1024px) 100vw, 50vw" />
             </div>
         </div>
     </section>
@@ -315,7 +316,7 @@ const faqSchema = {
             <!-- TravelMar -->
             <article class="ferry-card reveal">
                 <div class="ferry-image">
-                    <img src="/images/transport/travelmar.webp" alt="Паром TravelMar" decoding="async" loading="lazy">
+                    <CldImage src="/images/transport/travelmar.webp" alt="Паром TravelMar" width={2400} height={1800} sizes="(max-width: 1024px) 100vw, 400px" />
                 </div>
                 <div class="ferry-content">
                     <h3 class="ferry-name">TravelMar</h3>
@@ -335,7 +336,7 @@ const faqSchema = {
             <!-- PositanoJet -->
             <article class="ferry-card reveal">
                 <div class="ferry-image">
-                    <img src="/images/transport/positanojet.webp" alt="Паром PositanoJet" decoding="async" loading="lazy">
+                    <CldImage src="/images/transport/positanojet.webp" alt="Паром PositanoJet" width={2400} height={3200} sizes="(max-width: 1024px) 100vw, 400px" />
                 </div>
                 <div class="ferry-content">
                     <h3 class="ferry-name">PositanoJet</h3>
@@ -361,7 +362,7 @@ const faqSchema = {
             <!-- Alicost -->
             <article class="ferry-card reveal">
                 <div class="ferry-image">
-                    <img src="/images/transport/alicost.webp" alt="Паром Alicost" decoding="async" loading="lazy">
+                    <CldImage src="/images/transport/alicost.webp" alt="Паром Alicost" width={2400} height={1800} sizes="(max-width: 1024px) 100vw, 400px" />
                 </div>
                 <div class="ferry-content">
                     <h3 class="ferry-name">Alicost</h3>

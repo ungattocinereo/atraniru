@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CldImage from '../components/CldImage.astro';
 ---
 
 <Layout
@@ -496,7 +497,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
     <div class="locations-list">
       <article class="location-item reveal">
         <div class="location-image">
-          <img src="/images/index/atrani-4-index.webp" alt="Атрани — самый маленький город Италии" decoding="async" loading="lazy">
+          <CldImage src="/images/index/atrani-4-index.webp" alt="Атрани — самый маленький город Италии" width={2400} height={1600} sizes="(max-width: 768px) 100vw, 33vw" />
         </div>
         <div class="location-content">
           <span class="location-number">APT—01</span>
@@ -512,7 +513,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 
       <article class="location-item reverse reveal">
         <div class="location-image">
-          <img src="/images/index/excursion-boat.webp" alt="Вид на побережье с моря" decoding="async" loading="lazy">
+          <CldImage src="/images/index/excursion-boat.webp" alt="Вид на побережье с моря" width={2400} height={1800} sizes="(max-width: 768px) 100vw, 33vw" />
         </div>
         <div class="location-content">
           <span class="location-number">APT—02</span>
@@ -528,7 +529,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 
       <article class="location-item reveal">
         <div class="location-image">
-          <img src="/images/index/excursion-by-car.webp" alt="Серпантин побережья Амальфи" decoding="async" loading="lazy">
+          <CldImage src="/images/index/excursion-by-car.webp" alt="Серпантин побережья Амальфи" width={2200} height={1467} sizes="(max-width: 768px) 100vw, 33vw" />
         </div>
         <div class="location-content">
           <span class="location-number">APT—03</span>

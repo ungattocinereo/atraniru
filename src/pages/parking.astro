@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CldImage from '../components/CldImage.astro';
 
 const faqSchema = {
     "@context": "https://schema.org",
@@ -368,7 +369,7 @@ const warnings = [
         </div>
 
         <div class="hero-image">
-            <img src="/images/atrani-with-3-bikes-no-plates.webp" alt="Атрани, узкие улицы и припаркованные мотоциклы" decoding="async" loading="eager">
+            <CldImage src="/images/atrani-with-3-bikes-no-plates.webp" alt="Атрани, узкие улицы и припаркованные мотоциклы" width={2000} height={1581} sizes="(max-width: 1024px) 0px, 50vw" priority />
         </div>
 
         <div class="scroll-indicator">Scroll</div>
@@ -417,7 +418,7 @@ const warnings = [
                 </div>
             </div>
             <div class="intro-image reveal">
-                <img src="/images/transport/bus-amalfi-atrani-salerno.webp" alt="Серпантин Амальфитанского побережья" decoding="async" loading="lazy">
+                <CldImage src="/images/transport/bus-amalfi-atrani-salerno.webp" alt="Серпантин Амальфитанского побережья" width={950} height={1000} sizes="(max-width: 1024px) 100vw, 50vw" />
             </div>
         </div>
     </section>
@@ -597,7 +598,7 @@ const warnings = [
         <div class="alt-cards">
             <article class="alt-card reveal">
                 <div class="alt-image">
-                    <img src="/images/transport/travelmar.webp" alt="Паром TravelMar" decoding="async" loading="lazy">
+                    <CldImage src="/images/transport/travelmar.webp" alt="Паром TravelMar" width={2400} height={1800} sizes="(max-width: 1024px) 100vw, 600px" />
                 </div>
                 <div class="alt-content">
                     <h3 class="alt-name">Паромы TravelMar</h3>
@@ -610,7 +611,7 @@ const warnings = [
 
             <article class="alt-card reveal">
                 <div class="alt-image">
-                    <img src="/images/transport/sitasud-amalfi-bus-amalfi-1350x770.webp" alt="Автобус SITA на побережье" decoding="async" loading="lazy">
+                    <CldImage src="/images/transport/sitasud-amalfi-bus-amalfi-1350x770.webp" alt="Автобус SITA на побережье" width={1350} height={770} sizes="(max-width: 1024px) 100vw, 600px" />
                 </div>
                 <div class="alt-content">
                     <h3 class="alt-name">Автобусы SITA</h3>

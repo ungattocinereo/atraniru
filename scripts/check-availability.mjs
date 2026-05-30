@@ -79,6 +79,13 @@ const apartments = [
     feeds: [
       'https://www.airbnb.com/calendar/ical/973032288955949308.ics?t=06b2618b55984543b0d88662b90ccffd'
     ]
+  },
+  {
+    id: 'villa-ravello',
+    name: 'Villa In Ravello',
+    feeds: [
+      'https://ical.booking.com/v1/export?t=d3c249ba-4358-4d99-abfd-7b81980525bf'
+    ]
   }
 ];
 

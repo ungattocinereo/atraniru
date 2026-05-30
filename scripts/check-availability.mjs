@@ -45,8 +45,8 @@ const apartments = [
     ]
   },
   {
-    id: 'youth-room',
-    name: 'Youth Room',
+    id: 'bunkbed-room',
+    name: 'Bunkbed Room',
     feeds: [
       'https://ical.booking.com/v1/export/t/940e8ee6-25a3-4966-9eab-c83b54827e78.ics',
       'https://www.airbnb.com/calendar/ical/1624089061068359230.ics?t=7cbf451bfed643a5a403dd2d9489df63'

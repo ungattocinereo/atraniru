@@ -1,0 +1,249 @@
+---
+// TelegramCoastBanner — news channel promo before the Amalfi coast editorial section
+---
+
+<section class="telegram-band" aria-label="Новости Амальфитанского побережья">
+  <div class="telegram-shell reveal">
+    <a
+      class="telegram-banner"
+      href="https://t.me/amalfinovosti"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <div class="telegram-banner-media" aria-hidden="true">
+        <img
+          src="/images/index/amalfi-telegram-news.webp"
+          alt=""
+          loading="lazy"
+          decoding="async"
+          width="1774"
+          height="887"
+        />
+      </div>
+      <div class="telegram-banner-copy">
+        <p class="telegram-kicker">Telegram</p>
+        <h2>Новости побережья</h2>
+        <p class="telegram-text">
+          Коротко о том, что происходит в Атрани, Амальфи, Равелло и рядом: море,
+          дороги, события, полезные новости и настроение дня.
+        </p>
+        <span class="telegram-cta">Подписаться в Telegram</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<style>
+  .telegram-band {
+    padding: 92px 0 0;
+    background: var(--color-white);
+    color: var(--color-white);
+  }
+
+  .telegram-shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  .telegram-banner {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(440px, 500px);
+    min-height: 360px;
+    overflow: hidden;
+    background: var(--color-navy-deep);
+    color: var(--color-white);
+    text-decoration: none;
+  }
+
+  .telegram-banner::before {
+    content: 'AMALFI NEWS';
+    position: absolute;
+    left: 22px;
+    bottom: -18px;
+    z-index: 2;
+    color: rgba(255, 255, 255, 0.12);
+    font-family: var(--font-display);
+    font-size: clamp(48px, 7vw, 96px);
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 0.9;
+    pointer-events: none;
+  }
+
+  .telegram-banner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(90deg, rgba(0, 10, 39, 0.1) 0%, rgba(0, 10, 39, 0.74) 59%, rgba(0, 10, 39, 0.98) 100%),
+      linear-gradient(180deg, rgba(255, 87, 34, 0.12), rgba(0, 10, 39, 0.08));
+    pointer-events: none;
+  }
+
+  .telegram-banner-media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .telegram-banner-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 42% center;
+    transform: scale(1.01);
+    transition: transform 0.7s var(--ease-out);
+  }
+
+  .telegram-banner-copy {
+    position: relative;
+    z-index: 2;
+    grid-column: 2;
+    display: flex;
+    min-height: 360px;
+    flex-direction: column;
+    justify-content: center;
+    padding: 46px 40px 42px;
+  }
+
+  .telegram-kicker {
+    margin: 0 0 14px;
+    color: var(--color-orange);
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .telegram-banner h2 {
+    margin: 0;
+    color: var(--color-white);
+    font-family: var(--font-display);
+    font-size: clamp(32px, 3.4vw, 48px);
+    font-weight: 900;
+    letter-spacing: 0;
+    line-height: 0.95;
+    text-wrap: balance;
+    text-transform: uppercase;
+  }
+
+  .telegram-text {
+    max-width: 380px;
+    margin: 22px 0 28px;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 16px;
+    line-height: 1.55;
+  }
+
+  .telegram-cta {
+    display: inline-flex;
+    width: fit-content;
+    min-height: 52px;
+    align-items: center;
+    border: 2px solid var(--color-orange);
+    background: var(--color-orange);
+    color: var(--color-white);
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+    padding: 0 20px;
+    text-transform: uppercase;
+    transition:
+      background 0.2s var(--ease-out),
+      color 0.2s var(--ease-out),
+      transform 0.2s var(--ease-out);
+  }
+
+  .telegram-banner:hover .telegram-banner-media img {
+    transform: scale(1.05);
+  }
+
+  .telegram-banner:hover .telegram-cta {
+    background: var(--color-white);
+    color: var(--color-navy-deep);
+    transform: translate(-2px, -2px);
+  }
+
+  .telegram-banner:focus-visible {
+    outline: 4px solid var(--color-orange);
+    outline-offset: 6px;
+  }
+
+  @media (max-width: 900px) {
+    .telegram-banner {
+      grid-template-columns: 1fr;
+      min-height: 420px;
+    }
+
+    .telegram-banner::after {
+      background:
+        linear-gradient(180deg, rgba(0, 10, 39, 0.1) 0%, rgba(0, 10, 39, 0.3) 28%, rgba(0, 10, 39, 0.96) 100%),
+        linear-gradient(180deg, rgba(255, 87, 34, 0.08), rgba(0, 10, 39, 0.08));
+    }
+
+    .telegram-banner-copy {
+      grid-column: 1;
+      min-height: 420px;
+      justify-content: flex-end;
+      padding: 34px;
+    }
+
+    .telegram-text {
+      max-width: 560px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .telegram-band {
+      padding-top: 64px;
+    }
+
+    .telegram-shell {
+      padding: 0 20px;
+    }
+
+    .telegram-banner {
+      min-height: 520px;
+    }
+
+    .telegram-banner::before {
+      left: 14px;
+      bottom: -10px;
+      font-size: 44px;
+    }
+
+    .telegram-banner-media img {
+      object-position: 33% center;
+    }
+
+    .telegram-banner-copy {
+      min-height: 520px;
+      padding: 26px 22px 30px;
+    }
+
+    .telegram-banner h2 {
+      font-size: clamp(30px, 9.2vw, 40px);
+    }
+
+    .telegram-text {
+      margin: 18px 0 22px;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .telegram-cta {
+      width: 100%;
+      justify-content: center;
+      min-height: 54px;
+      padding: 0 14px;
+      text-align: center;
+    }
+  }
+</style>

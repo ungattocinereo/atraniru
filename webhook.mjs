@@ -7,6 +7,7 @@
  *   1. Ghost CMS    → POST /webhook/rebuild              (post publish/update/delete)
  *   2. GitHub       → POST /hooks/redeploy-atrani-ru     (git push to main)
  *   3. Contact form → POST /hooks/send-telegram-atrani   (public, hardened)
+ *   4. Newsletter   → POST /hooks/subscribe-atrani-newsletter (Ghost member signup)
  *
  * Ghost uses x-ghost-signature header: "sha256=<hash>, t=<timestamp>"
  * GitHub uses x-hub-signature-256 header: "sha256=<hash>"
@@ -17,6 +18,8 @@
  *   GITHUB_WEBHOOK_SECRET - GitHub webhook secret
  *   TELEGRAM_BOT_TOKEN    - Telegram bot token (shared with amalfi.day)
  *   TELEGRAM_CHAT_ID      - Destination chat/channel ID
+ *   GHOST_ADMIN_API_KEY   - Ghost Admin API key for member creation
+ *   GHOST_NEWSLETTER_ID   - Optional Ghost newsletter id to subscribe members to
  *   WEBHOOK_PORT          - port to listen on (default: 40003)
  */
 
@@ -56,6 +59,9 @@ const GHOST_SECRET = process.env.WEBHOOK_SECRET;
 const GITHUB_SECRET = process.env.GITHUB_WEBHOOK_SECRET;
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
+const GHOST_ADMIN_URL = process.env.GHOST_ADMIN_URL || process.env.GHOST_URL;
+const GHOST_ADMIN_API_KEY = process.env.GHOST_ADMIN_API_KEY;
+const GHOST_NEWSLETTER_ID = process.env.GHOST_NEWSLETTER_ID;
 const PORT = parseInt(process.env.WEBHOOK_PORT || '40003', 10);
 const REBUILD_SCRIPT = resolve(__dirname, 'rebuild.sh');
 
@@ -68,12 +74,18 @@ if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
   console.warn('[webhook] TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID not set — contact form will return 500');
 }
 
-// ---- Contact form: constants, rate limit, helpers ----
+if (!GHOST_ADMIN_URL || !GHOST_ADMIN_API_KEY) {
+  console.warn('[webhook] GHOST_ADMIN_URL / GHOST_ADMIN_API_KEY not set — newsletter form will return 500');
+}
+
+// ---- Public form constants, rate limit, helpers ----
 
 const CONTACT_RATE_WINDOW_MS = 10 * 60 * 1000;
 const CONTACT_RATE_LIMIT_MAX = 6;
 const CONTACT_MIN_FORM_FILL_MS = 3500;
 const CONTACT_SPAM_WORDS = /\b(casino|porn|viagra|forex|escort|betting)\b/i;
+const NEWSLETTER_RATE_LIMIT_MAX = 8;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CONTACT_FIELD_LIMITS = {
   name: 80,
   contact: 120,
@@ -83,6 +95,7 @@ const CONTACT_FIELD_LIMITS = {
 };
 
 const contactRequestBuckets = new Map();
+const newsletterRequestBuckets = new Map();
 
 function escapeHtml(value) {
   return String(value ?? '')
@@ -123,6 +136,21 @@ function takeRateLimitSlot(ip) {
   return { allowed: true, retryAfterSec: 0 };
 }
 
+function takeNewsletterRateLimitSlot(ip) {
+  const now = Date.now();
+  const bucket = newsletterRequestBuckets.get(ip) || [];
+  const fresh = bucket.filter((entry) => now - entry < CONTACT_RATE_WINDOW_MS);
+
+  if (fresh.length >= NEWSLETTER_RATE_LIMIT_MAX) {
+    const retryAfterMs = CONTACT_RATE_WINDOW_MS - (now - fresh[0]);
+    return { allowed: false, retryAfterSec: Math.max(1, Math.ceil(retryAfterMs / 1000)) };
+  }
+
+  fresh.push(now);
+  newsletterRequestBuckets.set(ip, fresh);
+  return { allowed: true, retryAfterSec: 0 };
+}
+
 function headerValue(req, key) {
   const value = req.headers[key];
   if (!value) return '';
@@ -146,6 +174,131 @@ function setCors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+}
+
+function clientIp(req, payload = {}) {
+  const forwardedFor = headerValue(req, 'x-forwarded-for');
+  return (
+    (forwardedFor ? forwardedFor.split(',')[0].trim() : '') ||
+    headerValue(req, 'x-real-ip') ||
+    headerValue(req, 'cf-connecting-ip') ||
+    payloadString(payload, 'ip') ||
+    req.socket?.remoteAddress ||
+    'unknown'
+  );
+}
+
+function base64Url(value) {
+  return Buffer.from(value).toString('base64url');
+}
+
+function createGhostAdminToken() {
+  const [id, secret] = String(GHOST_ADMIN_API_KEY || '').split(':');
+  if (!id || !secret) {
+    throw new Error('Invalid Ghost Admin API key');
+  }
+
+  const iat = Math.floor(Date.now() / 1000);
+  const header = base64Url(JSON.stringify({ alg: 'HS256', typ: 'JWT', kid: id }));
+  const payload = base64Url(JSON.stringify({ iat, exp: iat + 5 * 60, aud: '/admin/' }));
+  const signature = createHmac('sha256', Buffer.from(secret, 'hex'))
+    .update(`${header}.${payload}`)
+    .digest('base64url');
+
+  return `${header}.${payload}.${signature}`;
+}
+
+async function createGhostMember(email) {
+  if (!GHOST_ADMIN_URL || !GHOST_ADMIN_API_KEY) {
+    throw new Error('Missing Ghost Admin configuration');
+  }
+
+  const member = {
+    email,
+    labels: [{ name: 'Atrani.ru newsletter', slug: 'atraniru-newsletter' }],
+  };
+
+  if (GHOST_NEWSLETTER_ID) {
+    member.newsletters = [{ id: GHOST_NEWSLETTER_ID }];
+  }
+
+  const ghostBaseUrl = GHOST_ADMIN_URL.endsWith('/') ? GHOST_ADMIN_URL : `${GHOST_ADMIN_URL}/`;
+  const url = new URL('ghost/api/admin/members/', ghostBaseUrl);
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: `Ghost ${createGhostAdminToken()}`,
+      'Accept-Version': 'v5.0',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ members: [member] }),
+  });
+
+  if (response.ok) {
+    return;
+  }
+
+  const body = await response.text();
+  if (response.status === 422 && /already exists|Member already exists|Validation error/i.test(body)) {
+    return;
+  }
+
+  throw new Error(`Ghost member signup failed: ${response.status}`);
+}
+
+async function handleNewsletterSignup(req, res) {
+  setCors(res);
+
+  const body = await collectBody(req);
+  let payload = {};
+  try {
+    payload = body ? JSON.parse(body) : {};
+  } catch {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Invalid JSON payload' }));
+    return;
+  }
+
+  const ip = clientIp(req, payload);
+  const honeypot = pickString(
+    payloadString(payload, 'company_website'),
+    payloadString(payload, 'company'),
+    payloadString(payload, 'website'),
+  );
+  if (honeypot) {
+    console.log(`[webhook] Newsletter: honeypot triggered from ${ip}`);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: true }));
+    return;
+  }
+
+  const rate = takeNewsletterRateLimitSlot(ip);
+  if (!rate.allowed) {
+    res.writeHead(429, {
+      'Content-Type': 'application/json',
+      'Retry-After': String(rate.retryAfterSec),
+    });
+    res.end(JSON.stringify({ error: 'Too many requests. Please try again later.' }));
+    return;
+  }
+
+  const email = payloadString(payload, 'email').toLowerCase();
+  if (!EMAIL_REGEX.test(email) || email.length > 254) {
+    res.writeHead(400, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Invalid email' }));
+    return;
+  }
+
+  try {
+    await createGhostMember(email);
+    console.log(`[webhook] Newsletter: subscribed ${email}`);
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ ok: true }));
+  } catch (err) {
+    console.error('[webhook] Newsletter:', err.message);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ error: 'Could not subscribe' }));
+  }
 }
 
 async function handleContactForm(req, res) {
@@ -449,9 +602,23 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  // CORS preflight for the public newsletter endpoint
+  if (req.method === 'OPTIONS' && req.url === '/hooks/subscribe-atrani-newsletter') {
+    setCors(res);
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
   // Contact form (public, hardened)
   if (req.method === 'POST' && req.url === '/hooks/send-telegram-atrani') {
     await handleContactForm(req, res);
+    return;
+  }
+
+  // Newsletter signup (public, hardened)
+  if (req.method === 'POST' && req.url === '/hooks/subscribe-atrani-newsletter') {
+    await handleNewsletterSignup(req, res);
     return;
   }
 
@@ -537,8 +704,9 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`[webhook] Ghost:   POST /webhook/rebuild`);
   console.log(`[webhook] GitHub:  POST /hooks/redeploy-atrani-ru`);
   console.log(`[webhook] Contact: POST /hooks/send-telegram-atrani`);
+  console.log(`[webhook] News:    POST /hooks/subscribe-atrani-newsletter`);
   console.log(`[webhook] Health:  GET  /webhook/health`);
   console.log(
-    `[webhook] Secrets: Ghost=${GHOST_SECRET ? 'set' : 'MISSING'}, GitHub=${GITHUB_SECRET ? 'set' : 'MISSING'}, Telegram=${TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID ? 'set' : 'MISSING'}`,
+    `[webhook] Secrets: Ghost=${GHOST_SECRET ? 'set' : 'MISSING'}, GitHub=${GITHUB_SECRET ? 'set' : 'MISSING'}, Telegram=${TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID ? 'set' : 'MISSING'}, GhostAdmin=${GHOST_ADMIN_URL && GHOST_ADMIN_API_KEY ? 'set' : 'MISSING'}, Newsletter=${GHOST_NEWSLETTER_ID ? 'set' : 'default'}`,
   );
 });

@@ -16,6 +16,7 @@ test('homepage places the Telegram coast news banner before section 03', () => {
 test('Telegram coast banner links to the news channel and uses the supplied image', () => {
   assert.match(bannerSource, /https:\/\/t\.me\/amalfinovosti/);
   assert.match(bannerSource, /\/images\/index\/amalfi-telegram-news\.webp/);
+  assert.match(bannerSource, /Меж двух лимонов/);
   assert.match(bannerSource, /Новости побережья/);
   assert.match(bannerSource, /Подписаться в Telegram/);
 });

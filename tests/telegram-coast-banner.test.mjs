@@ -24,5 +24,11 @@ test('Telegram coast banner includes responsive desktop and mobile presentation 
   assert.match(bannerSource, /\.telegram-banner/);
   assert.match(bannerSource, /\.telegram-banner-media/);
   assert.match(bannerSource, /@media \(max-width: 760px\)/);
-  assert.match(bannerSource, /grid-template-columns: 1fr/);
+  assert.match(bannerSource, /width:\s*calc\(100% - 44px\)/);
+});
+
+test('Telegram coast banner is full-bleed across the browser width', () => {
+  assert.doesNotMatch(bannerSource, /\.telegram-shell\s*{[^}]*max-width:\s*1200px/s);
+  assert.match(bannerSource, /\.telegram-shell\s*{[^}]*width:\s*100%/s);
+  assert.match(bannerSource, /\.telegram-banner\s*{[^}]*width:\s*100vw/s);
 });

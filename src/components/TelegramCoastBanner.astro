@@ -21,13 +21,15 @@
         />
       </div>
       <div class="telegram-banner-copy">
-        <p class="telegram-kicker">Telegram</p>
-        <h2>Новости побережья</h2>
-        <p class="telegram-text">
-          Коротко о том, что происходит в Атрани, Амальфи, Равелло и рядом: море,
-          дороги, события, полезные новости и настроение дня.
-        </p>
-        <span class="telegram-cta">Подписаться в Telegram</span>
+        <div class="telegram-banner-copy-inner">
+          <p class="telegram-kicker">Telegram</p>
+          <h2>Новости побережья</h2>
+          <p class="telegram-text">
+            Коротко о том, что происходит в Атрани, Амальфи, Равелло и рядом: море,
+            дороги, события, полезные новости и настроение дня.
+          </p>
+          <span class="telegram-cta">Подписаться в Telegram</span>
+        </div>
       </div>
     </a>
   </div>
@@ -35,23 +37,25 @@
 
 <style>
   .telegram-band {
-    padding: 92px 0 0;
+    padding: 104px 0 0;
     background: var(--color-white);
     color: var(--color-white);
+    overflow: hidden;
   }
 
   .telegram-shell {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 40px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   .telegram-banner {
     position: relative;
     isolation: isolate;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(440px, 500px);
-    min-height: 360px;
+    display: block;
+    width: 100vw;
+    max-width: 100%;
+    min-height: clamp(440px, 42vw, 620px);
     overflow: hidden;
     background: var(--color-navy-deep);
     color: var(--color-white);
@@ -61,12 +65,12 @@
   .telegram-banner::before {
     content: 'AMALFI NEWS';
     position: absolute;
-    left: 22px;
-    bottom: -18px;
+    left: max(22px, calc((100vw - 1200px) / 2));
+    bottom: -20px;
     z-index: 2;
     color: rgba(255, 255, 255, 0.12);
     font-family: var(--font-display);
-    font-size: clamp(48px, 7vw, 96px);
+    font-size: clamp(64px, 11vw, 168px);
     font-weight: 900;
     letter-spacing: 0;
     line-height: 0.9;
@@ -79,8 +83,8 @@
     inset: 0;
     z-index: 1;
     background:
-      linear-gradient(90deg, rgba(0, 10, 39, 0.1) 0%, rgba(0, 10, 39, 0.74) 59%, rgba(0, 10, 39, 0.98) 100%),
-      linear-gradient(180deg, rgba(255, 87, 34, 0.12), rgba(0, 10, 39, 0.08));
+      linear-gradient(90deg, rgba(0, 10, 39, 0.03) 0%, rgba(0, 10, 39, 0.28) 38%, rgba(0, 10, 39, 0.88) 70%, rgba(0, 10, 39, 0.98) 100%),
+      linear-gradient(180deg, rgba(255, 87, 34, 0.08), rgba(0, 10, 39, 0.16));
     pointer-events: none;
   }
 
@@ -94,7 +98,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: 42% center;
+    object-position: center center;
     transform: scale(1.01);
     transition: transform 0.7s var(--ease-out);
   }
@@ -102,12 +106,17 @@
   .telegram-banner-copy {
     position: relative;
     z-index: 2;
-    grid-column: 2;
     display: flex;
-    min-height: 360px;
-    flex-direction: column;
+    width: min(1200px, calc(100% - 80px));
+    min-height: clamp(440px, 42vw, 620px);
     justify-content: center;
-    padding: 46px 40px 42px;
+    margin: 0 auto;
+  }
+
+  .telegram-banner-copy-inner {
+    width: min(540px, 42vw);
+    margin-left: auto;
+    padding: 54px 0 52px;
   }
 
   .telegram-kicker {
@@ -125,7 +134,7 @@
     margin: 0;
     color: var(--color-white);
     font-family: var(--font-display);
-    font-size: clamp(32px, 3.4vw, 48px);
+    font-size: clamp(42px, 4.7vw, 70px);
     font-weight: 900;
     letter-spacing: 0;
     line-height: 0.95;
@@ -134,7 +143,7 @@
   }
 
   .telegram-text {
-    max-width: 380px;
+    max-width: 470px;
     margin: 22px 0 28px;
     color: rgba(255, 255, 255, 0.82);
     font-size: 16px;
@@ -178,35 +187,31 @@
 
   @media (max-width: 900px) {
     .telegram-banner {
-      grid-template-columns: 1fr;
-      min-height: 420px;
+      min-height: 560px;
     }
 
     .telegram-banner::after {
       background:
-        linear-gradient(180deg, rgba(0, 10, 39, 0.1) 0%, rgba(0, 10, 39, 0.3) 28%, rgba(0, 10, 39, 0.96) 100%),
+        linear-gradient(180deg, rgba(0, 10, 39, 0.04) 0%, rgba(0, 10, 39, 0.18) 32%, rgba(0, 10, 39, 0.96) 100%),
         linear-gradient(180deg, rgba(255, 87, 34, 0.08), rgba(0, 10, 39, 0.08));
     }
 
     .telegram-banner-copy {
-      grid-column: 1;
-      min-height: 420px;
+      width: min(100% - 56px, 720px);
+      min-height: 560px;
       justify-content: flex-end;
-      padding: 34px;
     }
 
-    .telegram-text {
-      max-width: 560px;
+    .telegram-banner-copy-inner {
+      width: 100%;
+      margin-left: 0;
+      padding: 34px 0 38px;
     }
   }
 
   @media (max-width: 760px) {
     .telegram-band {
       padding-top: 64px;
-    }
-
-    .telegram-shell {
-      padding: 0 20px;
     }
 
     .telegram-banner {
@@ -220,16 +225,20 @@
     }
 
     .telegram-banner-media img {
-      object-position: 33% center;
+      object-position: 34% center;
     }
 
     .telegram-banner-copy {
+      width: calc(100% - 44px);
       min-height: 520px;
-      padding: 26px 22px 30px;
+    }
+
+    .telegram-banner-copy-inner {
+      padding: 26px 0 30px;
     }
 
     .telegram-banner h2 {
-      font-size: clamp(30px, 9.2vw, 40px);
+      font-size: clamp(34px, 10vw, 44px);
     }
 
     .telegram-text {

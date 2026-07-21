@@ -38,3 +38,6 @@ public/data/availability.json
 
 # visual audit output (Playwright screenshots)
 screenshots/
+
+# isolated Codex development worktrees
+.worktrees/

@@ -4,8 +4,8 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "@id": "https://atrani.ru/#business",
+  "@type": "TravelAgency",
+  "@id": "https://atrani.ru/#agency",
   "name": "Atrani.ru — АМАЛЬФИГЕТЬ",
   "url": "https://atrani.ru",
   "telephone": "+39 327 097 2329",
@@ -175,10 +175,14 @@ const localBusinessSchema = {
               <label for="service" class="form-label">Что интересует</label>
               <select id="service" name="service" class="form-input form-select">
                 <option value="">— Выберите —</option>
-                <option value="Апартаменты">Апартаменты</option>
-                <option value="Фотосессия">Фотосессия</option>
-                <option value="Трансфер / портер">Трансфер / портер</option>
-                <option value="Другое">Другое</option>
+                <option value="apartments">Апартаменты</option>
+                <option value="car-tour">Экскурсия на машине</option>
+                <option value="boat-tour">Морская экскурсия</option>
+                <option value="gastronomy-tour">Гастрономическая экскурсия</option>
+                <option value="vespa-tour">Vespa / мотоцикл</option>
+                <option value="photosession">Фотосессия</option>
+                <option value="transfer">Трансфер / портер</option>
+                <option value="other">Другое</option>
               </select>
             </div>
 
@@ -213,7 +217,7 @@ const localBusinessSchema = {
               <input type="checkbox" id="gdpr" name="gdpr" class="form-checkbox" required>
               <span class="checkbox-text">
                 Согласен на обработку персональных данных согласно
-                <a href="/privacy" class="privacy-link">политике конфиденциальности</a>.
+                <a href="/privacy-policy" class="privacy-link">политике конфиденциальности</a>.
               </span>
             </label>
           </div>
@@ -1033,12 +1037,20 @@ const localBusinessSchema = {
   const formMessage = document.getElementById('formMessage') as HTMLDivElement | null;
   const sendAnotherBtn = document.getElementById('sendAnother') as HTMLButtonElement | null;
   const formStartedAt = document.getElementById('formStartedAt') as HTMLInputElement | null;
+  const serviceSelect = document.getElementById('service') as HTMLSelectElement | null;
 
   const ENDPOINT = '/hooks/send-telegram-atrani';
   const COOLDOWN_KEY = 'atrani_contact_last_submit';
   const COOLDOWN_MS = 60_000;
+  const FALLBACK_EMAIL = 'mail@atrani.ru';
 
   if (formStartedAt) formStartedAt.value = String(Date.now());
+
+  const requestedService = new URLSearchParams(window.location.search).get('service');
+  if (serviceSelect && requestedService) {
+    const hasRequestedOption = Array.from(serviceSelect.options).some(option => option.value === requestedService);
+    if (hasRequestedOption) serviceSelect.value = requestedService;
+  }
 
   const showError = (msg: string, submitBtn: HTMLButtonElement, btnText: HTMLSpanElement, originalText: string | null) => {
     if (formMessage) {
@@ -1071,7 +1083,10 @@ const localBusinessSchema = {
       const formData = new FormData(form);
       const name = String(formData.get('name') || '').trim();
       const contact = String(formData.get('contact') || '').trim();
-      const service = String(formData.get('service') || '').trim();
+      const serviceValue = String(formData.get('service') || '').trim();
+      const service = serviceValue
+        ? (serviceSelect?.selectedOptions[0]?.textContent?.trim() || serviceValue)
+        : '';
       const dates = String(formData.get('dates') || '').trim();
       const message = String(formData.get('message') || '').trim();
       const gdpr = formData.get('gdpr');
@@ -1123,7 +1138,7 @@ const localBusinessSchema = {
         try { result = await response.json(); } catch {}
 
         if (response.status === 429) {
-          showError('Слишком много запросов. Попробуйте через пару минут.', submitBtn, btnText, originalText);
+          showError(`Слишком много запросов. Попробуйте через пару минут или напишите на ${FALLBACK_EMAIL}.`, submitBtn, btnText, originalText);
           return;
         }
         if (!response.ok || result.ok === false) {
@@ -1133,8 +1148,12 @@ const localBusinessSchema = {
             serverError === 'Invalid contact field' ? 'Укажите корректный email или телефон.' :
             serverError === 'Invalid field length' ? 'Слишком длинное значение в одном из полей.' :
             serverError === 'Rejected as spam' ? 'Сообщение отклонено фильтром. Уберите ссылки и попробуйте снова.' :
-            'Не удалось отправить. Попробуйте ещё раз или напишите на hello@atrani.ru.';
-          showError(readable, submitBtn, btnText, originalText);
+            serverError === 'Submission too fast' ? `Не получилось отправить так быстро. Попробуйте ещё раз через несколько секунд или напишите на ${FALLBACK_EMAIL}.` :
+            `Не удалось отправить. Попробуйте ещё раз или напишите на ${FALLBACK_EMAIL}.`;
+          const readableWithFallback = readable.includes(FALLBACK_EMAIL)
+            ? readable
+            : `${readable} Если ошибка повторится, напишите на ${FALLBACK_EMAIL}.`;
+          showError(readableWithFallback, submitBtn, btnText, originalText);
           return;
         }
 
@@ -1146,7 +1165,7 @@ const localBusinessSchema = {
           setTimeout(() => formSuccess.classList.add('showing'), 50);
         }, 500);
       } catch (err) {
-        showError('Ошибка сети. Проверьте соединение и попробуйте снова.', submitBtn, btnText, originalText);
+        showError(`Ошибка сети. Проверьте соединение и попробуйте снова или напишите на ${FALLBACK_EMAIL}.`, submitBtn, btnText, originalText);
       }
     });
 

@@ -1,95 +1,136 @@
-#!/bin/bash
-set -e
+#!/usr/bin/env bash
+set -Eeuo pipefail
 
-# Atrani.ru deploy script (static site + Ghost CMS + webhook)
-# Usage: ./deploy.sh
-# Run on VPS from the project directory: /home/greg/atraniru
+# Atrani.ru deployment entry point.
 #
-# Architecture:
-#   Caddy serves Astro static files from dist/
-#   Ghost (Docker, port 40002) is headless CMS only
-#   Webhook server (port 40003) triggers rebuild on Ghost publish or GitHub push
-#   Caddy proxies /blog/ghost/*, /blog/content/*, /webhook/*, /hooks/* to port 40003
-#
-# Required Caddy config (/etc/caddy/Caddyfile):
-#
-#   atrani.ru {
-#       # Ghost admin panel
-#       handle /blog/ghost/* {
-#           reverse_proxy localhost:40002
-#       }
-#
-#       # Ghost uploaded images
-#       handle /blog/content/* {
-#           reverse_proxy localhost:40002
-#       }
-#
-#       # Ghost Content API (needed at build time from VPS itself)
-#       handle /blog/ghost/api/* {
-#           reverse_proxy localhost:40002
-#       }
-#
-#       # Webhook server (Ghost + GitHub rebuild triggers)
-#       handle /webhook/* {
-#           reverse_proxy localhost:40003
-#       }
-#
-#       # GitHub webhook (redeploy on push)
-#       handle /hooks/* {
-#           reverse_proxy localhost:40003
-#       }
-#
-#       # Astro static site (all other routes including /blog/*)
-#       handle {
-#           root * /home/greg/atraniru/dist
-#           try_files {path} {path}/index.html {path}.html
-#           file_server
-#       }
-#   }
+#   ./deploy.sh                 Fetch and fast-forward main, install dependencies,
+#                               build a release, activate it, and restart services.
+#   ./deploy.sh --rebuild-only  Build and activate the current committed revision.
+#                               Used by the Ghost webhook; it never pulls code or
+#                               restarts the webhook process that invoked it.
 
-APP_DIR="/home/greg/atraniru"
+APP_DIR="${ATRANI_APP_DIR:-/srv/atraniru}"
+BACKUP_ROOT="${ATRANI_BACKUP_DIR:-/srv/atraniru-backups}"
+LOCK_FILE="${ATRANI_DEPLOY_LOCK:-/tmp/atraniru-deploy.lock}"
+MODE="${1:-deploy}"
+BUILD_DIR=""
+PREVIOUS_DIST=""
+DIST_ACTIVATED=0
 
+log() {
+  printf '[deploy] %s %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*"
+}
+
+die() {
+  log "ERROR: $*"
+  exit 1
+}
+
+cleanup() {
+  if [[ -n "$BUILD_DIR" && "$BUILD_DIR" == "$APP_DIR/.deploy-build."* && -d "$BUILD_DIR" ]]; then
+    rm -rf -- "$BUILD_DIR"
+  fi
+}
+
+rollback_dist() {
+  if [[ "$DIST_ACTIVATED" -eq 1 && -n "$PREVIOUS_DIST" && -d "$PREVIOUS_DIST" ]]; then
+    log "Restoring the previous static release"
+    if [[ -d "$APP_DIR/dist" ]]; then
+      mv "$APP_DIR/dist" "$BACKUP_ROOT/failed-dist-$(date -u '+%Y%m%dT%H%M%SZ')"
+    fi
+    mv "$PREVIOUS_DIST" "$APP_DIR/dist"
+    DIST_ACTIVATED=0
+  fi
+}
+
+on_error() {
+  local status=$?
+  rollback_dist || true
+  cleanup
+  exit "$status"
+}
+
+case "$MODE" in
+  deploy|--rebuild-only) ;;
+  *) die "Usage: $0 [--rebuild-only]" ;;
+esac
+
+command -v flock >/dev/null 2>&1 || die "flock is required"
+exec 9>"$LOCK_FILE"
+flock -n 9 || die "another deploy or rebuild is already running"
+
+[[ -d "$APP_DIR/.git" ]] || die "repository not found at $APP_DIR"
 cd "$APP_DIR"
 
-# Check .env exists with required credentials
-if [ ! -f .env ] || ! grep -q "GHOST_URL" .env || ! grep -q "CONTENT_API_KEY" .env; then
-  echo "ERROR: .env missing or incomplete"
-  echo "Create .env with:"
-  echo "  GHOST_URL=http://localhost:40002/blog"
-  echo "  GHOST_PUBLIC_URL=https://atrani.ru/blog"
-  echo "  CONTENT_API_KEY=<your-ghost-content-api-key>"
-  echo "  WEBHOOK_SECRET=<random-secret>"
-  exit 1
+[[ -f .env ]] || die ".env is missing"
+grep -Eq '^GHOST_URL=.+' .env || die "GHOST_URL is missing from .env"
+grep -Eq '^CONTENT_API_KEY=.+' .env || die "CONTENT_API_KEY is missing from .env"
+
+if [[ "$MODE" == "deploy" ]]; then
+  [[ -z "$(git status --porcelain --untracked-files=all)" ]] || \
+    die "working tree is not clean; preserve or commit server changes first"
+
+  current_branch="$(git branch --show-current)"
+  [[ "$current_branch" == "main" ]] || die "full deployment must run from main"
+
+  log "Fetching origin/main"
+  git fetch origin main
+  git merge --ff-only origin/main
+
+  log "Installing locked dependencies"
+  npm ci
+else
+  [[ -d node_modules ]] || die "node_modules is missing; run a full deploy first"
 fi
 
-echo "=== Pulling latest code ==="
-git pull origin main
+sudo install -d -o "$(id -un)" -g "$(id -gn)" "$BACKUP_ROOT"
+BUILD_DIR="$(mktemp -d "$APP_DIR/.deploy-build.XXXXXX")"
+trap on_error ERR INT TERM
+trap cleanup EXIT
 
-echo "=== Installing dependencies ==="
-npm ci
+log "Preparing isolated release from $(git rev-parse --short HEAD)"
+git archive HEAD | tar -x -C "$BUILD_DIR"
+install -m 600 .env "$BUILD_DIR/.env"
+ln -s "$APP_DIR/node_modules" "$BUILD_DIR/node_modules"
 
-echo "=== Building static site ==="
-npm run build
+log "Building static site"
+(
+  cd "$BUILD_DIR"
+  npm run build
+)
 
-echo "=== Setting up webhook server ==="
-# Install systemd service if not already installed
-if [ ! -f /etc/systemd/system/atraniru-webhook.service ]; then
-  echo "Installing webhook systemd service..."
-  sudo cp "$APP_DIR/atraniru-webhook.service" /etc/systemd/system/
+for required_file in dist/index.html dist/sitemap-index.xml dist/llms.txt; do
+  [[ -s "$BUILD_DIR/$required_file" ]] || die "release is missing $required_file"
+done
+
+timestamp="$(date -u '+%Y%m%dT%H%M%SZ')"
+if [[ -d "$APP_DIR/dist" ]]; then
+  PREVIOUS_DIST="$BACKUP_ROOT/dist-$timestamp"
+  log "Backing up current static release to $PREVIOUS_DIST"
+  mv "$APP_DIR/dist" "$PREVIOUS_DIST"
+fi
+
+log "Activating validated static release"
+mv "$BUILD_DIR/dist" "$APP_DIR/dist"
+DIST_ACTIVATED=1
+
+[[ -s "$APP_DIR/dist/index.html" ]] || die "activated release is not readable"
+
+if [[ "$MODE" == "deploy" ]]; then
+  log "Installing and restarting webhook service"
+  sudo install -m 0644 "$APP_DIR/atraniru-webhook.service" /etc/systemd/system/atraniru-webhook.service
   sudo systemctl daemon-reload
   sudo systemctl enable atraniru-webhook
+  sudo systemctl restart atraniru-webhook
+
+  log "Reloading shared Caddy configuration"
+  # The repository Caddyfile is an Atrani reference fragment. The server-wide
+  # /etc/caddy/Caddyfile is shared with other sites and must never be replaced.
+  sudo systemctl reload caddy
+
+  curl --fail --silent --show-error --max-time 10 \
+    http://127.0.0.1:13103/webhook/health >/dev/null
 fi
 
-# Restart webhook server
-sudo systemctl restart atraniru-webhook
-
-echo ""
-echo "=== Done! ==="
-echo "Static files in: $APP_DIR/dist"
-echo ""
-echo "Next steps (first deploy only):"
-echo "  1. Update Caddy config: sudo nano /etc/caddy/Caddyfile"
-echo "  2. Reload Caddy: sudo systemctl reload caddy"
-echo "  3. Add Ghost webhook: Ghost Admin → Settings → Integrations"
-echo "     Event: Post published"
-echo "     URL: https://atrani.ru/webhook/rebuild?secret=YOUR_WEBHOOK_SECRET"
+DIST_ACTIVATED=0
+log "Deployment complete; static files are in $APP_DIR/dist"

@@ -3,4 +3,22 @@ Allow: /
 Disallow: /api-test
 Disallow: /blog/*/edit
 
+# ChatGPT search crawler. Keep this separate from GPTBot so the intent is explicit.
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /api-test
+Disallow: /blog/*/edit
+
+# OpenAI's general web crawler is also allowed by site policy.
+User-agent: GPTBot
+Allow: /
+Disallow: /api-test
+Disallow: /blog/*/edit
+
+# User-requested page visits from ChatGPT.
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /api-test
+Disallow: /blog/*/edit
+
 Sitemap: https://atrani.ru/sitemap-index.xml

@@ -4,10 +4,11 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "test:images": "node --test tests/image-urls.test.mjs",
     "optimize:images": "node scripts/optimize-images.mjs",
     "check:availability": "node scripts/check-availability.mjs",
     "prebuild": "npm run check:availability && npm run optimize:images",
-    "build": "astro build",
+    "build": "astro build && node scripts/finalize-seo.mjs",
     "compress": "gzipper compress ./dist --brotli --gzip --include html,css,js,svg,json,xml,woff,woff2",
     "build:prod": "npm run build && npm run compress",
     "preview": "astro preview",

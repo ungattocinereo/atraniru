@@ -1,0 +1,57 @@
+---
+/*
+ * GhostImage — keeps Ghost's original image URL as the safe <img src>
+ * fallback while adding responsive /size/w... candidates for modern
+ * browsers. Non-Ghost fallback images render as plain <img>.
+ */
+import { buildGhostSrcSet, isGhostImageUrl } from '../lib/imageUrls.mjs';
+
+interface Props {
+  src: string | null | undefined;
+  alt: string;
+  sizes?: string;
+  widths?: number[];
+  loading?: 'lazy' | 'eager';
+  decoding?: 'async' | 'auto' | 'sync';
+  fetchpriority?: 'high' | 'low' | 'auto';
+  class?: string;
+  width?: number | string;
+  height?: number | string;
+  [key: string]: unknown;
+}
+
+const {
+  src,
+  alt,
+  sizes = '100vw',
+  widths = [600, 960, 1200, 1600, 2000, 2400],
+  loading = 'lazy',
+  decoding = 'async',
+  fetchpriority,
+  class: className,
+  width,
+  height,
+  ...rest
+} = Astro.props as Props;
+
+const resolvedSrc = src || '';
+const srcset = resolvedSrc && isGhostImageUrl(resolvedSrc)
+  ? buildGhostSrcSet(resolvedSrc, widths)
+  : undefined;
+---
+
+{resolvedSrc && (
+  <img
+    src={resolvedSrc}
+    srcset={srcset}
+    sizes={srcset ? sizes : undefined}
+    width={width}
+    height={height}
+    alt={alt}
+    loading={loading}
+    decoding={decoding}
+    fetchpriority={fetchpriority}
+    class={className}
+    {...rest}
+  />
+)}

@@ -2,6 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import Newsletter from '../../components/Newsletter.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CldImage from '../../components/CldImage.astro';
+import GhostImage from '../../components/GhostImage.astro';
 import { getAllPosts, getFeaturedPosts, formatDate } from '../../lib/ghostApi';
 import { rewriteGhostUrl } from '../../lib/ghost';
 
@@ -10,14 +12,15 @@ const [allPosts, featuredPosts] = await Promise.all([
   getFeaturedPosts(4),
 ]);
 
-const BATCH_SIZE = 12;
+const POSTS_PER_PAGE = 12;
 
 // Category counts for toggle badges
 const blogCount = allPosts.filter(p => p.primary_tag?.slug === 'blogh').length;
 const newsCount = allPosts.filter(p => p.primary_tag?.slug === 'novosti').length;
 
-// Show all posts in the regular grid (featured posts also appear in featured section above)
-const regularPosts = allPosts;
+// Keep the first archive document lean; older posts live on crawlable page URLs.
+const regularPosts = allPosts.slice(0, POSTS_PER_PAGE);
+const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
 ---
 
 <Layout
@@ -36,10 +39,13 @@ const regularPosts = allPosts;
 
     <!-- Hero background image -->
     <div class="blog-hero-bg-image">
-      <img
+      <CldImage
         src="/images/index/atrani-4-index.webp"
         alt="Атрани — вид на город у моря"
-        loading="eager"
+        width={2400}
+        height={1600}
+        sizes="100vw"
+        priority
       />
     </div>
 
@@ -93,10 +99,12 @@ const regularPosts = allPosts;
           >
             <a href={`/blog/${post.slug}`}>
               <div class="featured-card-image">
-                <img
+                <GhostImage
                   src={rewriteGhostUrl(post.feature_image) || '/images/placeholder-blog.jpg'}
                   alt={post.title}
                   loading="eager"
+                  sizes={i === 0 ? '(max-width: 768px) 100vw, 50vw' : '(max-width: 768px) 100vw, 25vw'}
+                  widths={[600, 960, 1200, 1600, 2000]}
                 />
                 <div class="featured-card-overlay"></div>
                 <span class="featured-card-badge">
@@ -129,19 +137,21 @@ const regularPosts = allPosts;
       <span class="section-divider-label">Последние публикации</span>
       <div class="section-divider-line" aria-hidden="true"></div>
     </div>
-    <div class="blog-listing-grid" data-batch-size={BATCH_SIZE}>
+    <div class="blog-listing-grid">
       {regularPosts.map((post, i) => (
         <article
-          class={`blog-listing-card reveal ${i >= BATCH_SIZE ? 'blog-listing-card--hidden' : ''}`}
+          class="blog-listing-card reveal"
           data-index={i}
           data-tag={post.primary_tag?.slug || ''}
         >
           <a href={`/blog/${post.slug}`}>
             <div class="blog-listing-card-image">
-              <img
+              <GhostImage
                 src={rewriteGhostUrl(post.feature_image) || '/images/placeholder-blog.jpg'}
                 alt={post.title}
                 loading={i < 3 ? 'eager' : 'lazy'}
+                sizes="(max-width: 768px) 100vw, 33vw"
+                widths={[600, 960, 1200, 1600]}
               />
               {post.primary_tag && (
                 <span class="blog-listing-card-category">{post.primary_tag.name}</span>
@@ -154,7 +164,13 @@ const regularPosts = allPosts;
                 {post.primary_author && (
                   <span class="blog-listing-card-author">
                     {post.primary_author.profile_image && (
-                      <img src={rewriteGhostUrl(post.primary_author.profile_image)} alt={post.primary_author.name} class="blog-listing-card-author-img" />
+                      <GhostImage
+                        src={rewriteGhostUrl(post.primary_author.profile_image)}
+                        alt={post.primary_author.name}
+                        class="blog-listing-card-author-img"
+                        sizes="40px"
+                        widths={[160, 320]}
+                      />
                     )}
                     {post.primary_author.name}
                   </span>
@@ -168,8 +184,14 @@ const regularPosts = allPosts;
       ))}
     </div>
 
-    {regularPosts.length > BATCH_SIZE && (
-      <div id="load-more-sentinel" aria-hidden="true"></div>
+    {totalPages > 1 && (
+      <nav class="archive-pagination" aria-label="Страницы блога">
+        <span class="archive-pagination-current" aria-current="page">1</span>
+        {Array.from({ length: totalPages - 1 }, (_, index) => index + 2).map((page) => (
+          <a href={`/blog/page/${page}`}>{page}</a>
+        ))}
+        <a class="archive-pagination-next" href="/blog/page/2" rel="next">Следующая →</a>
+      </nav>
     )}
 
     {regularPosts.length === 0 && (
@@ -195,7 +217,9 @@ const regularPosts = allPosts;
       "url": "https://atrani.ru",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://atrani.ru/logo.png"
+        "url": "https://atrani.ru/icon-512.png",
+        "width": 512,
+        "height": 512
       }
     },
     "blogPost": allPosts.slice(0, 10).map(post => ({
@@ -808,6 +832,36 @@ const regularPosts = allPosts;
   /* =============================================
      RESPONSIVE
      ============================================= */
+  .archive-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 56px;
+  }
+
+  .archive-pagination a,
+  .archive-pagination-current {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    padding: 10px 14px;
+    border: 2px solid var(--color-navy);
+    color: var(--color-navy);
+    font-weight: 800;
+    text-decoration: none;
+  }
+
+  .archive-pagination-current,
+  .archive-pagination a:hover {
+    background: var(--color-orange);
+    border-color: var(--color-orange);
+    color: white;
+  }
+
   @media (max-width: 1024px) {
     /* Featured: switch to 2x2 grid */
     .featured-grid {
@@ -919,137 +973,24 @@ const regularPosts = allPosts;
   }
 </style>
 
-<!-- Fallback: show all cards when JS is disabled -->
-<noscript>
-  <style>
-    .blog-listing-card--hidden { display: block !important; }
-  </style>
-</noscript>
-
 <script>
-  // === Category Filtering + Infinite Scroll ===
+  // Category filtering applies to the current crawlable archive page.
   const filterTabs = document.querySelectorAll('.blog-filter-tab');
-  const allCards = Array.from(document.querySelectorAll('.blog-listing-card'));
-  const featuredCards = Array.from(document.querySelectorAll('.featured-card'));
-  const grid = document.querySelector('.blog-listing-grid');
-  const sentinel = document.getElementById('load-more-sentinel');
-  const BATCH = parseInt(grid?.dataset.batchSize || '12', 10);
+  const cards = document.querySelectorAll<HTMLElement>('.blog-listing-card, .featured-card');
 
-  let currentFilter = 'all';
-  let visible = 0;
-
-  // --- Filtering ---
-  function getFilteredCards() {
-    if (currentFilter === 'all') return allCards;
-    return allCards.filter(c => c.dataset.tag === currentFilter);
-  }
-
-  function applyFilter(filter) {
-    currentFilter = filter;
-
-    // Update active tab
+  function applyFilter(filter: string) {
     filterTabs.forEach(tab => {
-      tab.classList.toggle('is-active', tab.dataset.filter === filter);
+      const element = tab as HTMLElement;
+      element.classList.toggle('is-active', element.dataset.filter === filter);
     });
-
-    // Filter featured cards
-    featuredCards.forEach(card => {
-      const show = filter === 'all' || card.dataset.tag === filter;
-      card.style.display = show ? '' : 'none';
+    cards.forEach(card => {
+      card.hidden = filter !== 'all' && card.dataset.tag !== filter;
     });
-
-    // Reset all regular cards
-    allCards.forEach(card => {
-      card.classList.remove('blog-listing-card--hidden', 'blog-listing-card--revealing', 'blog-listing-card--filter-hidden');
-      card.style.animationDelay = '';
-    });
-
-    // Apply filter + batch visibility
-    const filtered = getFilteredCards();
-    let idx = 0;
-    allCards.forEach(card => {
-      const matchesFilter = filter === 'all' || card.dataset.tag === filter;
-      if (!matchesFilter) {
-        card.classList.add('blog-listing-card--filter-hidden');
-        return;
-      }
-      if (idx >= BATCH) {
-        card.classList.add('blog-listing-card--hidden');
-      } else {
-        // Staggered reveal animation
-        card.classList.add('blog-listing-card--revealing');
-        card.style.animationDelay = `${idx * 0.04}s`;
-      }
-      idx++;
-    });
-
-    visible = Math.min(BATCH, filtered.length);
-
-    // Handle empty state
-    handleEmptyState(filtered.length);
-
-    // Reset infinite scroll
-    resetInfiniteScroll(filtered.length);
   }
 
   filterTabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      const filter = tab.dataset.filter;
-      if (filter !== currentFilter) applyFilter(filter);
+      applyFilter((tab as HTMLElement).dataset.filter || 'all');
     });
   });
-
-  // --- Empty State ---
-  function handleEmptyState(matchCount) {
-    let emptyEl = document.querySelector('.blog-empty-filtered');
-    if (matchCount === 0) {
-      if (!emptyEl) {
-        emptyEl = document.createElement('div');
-        emptyEl.className = 'blog-empty blog-empty-filtered';
-        emptyEl.innerHTML = '<p>В этой категории пока нет статей</p>';
-        grid?.parentNode?.insertBefore(emptyEl, grid.nextSibling);
-      }
-      emptyEl.style.display = 'block';
-    } else if (emptyEl) {
-      emptyEl.style.display = 'none';
-    }
-  }
-
-  // --- Infinite Scroll ---
-  function revealNextBatch() {
-    const filtered = getFilteredCards();
-    const end = Math.min(visible + BATCH, filtered.length);
-    for (let i = visible; i < end; i++) {
-      const card = filtered[i];
-      card.classList.remove('blog-listing-card--hidden');
-      card.classList.add('blog-listing-card--revealing');
-      card.style.animationDelay = `${(i - visible) * 0.04}s`;
-    }
-    visible = end;
-
-    if (visible >= filtered.length && sentinel) {
-      observer.unobserve(sentinel);
-    }
-  }
-
-  function resetInfiniteScroll(totalFiltered) {
-    if (!sentinel) return;
-    if (totalFiltered > BATCH) {
-      observer.observe(sentinel);
-    } else {
-      observer.unobserve(sentinel);
-    }
-  }
-
-  const observer = new IntersectionObserver((entries) => {
-    if (entries[0]?.isIntersecting) {
-      revealNextBatch();
-    }
-  }, { rootMargin: '200px' });
-
-  // Initial setup
-  visible = Math.min(BATCH, allCards.length);
-  if (grid && sentinel && allCards.length > BATCH) {
-    observer.observe(sentinel);
-  }
 </script>

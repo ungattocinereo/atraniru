@@ -5,8 +5,10 @@ After=network.target
 [Service]
 Type=simple
 User=greg
-WorkingDirectory=/home/greg/atraniru
-ExecStart=/usr/bin/node /home/greg/atraniru/webhook.mjs
+WorkingDirectory=/srv/atraniru
+EnvironmentFile=/srv/atraniru/.env
+Environment=WEBHOOK_PORT=13103
+ExecStart=/usr/bin/node /srv/atraniru/webhook.mjs
 Restart=on-failure
 RestartSec=5
 StandardOutput=journal

@@ -1,6 +1,7 @@
 ---
 import Layout from './Layout.astro';
 import { rewriteGhostUrl } from '../lib/ghost';
+import { createMetaDescription } from '../lib/seo.mjs';
 import type { GhostPost } from '../lib/types/ghost';
 
 interface Props {
@@ -15,11 +16,12 @@ const canonicalUrl = `${siteUrl}/blog/${post.slug}`;
 // Title: Ghost og_title > meta_title > default
 const metaTitle = post.og_title || post.meta_title || `${post.title} — Atrani.ru`;
 
-// Description: Ghost og_description > meta_description > excerpt
-const metaDescription = post.og_description || post.meta_description || post.custom_excerpt || post.excerpt;
+// Always provide a useful description, including legacy Ghost posts without metadata.
+const metaDescription = createMetaDescription(post);
 
 // OG image
 const ogImage = rewriteGhostUrl(post.og_image || post.feature_image) || '/meta.png';
+const schemaImage = new URL(ogImage, siteUrl).href;
 
 // Twitter-specific overrides (Ghost allows separate twitter fields)
 const twitterTitle = post.twitter_title || metaTitle;
@@ -29,6 +31,9 @@ const twitterImage = rewriteGhostUrl(post.twitter_image || post.og_image || post
 // Author twitter handle
 const authorTwitter = post.primary_author?.twitter
   ? (post.primary_author.twitter.startsWith('@') ? post.primary_author.twitter : `@${post.primary_author.twitter}`)
+  : undefined;
+const authorWebsite = post.primary_author?.website
+  ? post.primary_author.website.replace(/^http:\/\/www\.cinereo\.it\/?$/i, 'https://cinereo.it')
   : undefined;
 
 // Image alt text
@@ -85,7 +90,7 @@ const keywords = post.tags && post.tags.length > 0
     "@type": "BlogPosting",
     "headline": post.title,
     "description": metaDescription,
-    "image": rewriteGhostUrl(post.feature_image),
+    "image": schemaImage,
     "datePublished": post.published_at,
     "dateModified": post.updated_at,
     "inLanguage": "ru",
@@ -97,7 +102,7 @@ const keywords = post.tags && post.tags.length > 0
       "name": post.primary_author.name,
       "image": rewriteGhostUrl(post.primary_author.profile_image),
       "description": post.primary_author.bio,
-      ...(post.primary_author.website ? { "url": post.primary_author.website } : {})
+      ...(authorWebsite ? { "url": authorWebsite } : {})
     } : undefined,
     "publisher": {
       "@type": "Organization",
@@ -105,7 +110,9 @@ const keywords = post.tags && post.tags.length > 0
       "url": "https://atrani.ru",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://atrani.ru/logo.png"
+        "url": "https://atrani.ru/icon-512.png",
+        "width": 512,
+        "height": 512
       }
     },
     "mainEntityOfPage": {

@@ -25,6 +25,7 @@ export default defineConfig({
       filter: (page) =>
         !page.includes('/api-test') &&
         !page.includes('/privacy-policy') &&
+        !page.match(/\/photosessions\/?$/) &&
         !page.endsWith('/edit') &&
         !page.endsWith('/edit/'),
       serialize(item) {

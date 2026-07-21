@@ -20,7 +20,7 @@
  *   TELEGRAM_CHAT_ID      - Destination chat/channel ID
  *   GHOST_ADMIN_API_KEY   - Ghost Admin API key for member creation
  *   GHOST_NEWSLETTER_ID   - Optional Ghost newsletter id to subscribe members to
- *   WEBHOOK_PORT          - port to listen on (default: 40003)
+ *   WEBHOOK_PORT          - port to listen on (default: 13103)
  */
 
 import { createServer } from 'node:http';
@@ -62,7 +62,7 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 const GHOST_ADMIN_URL = process.env.GHOST_ADMIN_URL || process.env.GHOST_URL;
 const GHOST_ADMIN_API_KEY = process.env.GHOST_ADMIN_API_KEY;
 const GHOST_NEWSLETTER_ID = process.env.GHOST_NEWSLETTER_ID;
-const PORT = parseInt(process.env.WEBHOOK_PORT || '40003', 10);
+const PORT = parseInt(process.env.WEBHOOK_PORT || '13103', 10);
 const REBUILD_SCRIPT = resolve(__dirname, 'rebuild.sh');
 
 if (!GHOST_SECRET && !GITHUB_SECRET && !(TELEGRAM_BOT_TOKEN && TELEGRAM_CHAT_ID)) {
@@ -82,7 +82,7 @@ if (!GHOST_ADMIN_URL || !GHOST_ADMIN_API_KEY) {
 
 const CONTACT_RATE_WINDOW_MS = 10 * 60 * 1000;
 const CONTACT_RATE_LIMIT_MAX = 6;
-const CONTACT_MIN_FORM_FILL_MS = 3500;
+const CONTACT_MIN_FORM_FILL_MS = 1000;
 const CONTACT_SPAM_WORDS = /\b(casino|porn|viagra|forex|escort|betting)\b/i;
 const NEWSLETTER_RATE_LIMIT_MAX = 8;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -314,14 +314,7 @@ async function handleContactForm(req, res) {
     return;
   }
 
-  const forwardedFor = headerValue(req, 'x-forwarded-for');
-  const ip =
-    (forwardedFor ? forwardedFor.split(',')[0].trim() : '') ||
-    headerValue(req, 'x-real-ip') ||
-    headerValue(req, 'cf-connecting-ip') ||
-    payloadString(payload, 'ip') ||
-    req.socket?.remoteAddress ||
-    'unknown';
+  const ip = clientIp(req, payload);
 
   const honeypot = pickString(
     payloadString(payload, 'company_website'),
@@ -341,9 +334,16 @@ async function handleContactForm(req, res) {
     startedAt > 0 &&
     Date.now() - startedAt < CONTACT_MIN_FORM_FILL_MS
   ) {
+    const retryAfterSec = Math.max(
+      1,
+      Math.ceil((CONTACT_MIN_FORM_FILL_MS - (Date.now() - startedAt)) / 1000),
+    );
     console.log(`[webhook] Contact: too-fast submission from ${ip}`);
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ ok: true }));
+    res.writeHead(425, {
+      'Content-Type': 'application/json',
+      'Retry-After': String(retryAfterSec),
+    });
+    res.end(JSON.stringify({ error: 'Submission too fast' }));
     return;
   }
 
@@ -388,9 +388,8 @@ async function handleContactForm(req, res) {
     return;
   }
 
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phoneDigits = contact.replace(/\D/g, '');
-  if (!emailRegex.test(contact) && phoneDigits.length < 7) {
+  if (!EMAIL_REGEX.test(contact) && phoneDigits.length < 7) {
     res.writeHead(400, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ error: 'Invalid contact field' }));
     return;
@@ -699,8 +698,8 @@ const server = createServer(async (req, res) => {
   res.end();
 });
 
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`[webhook] Listening on 0.0.0.0:${PORT}`);
+server.listen(PORT, '127.0.0.1', () => {
+  console.log(`[webhook] Listening on 127.0.0.1:${PORT}`);
   console.log(`[webhook] Ghost:   POST /webhook/rebuild`);
   console.log(`[webhook] GitHub:  POST /hooks/redeploy-atrani-ru`);
   console.log(`[webhook] Contact: POST /hooks/send-telegram-atrani`);

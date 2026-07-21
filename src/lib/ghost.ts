@@ -1,4 +1,5 @@
 import GhostContentAPI from '@tryghost/content-api';
+import { normalizeLegacyLinks } from './seo.mjs';
 
 const GHOST_URL = import.meta.env.GHOST_URL;
 const GHOST_PUBLIC_URL = import.meta.env.GHOST_PUBLIC_URL || GHOST_URL;
@@ -30,6 +31,8 @@ export function rewriteGhostUrl(url: string | null | undefined): string | null {
  */
 export function rewriteGhostHtml(html: string | null | undefined): string | null {
     if (!html) return null;
-    if (GHOST_URL === GHOST_PUBLIC_URL) return html;
-    return html.replaceAll(GHOST_URL, GHOST_PUBLIC_URL);
+    const publicHtml = GHOST_URL === GHOST_PUBLIC_URL
+        ? html
+        : html.replaceAll(GHOST_URL, GHOST_PUBLIC_URL);
+    return normalizeLegacyLinks(publicHtml);
 }

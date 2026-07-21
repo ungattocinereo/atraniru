@@ -1,5 +1,6 @@
 ---
 // Hero component for homepage
+import CldImage from './CldImage.astro';
 ---
 
 <section class="hero">
@@ -24,14 +25,13 @@
 
   <!-- Hero background image -->
   <div class="hero-bg-image">
-    <img
+    <CldImage
       src="/images/index/atrani-4-index.webp"
       alt="Атрани ночью - вид на город с освещением"
-      width="1920"
-      height="1080"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
+      width={2400}
+      height={1600}
+      sizes="100vw"
+      priority
     />
   </div>
 
@@ -40,13 +40,13 @@
 
   <!-- Hero side image with angled clip-path -->
   <div class="hero-image">
-    <img
+    <CldImage
       src="/images/index/imagehero.webp"
       alt="Атрани - вид на побережье"
-      width="1200"
-      height="1600"
-      loading="eager"
-      decoding="async"
+      width={2000}
+      height={2500}
+      sizes="(max-width: 900px) 0px, 38vw"
+      eager
     />
   </div>
 

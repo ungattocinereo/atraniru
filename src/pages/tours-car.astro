@@ -67,7 +67,15 @@ const toursCarSchema = {
         },
         "offers": {
           "@type": "Offer",
+          "price": "450",
           "priceCurrency": "EUR",
+          "priceSpecification": {
+            "@type": "PriceSpecification",
+            "minPrice": "450",
+            "maxPrice": "650",
+            "priceCurrency": "EUR",
+            "description": "до 3 часов / 4-6 часов"
+          },
           "availability": "https://schema.org/InStock"
         },
         "provider": {
@@ -86,9 +94,9 @@ const toursCarSchema = {
         "description": "Маршрут под вас: точки старта, продолжительность и точки интереса выбираете сами. Гибкий план от местных.",
         "offers": {
           "@type": "Offer",
-          "price": "280",
+          "price": "550",
           "priceCurrency": "EUR",
-          "description": "От €280 за группу до 4 человек",
+          "description": "От €550, зависит от маршрута и длительности",
           "availability": "https://schema.org/InStock"
         },
         "provider": {
@@ -104,7 +112,7 @@ const toursCarSchema = {
 
 <Layout
   title="Экскурсии на машине по Амальфи — 3 маршрута | Atrani.ru"
-  description="Автомобильные экскурсии по Амальфи за один день: вдоль побережья, горные деревни с дегустациями или маршрут под вас. От €280 за группу до 4 человек."
+  description="Автомобильные экскурсии по Амальфи за один день: вдоль побережья, горные деревни с дегустациями или маршрут под вас. От €400 за экскурсию."
   ogImage="/images/index/excursion-by-car.webp"
   ogImageAlt="Экскурсия на машине по Амальфитанскому побережью"
 >
@@ -186,7 +194,7 @@ const toursCarSchema = {
             <p class="price-details">до 3 часов / 4-6 часов</p>
           </div>
 
-          <a href="/contacts#contact-form" class="btn btn-primary tour-cta">Заказать экскурсию</a>
+          <a href="/contacts?service=car-tour#contact-form" class="btn btn-primary tour-cta">Заказать экскурсию</a>
         </div>
       </article>
 
@@ -215,7 +223,7 @@ const toursCarSchema = {
             <p class="price-details">до 3 часов / 4-6 часов</p>
           </div>
 
-          <a href="/contacts#contact-form" class="btn btn-primary tour-cta">Заказать экскурсию</a>
+          <a href="/contacts?service=gastronomy-tour#contact-form" class="btn btn-primary tour-cta">Заказать экскурсию</a>
         </div>
       </article>
 
@@ -244,7 +252,7 @@ const toursCarSchema = {
             <p class="price-details">зависит от маршрута и длительности</p>
           </div>
 
-          <a href="/contacts#contact-form" class="btn btn-primary tour-cta">Обсудить детали</a>
+          <a href="/contacts?service=car-tour#contact-form" class="btn btn-primary tour-cta">Обсудить детали</a>
         </div>
       </article>
     </div>

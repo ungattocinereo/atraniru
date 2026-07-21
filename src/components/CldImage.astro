@@ -3,14 +3,19 @@
  * CldImage — emits an <img> served via Cloudinary fetch delivery.
  *
  * Cloudinary pulls the source image from atrani.ru on first request,
- * applies f_auto / q_auto / w_<n>, and caches at the CDN edge for ~30
- * days. Falls back to the local src if PUBLIC_CLOUDINARY_CLOUD_NAME
- * is missing.
+ * applies f_auto / q_auto / w_<n>, and caches at the CDN edge.
+ * Falls back to the local src if PUBLIC_CLOUDINARY_CLOUD_NAME
+ * is missing, or if a transformed image errors in the browser.
  *
  * Usage:
  *   <CldImage src="/images/foo.webp" alt="..." width={1500} height={1072} priority />
  *   <CldImage src="/images/foo.webp" alt="..." width={800} height={600} sizes="(max-width: 768px) 100vw, 800px" />
  */
+import {
+  buildCloudinaryFetchUrl,
+  buildCloudinarySrcSet,
+  getResponsiveWidths,
+} from '../lib/imageUrls.mjs';
 
 interface Props {
   src: string;
@@ -39,7 +44,6 @@ const {
   ...rest
 } = Astro.props as Props;
 
-const siteUrl = 'https://atrani.ru';
 const cloud = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
 
 // Routing policy: photoshoot/apartment galleries and Ghost-served blog
@@ -48,33 +52,20 @@ const cloud = import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME;
 const SKIP_CLOUDINARY = ['/apartments/', '/images/photosessions/', '/blog/content/'];
 const useCloud = Boolean(cloud) && !SKIP_CLOUDINARY.some((p) => src.includes(p));
 
-// Resolve to an absolute URL Cloudinary can fetch.
-const sourceUrl = /^https?:\/\//.test(src)
-  ? src
-  : `${siteUrl}${src.startsWith('/') ? '' : '/'}${src}`;
-
-const cldUrl = (w: number) =>
-  useCloud
-    ? `https://res.cloudinary.com/${cloud}/image/fetch/f_auto,q_auto,w_${w}/${sourceUrl}`
-    : src;
-
-// Generate a srcset at standard breakpoints, capped at 2× the intrinsic
-// width and at 2560 (covers 1080p monitors at 2× DPR). The browser picks
-// the smallest source that meets viewport_width × DPR.
-const STANDARD_WIDTHS = [640, 960, 1280, 1600, 1920, 2560];
-const maxWidth = Math.min(width * 2, 2560);
-const widths = STANDARD_WIDTHS.filter((w) => w <= maxWidth);
-if (widths[widths.length - 1] !== maxWidth) widths.push(maxWidth);
-
-const srcset = widths.map((w) => `${cldUrl(w)} ${w}w`).join(', ');
+const widths = getResponsiveWidths(width);
+const srcset = useCloud
+  ? buildCloudinarySrcSet({ src, widths, cloudName: cloud })
+  : undefined;
 // Fallback src — sized for the layout width, capped at 1600 to avoid
 // shipping huge images to old browsers that ignore srcset.
-const fallbackSrc = cldUrl(Math.min(width, 1600));
+const fallbackSrc = useCloud
+  ? buildCloudinaryFetchUrl({ src, width: Math.min(width, 1600), cloudName: cloud })
+  : src;
 ---
 
 <img
   src={fallbackSrc}
-  srcset={useCloud ? srcset : undefined}
+  srcset={srcset}
   sizes={sizes ?? `${width}px`}
   width={width}
   height={height}
@@ -82,6 +73,8 @@ const fallbackSrc = cldUrl(Math.min(width, 1600));
   loading={eager || priority ? 'eager' : 'lazy'}
   decoding="async"
   fetchpriority={priority ? 'high' : undefined}
+  data-origin-src={useCloud ? src : undefined}
+  onerror={useCloud ? "this.onerror=null;this.removeAttribute('srcset');this.src=this.dataset.originSrc" : undefined}
   class={className}
   {...rest}
 />

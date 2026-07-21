@@ -1,8 +1,10 @@
 ---
 import BlogLayout from '../../../layouts/BlogLayout.astro';
 import Newsletter from '../../../components/Newsletter.astro';
+import GhostImage from '../../../components/GhostImage.astro';
 import { getAllPosts, getSinglePost, getRelatedPosts, formatDate, calculateReadingTime } from '../../../lib/ghostApi';
 import { rewriteGhostUrl, rewriteGhostHtml } from '../../../lib/ghost';
+import { normalizeArticleHeadings } from '../../../lib/seo.mjs';
 import type { GhostPost } from '../../../lib/types/ghost';
 
 export async function getStaticPaths() {
@@ -23,6 +25,7 @@ const readingTime = post.reading_time || (post.html ? calculateReadingTime(post.
 const tagSlugs = post.tags?.map(t => t.slug) || [];
 const relatedPosts = await getRelatedPosts(post.id, tagSlugs, 3);
 const postUrl = `https://atrani.ru/blog/${post.slug}`;
+const articleHtml = normalizeArticleHeadings(rewriteGhostHtml(post.html));
 ---
 
 <BlogLayout post={post}>
@@ -31,7 +34,14 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
     <header class="article-hero">
       {post.feature_image && (
         <div class="article-hero-bg">
-          <img src={rewriteGhostUrl(post.feature_image)} alt={post.title} />
+          <GhostImage
+            src={rewriteGhostUrl(post.feature_image)}
+            alt={post.title}
+            loading="eager"
+            fetchpriority="high"
+            sizes="100vw"
+            widths={[600, 960, 1200, 1600, 2000, 2400]}
+          />
         </div>
       )}
       <div class="article-hero-content">
@@ -52,10 +62,12 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
         {post.primary_author && (
           <div class="author-block">
             {post.primary_author.profile_image && (
-              <img
+              <GhostImage
                 src={rewriteGhostUrl(post.primary_author.profile_image)}
                 alt={post.primary_author.name}
                 class="author-avatar"
+                sizes="48px"
+                widths={[160, 320]}
               />
             )}
             <div class="author-info">
@@ -70,7 +82,7 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
     </header>
 
     <!-- Article Content -->
-    <div class="article-content" set:html={rewriteGhostHtml(post.html)} />
+    <div class="article-content" set:html={articleHtml} />
 
     <!-- Tags -->
     {post.tags && post.tags.length > 0 && (
@@ -119,10 +131,12 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
       <div class="author-bio-wrapper">
         <div class="author-bio reveal">
           {post.primary_author.profile_image && (
-            <img
+            <GhostImage
               src={rewriteGhostUrl(post.primary_author.profile_image)}
               alt={post.primary_author.name}
               class="author-bio-avatar"
+              sizes="96px"
+              widths={[160, 320]}
             />
           )}
           <div class="author-bio-content">
@@ -130,7 +144,7 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
             {post.primary_author.bio && <p>{post.primary_author.bio}</p>}
             <div class="author-bio-links">
               {post.primary_author.website && (
-                <a href={post.primary_author.website} target="_blank" rel="noopener">Сайт</a>
+                <a href={post.primary_author.website.replace(/^http:\/\/www\.cinereo\.it\/?$/i, 'https://cinereo.it')} target="_blank" rel="noopener">Сайт</a>
               )}
               {post.primary_author.facebook && (
                 <a href={`https://facebook.com/${post.primary_author.facebook}`} target="_blank" rel="noopener">Facebook</a>
@@ -158,10 +172,12 @@ const postUrl = `https://atrani.ru/blog/${post.slug}`;
           <article class="related-card reveal">
             <a href={`/blog/${related.slug}`}>
               <div class="related-card-image">
-                <img
+                <GhostImage
                   src={rewriteGhostUrl(related.feature_image) || '/images/placeholder-blog.jpg'}
                   alt={related.title}
                   loading="lazy"
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  widths={[600, 960, 1200, 1600]}
                 />
                 {related.primary_tag && (
                   <span class="related-card-category">{related.primary_tag.name}</span>

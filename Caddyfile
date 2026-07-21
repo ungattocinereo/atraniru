@@ -1,0 +1,93 @@
+# Atrani.ru site fragment. The VPS has one shared Caddyfile for several domains:
+# merge these two host blocks into it and never replace the whole server file.
+# Validate the merged candidate before reloading Caddy.
+
+www.atrani.ru {
+    redir https://atrani.ru{uri} 308
+}
+
+atrani.ru {
+    encode zstd br gzip
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Content-Security-Policy "frame-ancestors 'self'"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=()"
+        -Server
+    }
+
+    @trailingSlash {
+        path_regexp trailingSlash ^(.+)/$
+        not path /blog/ghost/* /blog/content/* /webhook/* /hooks/*
+    }
+    redir @trailingSlash {re.trailingSlash.1} 308
+
+    @legacyTimetables path /s/FERRY-timetables-Amalfi-Coast.pdf /s/BUS-timetables-Amalfi-Coast.pdf /files/FERRY-timetables.pdf /files/BUS-timetables.pdf /blog/files/BUS-timetables.pdf /blog/files/FERRY-timetables.pdf /blog/s/FERRY-timetables-Amalfi-Coast.pdf /blog/s/BUS-Sorrento.pdf /blog/s/BUS-timetables-Maiori-Tramonti-Nocera.pdf /blog/s/BUS-Amalfi-Agerola-Napoli-2flr.pdf
+    redir @legacyTimetables /transport 308
+
+    redir /blog/2019/2/20/old-photos-of-amalfi /blog/2019-2-20-old-photos-of-amalfi 308
+    redir /blog/2019/12/21/katastrofa /blog/katastrofa 308
+    redir /blog/2018/6/29/pesce-allacqua-pazza /blog/pesce-allacqua-pazza 308
+    redir /blog/2020/2/1/chiesa-maria-maddalena /blog/chiesa-maria-maddalena 308
+    redir /blog/2020/2/9/47-carnevale-maiori-2020 /blog/carnevale-maiori-2020 308
+    redir /blog/2019/1/25/colatura-di-alici-di-cetara /blog/colatura-di-alici-di-cetara 308
+    redir /blog/2020/3/2/final-carnivale-2020 /blog/final-carnivale-2020 308
+    redir /blog/2020/4/17/8-businessman-amalfi-interview /blog/8-businessman-amalfi-interview 308
+    redir /blog/2020/4/28/la-caravella /blog/la-caravella 308
+    redir /blog/2019/atrani /blog/2019-atrani 308
+    redir /blog/apts /apartments 308
+    redir /apts /apartments 308
+    redir /reshka /orel-i-reshka-amalfi 308
+    redir /blog/book /contacts 308
+    redir /blog/shop /contacts 308
+    redir /blog/eng /blog/eng-atrani 308
+    redir /blog/s/recepie-pasta-grangiano.pdf /blog/visit-pastificio-gentile-grangano 308
+
+    @fingerprintedAssets path /_astro/*
+    header @fingerprintedAssets Cache-Control "public, max-age=31536000, immutable"
+
+    @fonts path /fonts/*
+    header @fonts Cache-Control "public, max-age=31536000, immutable"
+
+    @media path /images/* /apartments/* /photosessions/* /index/*
+    header @media Cache-Control "public, max-age=2592000, stale-while-revalidate=86400"
+
+    @discovery path /robots.txt /llms.txt /sitemap-index.xml /sitemap-*.xml
+    header @discovery Cache-Control "public, max-age=3600"
+
+    @documents {
+        not path /_astro/* /fonts/* /images/* /apartments/* /photosessions/* /index/* /blog/content/* /ghost* /blog/ghost* /blog/r/* /blog/members/* /webhook/* /hooks/*
+    }
+    header @documents Cache-Control "public, max-age=0, must-revalidate"
+
+    handle /blog/ghost/* {
+        reverse_proxy 127.0.0.1:40002
+    }
+
+    handle /blog/content/* {
+        reverse_proxy 127.0.0.1:40002
+    }
+
+    handle /webhook/* {
+        reverse_proxy 127.0.0.1:13103
+    }
+
+    handle /hooks/* {
+        reverse_proxy 127.0.0.1:13103
+    }
+
+    handle {
+        root * /srv/atraniru/dist
+        try_files {path} {path}/index.html {path}.html
+        file_server
+    }
+
+    handle_errors {
+        @notFound expression {http.error.status_code} == 404
+        rewrite @notFound /404.html
+        file_server
+    }
+}

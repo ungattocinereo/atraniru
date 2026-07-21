@@ -43,9 +43,11 @@ const experiencesSchema = {
       "position": 2,
       "item": {
         "@type": "TouristTrip",
+        "@id": `${SITE}/tours-boat#trip`,
         "name": "Лодочная экскурсия по Амальфитанскому побережью",
         "description": "Изумрудный грот, скрытые бухты, Позитано с моря, купание в уединённых местах. Побережье открывается с воды совсем иначе.",
         "image": `${SITE}/images/index/excursion-boat.webp`,
+        "url": `${SITE}/tours-boat`,
         "provider": provider,
         "touristType": "Independent travelers"
       }
@@ -55,9 +57,11 @@ const experiencesSchema = {
       "position": 3,
       "item": {
         "@type": "TouristTrip",
+        "@id": `${SITE}/tours-vespa#trip`,
         "name": "Экскурсии на мотоцикле и Vespa по Амальфи",
         "description": "Туры на мотоциклах с гидом по самым живописным горным серпантинам Амальфитанского побережья.",
         "image": `${SITE}/images/atrani-with-3-bikes-no-plates.webp`,
+        "url": `${SITE}/tours-vespa`,
         "provider": provider,
         "offers": {
           "@type": "Offer",
@@ -71,6 +75,25 @@ const experiencesSchema = {
     {
       "@type": "ListItem",
       "position": 4,
+      "item": {
+        "@type": "TouristTrip",
+        "@id": `${SITE}/tours-gastronomy#trip`,
+        "name": "Гастрономическая экскурсия в долину Трамонти",
+        "description": "Винодельни, сыроварня, горные деревни и панорамы Кампании в индивидуальном маршруте от местных жителей.",
+        "image": `${SITE}/images/cooking-class.webp`,
+        "url": `${SITE}/tours-gastronomy`,
+        "provider": provider,
+        "offers": {
+          "@type": "Offer",
+          "price": "450",
+          "priceCurrency": "EUR",
+          "availability": "https://schema.org/InStock"
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
       "item": {
         "@type": "Service",
         "@id": `${SITE}/photos#service`,
@@ -98,7 +121,7 @@ const experiencesSchema = {
 ---
 
 <Layout
-  title="Экскурсии и впечатления на Амальфи — от местных | Atrani.ru"
+  title="Необычные экскурсии на Амальфи от местных | Atrani.ru"
   description="Экскурсии на машине и катере, фотосессии, винные дегустации и кулинарные мастер-классы. Индивидуальные впечатления от местных жителей Атрани."
   ogImage="/images/index/photoshootings.webp"
   ogImageAlt="Впечатления на Амальфитанском побережье"
@@ -111,8 +134,8 @@ const experiencesSchema = {
     <div class="hero-content">
       <p class="hero-label">Впечатления на побережье</p>
       <h1>
-        <span class="highlight">ЧУВСТВУЙ</span>
-        АМАЛЬФИ
+        <span class="highlight">ЭКСКУРСИИ</span>
+        ОТ МЕСТНЫХ
       </h1>
       <p class="hero-subtitle">От моря до гор, от рассвета до заката — каждое мгновение здесь превращается в воспоминание на всю жизнь</p>
       <div class="hero-actions">
@@ -171,7 +194,7 @@ const experiencesSchema = {
             <span class="price-label">Стоимость</span>
             <span class="price-amount">договорная</span>
           </div>
-          <a href="/contacts#contact-form" class="btn btn-primary">Забронировать</a>
+          <a href="/tours-boat" class="btn btn-primary">Подробнее</a>
         </div>
       </article>
 
@@ -193,14 +216,36 @@ const experiencesSchema = {
             <span class="price-label">Стоимость</span>
             <span class="price-amount">от €350</span>
           </div>
-          <a href="/contacts#contact-form" class="btn btn-primary">Забронировать</a>
+          <a href="/tours-vespa" class="btn btn-primary">Подробнее</a>
         </div>
       </article>
 
-      <!-- Card 4: Фотосессии -->
+      <!-- Card 4: Гастрономические экскурсии -->
       <article class="experience-card reveal">
         <div class="card-header">
           <span class="card-number">04</span>
+        </div>
+        <div class="card-image">
+          <CldImage src="/images/cooking-class.webp" alt="Гастрономическая экскурсия в Трамонти" width={1148} height={1104} sizes="(max-width: 768px) 100vw, 33vw" />
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Вкус гор</h3>
+          <p class="card-tagline">Винодельни и деревни Трамонти</p>
+          <p class="card-description">Гастрономический маршрут вглубь гор: местные сыры, редкие сорта винограда, семейные хозяйства и панорамы вдали от прибрежной толпы.</p>
+        </div>
+        <div class="card-footer">
+          <div class="price-info">
+            <span class="price-label">Стоимость</span>
+            <span class="price-amount">от €450</span>
+          </div>
+          <a href="/tours-gastronomy" class="btn btn-primary">Подробнее</a>
+        </div>
+      </article>
+
+      <!-- Card 5: Фотосессии -->
+      <article class="experience-card reveal">
+        <div class="card-header">
+          <span class="card-number">05</span>
         </div>
         <div class="card-image">
           <CldImage src="/images/index/photoshootings.webp" alt="Фотосессия на Амальфитанском побережье" width={2400} height={1600} sizes="(max-width: 768px) 100vw, 33vw" />
@@ -219,10 +264,10 @@ const experiencesSchema = {
         </div>
       </article>
 
-      <!-- Card 5: Кулинарные мастер-классы (Coming Soon) -->
+      <!-- Card 6: Кулинарные мастер-классы (Coming Soon) -->
       <article class="experience-card reveal coming-soon">
         <div class="card-header">
-          <span class="card-number">05</span>
+          <span class="card-number">06</span>
           <span class="coming-soon-badge">Открытие в 2026</span>
         </div>
         <div class="card-image">
@@ -797,4 +842,3 @@ const experiencesSchema = {
     }
   }
 </style>
-

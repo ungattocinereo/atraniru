@@ -1,5 +1,6 @@
 ---
 // BlogPreview component - 4 latest posts from Ghost
+import GhostImage from './GhostImage.astro';
 import { ghostClient, rewriteGhostUrl } from '../lib/ghost';
 
 let posts = [];
@@ -86,13 +87,14 @@ try {
         <article class="blog-card reveal">
           <a href={`/blog/${post.slug}`}>
             <div class="blog-image">
-              <img
+              <GhostImage
                 src={rewriteGhostUrl(post.feature_image) || '/images/placeholder-blog.jpg'}
                 alt={post.title}
                 width="1200"
                 height="800"
                 loading="lazy"
-                decoding="async"
+                sizes="(max-width: 768px) 100vw, 25vw"
+                widths={[600, 960, 1200, 1600]}
               />
             </div>
             <div class="blog-content">

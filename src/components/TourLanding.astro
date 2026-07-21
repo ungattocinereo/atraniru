@@ -23,6 +23,8 @@ interface Props {
   highlights: string[];
   schemaType?: 'TouristTrip' | 'Service';
   offerPrice?: string;
+  imageWidth?: number;
+  imageHeight?: number;
 }
 
 const {
@@ -40,6 +42,8 @@ const {
   highlights,
   schemaType = 'TouristTrip',
   offerPrice,
+  imageWidth = 2400,
+  imageHeight = 1600,
 } = Astro.props;
 
 const canonicalUrl = `https://atrani.ru${Astro.url.pathname}`;
@@ -88,7 +92,7 @@ const schema = {
 
   <section class="tour-hero">
     <div class="tour-hero-image">
-      <CldImage src={image} alt={imageAlt} width={2400} height={1600} sizes="100vw" priority />
+      <CldImage src={image} alt={imageAlt} width={imageWidth} height={imageHeight} sizes="100vw" priority />
     </div>
     <div class="tour-hero-overlay"></div>
     <div class="tour-hero-content">

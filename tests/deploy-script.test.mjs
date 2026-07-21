@@ -28,6 +28,12 @@ test('full deployment uses the production topology and serializes runs', () => {
   assert.match(deploy, /127\.0\.0\.1:13103\/webhook\/health/);
 });
 
+test('deployment waits until the restarted webhook is actually ready', () => {
+  assert.match(deploy, /wait_for_webhook/);
+  assert.match(deploy, /for attempt in/);
+  assert.match(deploy, /sleep 1/);
+});
+
 test('site is built in an isolated release and checked before activation', () => {
   assert.match(deploy, /git archive HEAD/);
   assert.match(deploy, /mktemp -d/);

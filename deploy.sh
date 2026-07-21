@@ -50,6 +50,21 @@ on_error() {
   exit "$status"
 }
 
+wait_for_webhook() {
+  local attempt
+  for attempt in {1..15}; do
+    if curl --fail --silent --max-time 2 \
+      http://127.0.0.1:13103/webhook/health >/dev/null; then
+      log "Webhook service is ready"
+      return 0
+    fi
+    sleep 1
+  done
+
+  log "ERROR: webhook service did not become ready within 15 seconds"
+  return 1
+}
+
 case "$MODE" in
   deploy|--rebuild-only) ;;
   *) die "Usage: $0 [--rebuild-only]" ;;
@@ -123,13 +138,13 @@ if [[ "$MODE" == "deploy" ]]; then
   sudo systemctl enable atraniru-webhook
   sudo systemctl restart atraniru-webhook
 
+  wait_for_webhook
+
   log "Reloading shared Caddy configuration"
   # The repository Caddyfile is an Atrani reference fragment. The server-wide
   # /etc/caddy/Caddyfile is shared with other sites and must never be replaced.
   sudo systemctl reload caddy
 
-  curl --fail --silent --show-error --max-time 10 \
-    http://127.0.0.1:13103/webhook/health >/dev/null
 fi
 
 DIST_ACTIVATED=0

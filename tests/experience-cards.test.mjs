@@ -18,3 +18,17 @@ test('the supplied wine photo represents the gastronomy tour everywhere', () => 
   assert.match(landing, /imageHeight=\{2000\}/);
   assert.match(experience, /src="\/images\/cooking-class\.webp" alt="Кулинарный мастер-класс/);
 });
+
+test('available experience cards are single full-card links', () => {
+  const experience = read('src/pages/experience.astro');
+  const routes = ['/tours-car', '/tours-boat', '/tours-vespa', '/tours-gastronomy', '/photos'];
+
+  for (const route of routes) {
+    assert.match(experience, new RegExp(`<a class="experience-card reveal" href="${route}"`));
+    assert.doesNotMatch(experience, new RegExp(`<a href="${route}" class="btn btn-primary"`));
+  }
+
+  assert.match(experience, /<article class="experience-card reveal coming-soon">/);
+  assert.match(experience, /\.experience-card:focus-visible/);
+  assert.doesNotMatch(experience, /onclick=/);
+});
